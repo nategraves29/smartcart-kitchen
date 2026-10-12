@@ -11,6 +11,7 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #FAF8F5;
       color: #1F2937;
+      -webkit-tap-highlight-color: transparent;
     }
     .pill-active {
       background-color: #15803D !important;
@@ -25,6 +26,9 @@
     }
     input[type="range"] {
       accent-color: #15803D;
+    }
+    button {
+      touch-action: manipulation;
     }
     @media print {
       .no-print { display: none !important; }
@@ -54,7 +58,7 @@
           <span id="headerUsername" class="text-sm font-semibold text-stone-800">User</span>
           <span id="syncBadge" class="text-[11px] text-stone-500 hidden sm:inline">• Saved</span>
         </div>
-        <button onclick="handleLogout()" class="text-xs sm:text-sm font-semibold text-stone-600 hover:text-red-600 px-3 py-1.5 rounded-xl hover:bg-stone-100 transition">
+        <button type="button" onclick="handleLogout()" class="text-xs sm:text-sm font-semibold text-stone-600 hover:text-red-600 px-3 py-1.5 rounded-xl hover:bg-stone-100 transition">
           Log Out
         </button>
       </div>
@@ -78,10 +82,10 @@
 
       <!-- Sign In / Create Account Toggle -->
       <div class="grid grid-cols-2 bg-stone-100 p-1 rounded-2xl mb-6">
-        <button id="tabLoginBtn" onclick="switchAuthMode('login')" class="py-2.5 rounded-xl font-bold text-sm bg-white text-stone-900 shadow-sm transition">
+        <button type="button" id="tabLoginBtn" onclick="switchAuthMode('login')" class="py-2.5 rounded-xl font-bold text-sm bg-white text-stone-900 shadow-sm transition">
           Sign In
         </button>
-        <button id="tabSignupBtn" onclick="switchAuthMode('signup')" class="py-2.5 rounded-xl font-bold text-sm text-stone-600 transition">
+        <button type="button" id="tabSignupBtn" onclick="switchAuthMode('signup')" class="py-2.5 rounded-xl font-bold text-sm text-stone-600 transition">
           Create New Profile
         </button>
       </div>
@@ -95,7 +99,7 @@
 
         <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Username</label>
-          <input id="authUsername" type="text" required placeholder="e.g., sarah_reston" autocomplete="username"
+          <input id="authUsername" type="text" required placeholder="e.g., nate or sarah_reston" autocomplete="username"
             class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-green-700 focus:ring-2 focus:ring-green-700/20 outline-none text-base" />
         </div>
 
@@ -127,11 +131,11 @@
           Or Try a Pre-Loaded Profile Immediately
         </p>
         <div class="grid grid-cols-2 gap-2.5">
-          <button onclick="loginQuickDemo('reston_demo', 'Reston Friend', 'reston')"
+          <button type="button" onclick="loginQuickDemo('reston_demo', 'Reston Friend', 'reston')"
             class="py-2.5 px-3 rounded-xl border border-stone-300 hover:border-green-700 hover:bg-green-50 text-xs font-bold text-stone-700 transition">
             🏡 Reston, VA Demo
           </button>
-          <button onclick="loginQuickDemo('pnw_demo', 'Oregon Home', 'pnw')"
+          <button type="button" onclick="loginQuickDemo('pnw_demo', 'Oregon Home', 'pnw')"
             class="py-2.5 px-3 rounded-xl border border-stone-300 hover:border-green-700 hover:bg-green-50 text-xs font-bold text-stone-700 transition">
             🌲 Oregon Demo
           </button>
@@ -164,17 +168,17 @@
 
     <!-- 3-Step Guided Navigation Bar -->
     <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-6 no-print">
-      <button id="stepBtn1" onclick="goToStep(1)"
+      <button type="button" id="stepBtn1" onclick="goToStep(1)"
         class="step-tab flex flex-col sm:flex-row items-center justify-center gap-2 py-3.5 px-3 rounded-2xl font-bold text-xs sm:text-sm border-2 border-green-700 bg-green-700 text-white shadow-sm transition">
         <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs font-extrabold">1</span>
         <span>My Kitchen & Fridge</span>
       </button>
-      <button id="stepBtn2" onclick="goToStep(2)"
+      <button type="button" id="stepBtn2" onclick="goToStep(2)"
         class="step-tab flex flex-col sm:flex-row items-center justify-center gap-2 py-3.5 px-3 rounded-2xl font-bold text-xs sm:text-sm border-2 border-stone-200 bg-white text-stone-700 hover:border-stone-300 transition">
         <span class="w-6 h-6 rounded-full bg-stone-100 flex items-center justify-center text-xs font-extrabold">2</span>
         <span>Store & Budget</span>
       </button>
-      <button id="stepBtn3" onclick="goToStep(3)"
+      <button type="button" id="stepBtn3" onclick="goToStep(3)"
         class="step-tab flex flex-col sm:flex-row items-center justify-center gap-2 py-3.5 px-3 rounded-2xl font-bold text-xs sm:text-sm border-2 border-stone-200 bg-white text-stone-700 hover:border-stone-300 transition">
         <span class="w-6 h-6 rounded-full bg-stone-100 flex items-center justify-center text-xs font-extrabold">3</span>
         <span>Meals & Grocery List</span>
@@ -211,7 +215,7 @@
           <input id="customFridgeInput" type="text" placeholder="Type anything else you have (e.g., 2 chicken breasts, half bag of spinach)..."
             onkeydown="if(event.key==='Enter'){event.preventDefault();addCustomFridgeItem();}"
             class="flex-1 px-4 py-3 rounded-xl border border-stone-300 focus:border-green-700 outline-none text-sm sm:text-base" />
-          <button onclick="addCustomFridgeItem()"
+          <button type="button" onclick="addCustomFridgeItem()"
             class="px-5 py-3 bg-stone-900 hover:bg-stone-800 text-white font-bold rounded-xl text-sm shrink-0 transition">
             + Add Item
           </button>
@@ -263,7 +267,7 @@
       </div>
 
       <div class="flex justify-end">
-        <button onclick="goToStep(2)"
+        <button type="button" onclick="goToStep(2)"
           class="w-full sm:w-auto px-8 py-4 bg-green-700 hover:bg-green-800 text-white font-extrabold rounded-2xl shadow-md text-base transition">
           Next: Choose Store & Weekly Budget →
         </button>
@@ -284,10 +288,10 @@
           </div>
           <!-- Region Filter Pills -->
           <div class="inline-flex bg-stone-100 p-1 rounded-xl self-start">
-            <button id="regionBtnReston" onclick="filterStoresByRegion('reston')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition">
+            <button type="button" id="regionBtnReston" onclick="filterStoresByRegion('reston')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition">
               📍 Reston, VA (20191)
             </button>
-            <button id="regionBtnPnw" onclick="filterStoresByRegion('pnw')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition">
+            <button type="button" id="regionBtnPnw" onclick="filterStoresByRegion('pnw')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition">
               🌲 Beaverton / OR
             </button>
           </div>
@@ -326,9 +330,9 @@
               <div class="text-xs text-stone-500">Number of recipes to plan</div>
             </div>
             <div class="flex items-center gap-3">
-              <button onclick="adjustCount('mealsCount', -1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">-</button>
+              <button type="button" onclick="adjustCount('mealsCount', -1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">-</button>
               <span id="mealsCountDisplay" class="font-extrabold text-lg w-6 text-center">5</span>
-              <button onclick="adjustCount('mealsCount', 1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">+</button>
+              <button type="button" onclick="adjustCount('mealsCount', 1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">+</button>
             </div>
           </div>
 
@@ -338,9 +342,9 @@
               <div class="text-xs text-stone-500">Portions cooked each night</div>
             </div>
             <div class="flex items-center gap-3">
-              <button onclick="adjustCount('servingsCount', -1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">-</button>
+              <button type="button" onclick="adjustCount('servingsCount', -1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">-</button>
               <span id="servingsCountDisplay" class="font-extrabold text-lg w-6 text-center">2</span>
-              <button onclick="adjustCount('servingsCount', 1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">+</button>
+              <button type="button" onclick="adjustCount('servingsCount', 1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">+</button>
             </div>
           </div>
         </div>
@@ -348,10 +352,10 @@
 
       <!-- Generate Button Row -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
-        <button onclick="goToStep(1)" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl border border-stone-300 font-bold text-stone-700 hover:bg-stone-100 transition">
+        <button type="button" onclick="goToStep(1)" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl border border-stone-300 font-bold text-stone-700 hover:bg-stone-100 transition">
           ← Back to My Kitchen
         </button>
-        <button onclick="generateWeeklyMealPlan()"
+        <button type="button" onclick="generateWeeklyMealPlan()"
           class="w-full sm:w-auto px-8 py-4 bg-green-700 hover:bg-green-800 text-white font-extrabold rounded-2xl shadow-lg text-base sm:text-lg transition flex items-center justify-center gap-2">
           <span>✨ Build My Grocery List & Recipes</span>
         </button>
@@ -387,11 +391,11 @@
             </div>
 
             <div class="flex flex-wrap gap-2 no-print">
-              <button onclick="verifyLiveStorePrices()" id="verifyLivePricesBtn"
+              <button type="button" onclick="verifyLiveStorePrices()" id="verifyLivePricesBtn"
                 class="px-4 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-bold text-xs sm:text-sm transition">
                 🔄 Check Live Store Sale Prices
               </button>
-              <button onclick="window.print()"
+              <button type="button" onclick="window.print()"
                 class="px-4 py-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold text-xs sm:text-sm transition">
                 🖨️ Print / Save PDF
               </button>
@@ -444,7 +448,7 @@
           <div class="lg:col-span-7 space-y-4">
             <div class="flex items-center justify-between">
               <h4 class="text-lg font-extrabold text-stone-900">🍳 Your Recipes for the Week</h4>
-              <button onclick="generateWeeklyMealPlan()" class="text-xs font-bold text-green-700 hover:underline no-print">
+              <button type="button" onclick="generateWeeklyMealPlan()" class="text-xs font-bold text-green-700 hover:underline no-print">
                 ↻ Shuffle New Recipes
               </button>
             </div>
@@ -461,47 +465,47 @@
   <footer class="mt-auto border-t border-stone-200 bg-white py-4 px-4 no-print">
     <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-stone-500">
       <div>SmartCart Kitchen — Built for Reston, VA (20191) & Beaverton, OR</div>
-      <button onclick="toggleAdminModal(true)" class="font-semibold text-stone-500 hover:text-stone-900 flex items-center gap-1">
+      <button type="button" onclick="toggleAdminModal(true)" class="font-semibold text-stone-500 hover:text-stone-900 flex items-center gap-1">
         <span>⚙️ Admin & Cloud Setup</span>
       </button>
     </div>
   </footer>
 
   <!-- ========================================== -->
-  <!-- HIDDEN ADMIN MODAL (FOR YOU, NOT FRIENDS)  -->
+  <!-- HIDDEN ADMIN MODAL                         -->
   <!-- ========================================== -->
   <div id="adminModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 no-print">
     <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-7 max-h-[90vh] overflow-y-auto shadow-2xl">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-extrabold text-stone-900">⚙️ Admin & Cloud Setup</h3>
-        <button onclick="toggleAdminModal(false)" class="text-stone-400 hover:text-stone-700 text-xl font-bold">✕</button>
+        <button type="button" onclick="toggleAdminModal(false)" class="text-stone-400 hover:text-stone-700 text-xl font-bold">✕</button>
       </div>
       <p class="text-xs text-stone-600 mb-4">
-        Paste your shared Cloudflare Worker URL or Gemini API key here, or hardcode them at the top of <code class="bg-stone-100 px-1 rounded">index.html</code> so your friends never have to touch this screen.
+        Your Firebase (`grocery-planner-v1`) and Cloudflare Worker (`smartcart-proxy.nategraves29.workers.dev`) are pre-configured! You can override them below if ever needed.
       </p>
 
       <div class="space-y-4">
         <div>
-          <label class="block text-xs font-bold uppercase text-stone-600 mb-1">Cloudflare Worker Proxy URL (Kroger / Harris Teeter / TJ's / Safeway)</label>
-          <input id="adminWorkerUrl" type="url" placeholder="https://grocery-proxy.yourname.workers.dev"
+          <label class="block text-xs font-bold uppercase text-stone-600 mb-1">Cloudflare Worker Proxy URL</label>
+          <input id="adminWorkerUrl" type="url" placeholder="https://smartcart-proxy.nategraves29.workers.dev/"
             class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm" />
         </div>
 
         <div>
-          <label class="block text-xs font-bold uppercase text-stone-600 mb-1">Gemini API Key (Optional — Enables Custom AI Recipe Generation)</label>
-          <input id="adminGeminiKey" type="password" placeholder="AIzaSy..."
+          <label class="block text-xs font-bold uppercase text-stone-600 mb-1">Gemini API Key Override (Optional — Already Handled by Cloudflare)</label>
+          <input id="adminGeminiKey" type="password" placeholder="Leave blank to use Cloudflare secret"
             class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm" />
         </div>
 
         <div>
-          <label class="block text-xs font-bold uppercase text-stone-600 mb-1">Firebase Config JSON (Optional if not hardcoded)</label>
+          <label class="block text-xs font-bold uppercase text-stone-600 mb-1">Firebase Config JSON Override (Optional)</label>
           <textarea id="adminFirebaseJson" rows="4" placeholder='{"apiKey":"...","authDomain":"...","projectId":"..."}'
             class="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs font-mono"></textarea>
         </div>
 
         <div class="flex justify-end gap-2 pt-2">
-          <button onclick="toggleAdminModal(false)" class="px-4 py-2 rounded-xl border border-stone-300 text-sm font-bold">Cancel</button>
-          <button onclick="saveAdminSettings()" class="px-5 py-2 rounded-xl bg-green-700 text-white text-sm font-bold">Save Settings</button>
+          <button type="button" onclick="toggleAdminModal(false)" class="px-4 py-2 rounded-xl border border-stone-300 text-sm font-bold">Cancel</button>
+          <button type="button" onclick="saveAdminSettings()" class="px-5 py-2 rounded-xl bg-green-700 text-white text-sm font-bold">Save Settings</button>
         </div>
       </div>
     </div>
@@ -528,22 +532,19 @@
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     // ============================================================================
-    // 1. PUT YOUR FIREBASE CONFIG & OPTIONAL SHARED KEYS HERE ONCE FOR ALL FRIENDS
+    // 1. PRE-CONFIGURED FIREBASE & CLOUDFLARE WORKER SETTINGS
     // ============================================================================
-    const firebaseConfig = {
-  apiKey: "AIzaSyAl5hOXY8_lAuQeIZS-T4uq5ZBTDayn40o",
-  authDomain: "grocery-planner-v1.firebaseapp.com",
-  projectId: "grocery-planner-v1",
-  storageBucket: "grocery-planner-v1.firebasestorage.app",
-  messagingSenderId: "794850230910",
-  appId: "1:794850230910:web:932506759e1f0726b7ce2f"
-};
+    const DEFAULT_FIREBASE_CONFIG = {
+      apiKey: "AIzaSyAl5hOXY8_lAuQeIZS-T4uq5ZBTDayn40o",
+      authDomain: "grocery-planner-v1.firebaseapp.com",
+      projectId: "grocery-planner-v1",
+      storageBucket: "grocery-planner-v1.firebasestorage.app",
+      messagingSenderId: "794850230910",
+      appId: "1:794850230910:web:932506759e1f0726b7ce2f"
+    };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-    const DEFAULT_WORKER_URL = "https://smartcart-proxy.nategraves29.workers.dev/"; // e.g. "https://grocery-proxy.yourname.workers.dev"
-    const DEFAULT_GEMINI_API_KEY = ""; // Optional: Google AI Studio key
+    const DEFAULT_WORKER_URL = "https://smartcart-proxy.nategraves29.workers.dev/";
+    const DEFAULT_GEMINI_API_KEY = ""; // Safely stored inside Cloudflare Worker secrets
 
     // ============================================================================
     // 2. STORE DIRECTORY (RESTON, VA 20191 + BEAVERTON, OR 97005)
@@ -646,7 +647,7 @@ const app = initializeApp(firebaseConfig);
     ];
 
     // ============================================================================
-    // 3. FRIENDLY KITCHEN OPTIONS (ICONS + PLAIN LANGUAGE)
+    // 3. KITCHEN OPTIONS & BUILT-IN RECIPES
     // ============================================================================
     const EQUIPMENT_OPTIONS = [
       { id: "skillet", label: "Skillet / Frying Pan", icon: "🍳" },
@@ -665,7 +666,7 @@ const app = initializeApp(firebaseConfig);
       "🥚 Eggs", "🍚 Rice", "🍝 Pasta", "🧅 Yellow Onions", "🥔 Potatoes",
       "🍅 Tomatoes", "🍗 Chicken Breast", "🥩 Ground Beef", "🧀 Cheddar Cheese",
       "🥬 Spinach / Greens", "🥕 Carrots", "🫑 Bell Peppers", "🫘 Canned Beans",
-      " tortillas", "🥫 Crushed Tomatoes"
+      "🌮 Tortillas", "🥫 Crushed Tomatoes"
     ];
 
     const ALLERGY_OPTIONS = [
@@ -685,9 +686,6 @@ const app = initializeApp(firebaseConfig);
       "Chili Powder / Paprika", "Italian Seasoning", "Chicken / Veggie Broth"
     ];
 
-    // ============================================================================
-    // 4. BUILT-IN SMART RECIPE LIBRARY (WORKS EVEN WITHOUT AN AI KEY)
-    // ============================================================================
     const CURATED_RECIPES = [
       {
         title: "Crispy Sheet-Pan Garlic Herb Chicken & Baby Potatoes",
@@ -782,53 +780,17 @@ const app = initializeApp(firebaseConfig);
           { name: "Yellow Onions (3 lb bag)", aisle: "Produce", basePrice: 2.99, key: "onions" },
           { name: "Fresh Green Onions (1 bunch)", aisle: "Produce", basePrice: 0.99, key: "onions" }
         ]
-      },
-      {
-        title: "Hearty Slow-Simmered Chicken & Potato Herb Soup",
-        time: "35 mins",
-        equipmentNeeded: "Large Soup Pot",
-        equipmentId: "pot",
-        allergens: [],
-        tags: ["🍲 Cozy One-Pan Meals", "🍱 Great for Leftovers", "💪 High Protein"],
-        steps: [
-          "Sweat diced onions and carrots in a soup pot with oil or butter until fragrant.",
-          "Add diced potatoes, chicken breast, and broth; simmer gently for 20 minutes until potatoes are tender.",
-          "Shred the chicken right in the pot, adjust seasoning, and ladle into warm bowls."
-        ],
-        ingredients: [
-          { name: "Boneless Skinless Chicken Breast (1.5 lb)", aisle: "Meat & Seafood", basePrice: 6.99, key: "chicken" },
-          { name: "Baby Gold Potatoes (1.5 lb bag)", aisle: "Produce", basePrice: 3.49, key: "potatoes" },
-          { name: "Whole Carrots (2 lb bag)", aisle: "Produce", basePrice: 1.99, key: "carrots" }
-        ]
-      },
-      {
-        title: "Flame-Kissed Grill Burgers & Crispy Oven Wedges",
-        time: "30 mins",
-        equipmentNeeded: "Grill / Pellet Smoker",
-        equipmentId: "grill",
-        allergens: ["🌾 Gluten / Wheat", "🥛 Dairy / Lactose"],
-        tags: ["💪 High Protein", "🥗 Kid & Family Friendly"],
-        steps: [
-          "Cut potatoes into wedges, toss with oil and seasoning, and roast or air-fry until crisp.",
-          "Shape seasoned ground beef into patties and sear on the grill or skillet to medium-well, melting cheddar on top.",
-          "Serve on toasted buns with sliced tomatoes and onions."
-        ],
-        ingredients: [
-          { name: "Lean Ground Beef 85/15 (1 lb)", aisle: "Meat & Seafood", basePrice: 5.99, key: "ground beef" },
-          { name: "Brioche or Classic Burger Buns (8 ct)", aisle: "Bakery", basePrice: 2.99, key: "buns" },
-          { name: "Vine-Ripe Tomatoes (1 lb)", aisle: "Produce", basePrice: 2.29, key: "tomatoes" }
-        ]
       }
     ];
 
     // ============================================================================
-    // 5. STATE MANAGEMENT & USER PROFILE STRUCTURE
+    // 4. STATE & FIREBASE INITIALIZATION
     // ============================================================================
     let firebaseApp = null;
     let auth = null;
     let db = null;
     let authMode = "login";
-    let currentUser = null; // { uid, username, displayName, isLocal }
+    let currentUser = null;
 
     function createDefaultProfile(region = "reston", displayName = "Friend") {
       return {
@@ -850,13 +812,11 @@ const app = initializeApp(firebaseConfig);
 
     let profileState = createDefaultProfile("reston", "Friend");
 
-    // ============================================================================
-    // 6. INITIALIZE FIREBASE (IF CONFIGURED) OR FALLBACK TO LOCAL ACCOUNTS
-    // ============================================================================
     function initFirebaseIfAvailable() {
       try {
         const savedJson = localStorage.getItem("smartcart_firebase_config");
-        const config = DEFAULT_FIREBASE_CONFIG || (savedJson ? JSON.parse(savedJson) : null);
+        const config = savedJson ? JSON.parse(savedJson) : DEFAULT_FIREBASE_CONFIG;
+
         if (config && config.apiKey && config.projectId) {
           firebaseApp = initializeApp(config);
           auth = getAuth(firebaseApp);
@@ -876,27 +836,19 @@ const app = initializeApp(firebaseConfig);
               enterWorkspace();
             }
           });
-        } else {
-          // Check if a local session was active
-          const activeLocalUser = localStorage.getItem("smartcart_active_local_user");
-          if (activeLocalUser) {
-            currentUser = JSON.parse(activeLocalUser);
-            loadUserProfile().then(() => enterWorkspace());
-          }
         }
       } catch (err) {
-        console.warn("Firebase init skipped, using local profile accounts:", err.message);
+        console.warn("Firebase init fallback to local accounts:", err.message);
       }
     }
 
-    // Convert plain username (e.g. "sarah") into valid email for Firebase Auth
     function usernameToEmail(usernameInput) {
-      const cleaned = usernameInput.trim().toLowerCase().replace(/\s+/g, "_");
-      return cleaned.includes("@") ? cleaned : `${cleaned}@kitchenplanner.app`;
+      const cleaned = usernameInput.trim().toLowerCase().replace(/[^a-z0-9._-]/g, "");
+      return usernameInput.includes("@") ? usernameInput.trim() : `${cleaned || "user"}@kitchenplanner.app`;
     }
 
     // ============================================================================
-    // 7. AUTHENTICATION HANDLERS (LOGIN / SIGNUP / DEMO / LOGOUT)
+    // 5. AUTHENTICATION HANDLERS
     // ============================================================================
     window.switchAuthMode = function (mode) {
       authMode = mode;
@@ -905,7 +857,8 @@ const app = initializeApp(firebaseConfig);
       const nameGroup = document.getElementById("displayNameGroup");
       const regionGroup = document.getElementById("regionPresetGroup");
       const submitBtn = document.getElementById("authSubmitBtn");
-      document.getElementById("authErrorBox").classList.add("hidden");
+      const errorBox = document.getElementById("authErrorBox");
+      if (errorBox) errorBox.classList.add("hidden");
 
       if (mode === "signup") {
         signupBtn.className = "py-2.5 rounded-xl font-bold text-sm bg-white text-stone-900 shadow-sm transition";
@@ -929,13 +882,16 @@ const app = initializeApp(firebaseConfig);
       const displayName = document.getElementById("authDisplayName").value.trim() || rawUsername;
       const regionPreset = document.getElementById("authRegionPreset").value || "reston";
       const errorBox = document.getElementById("authErrorBox");
+      const submitBtn = document.getElementById("authSubmitBtn");
+
       errorBox.classList.add("hidden");
+      submitBtn.textContent = "⏳ Loading Your Kitchen...";
+      submitBtn.disabled = true;
 
       const cleanUsername = rawUsername.toLowerCase().replace(/\s+/g, "_");
 
       try {
         if (auth) {
-          // Real Firebase Authentication
           const email = usernameToEmail(cleanUsername);
           if (authMode === "signup") {
             const cred = await createUserWithEmailAndPassword(auth, email, password);
@@ -948,17 +904,12 @@ const app = initializeApp(firebaseConfig);
             await signInWithEmailAndPassword(auth, email, password);
           }
         } else {
-          // Local Multi-Account Fallback (Works immediately before Firebase config is pasted)
           const accounts = JSON.parse(localStorage.getItem("smartcart_local_accounts") || "{}");
           if (authMode === "signup") {
             if (accounts[cleanUsername]) {
               throw new Error("That username is already taken. Try signing in instead!");
             }
-            accounts[cleanUsername] = {
-              password,
-              displayName,
-              region: regionPreset
-            };
+            accounts[cleanUsername] = { password, displayName, region: regionPreset };
             localStorage.setItem("smartcart_local_accounts", JSON.stringify(accounts));
             profileState = createDefaultProfile(regionPreset, displayName);
             currentUser = { uid: `local_${cleanUsername}`, username: cleanUsername, displayName, isLocal: true };
@@ -968,7 +919,7 @@ const app = initializeApp(firebaseConfig);
           } else {
             const acct = accounts[cleanUsername];
             if (!acct || acct.password !== password) {
-              throw new Error("Incorrect username or password. Need an account? Click 'Create New Profile' above.");
+              throw new Error("Incorrect username or password. Tap 'Create New Profile' above to set up a new account.");
             }
             currentUser = {
               uid: `local_${cleanUsername}`,
@@ -982,8 +933,15 @@ const app = initializeApp(firebaseConfig);
           }
         }
       } catch (err) {
-        errorBox.textContent = err.message.replace("Firebase: ", "");
+        let msg = err.message ? err.message.replace("Firebase: ", "") : "Unable to sign in.";
+        if (msg.includes("auth/unauthorized-domain")) {
+          msg = "Almost there! Add your github.io domain under Firebase Console -> Authentication -> Settings -> Authorized domains.";
+        }
+        errorBox.textContent = msg;
         errorBox.classList.remove("hidden");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = authMode === "signup" ? "Create My Personal Profile →" : "Sign In to My Kitchen →";
       }
     };
 
@@ -1006,7 +964,7 @@ const app = initializeApp(firebaseConfig);
     };
 
     // ============================================================================
-    // 8. LOAD & SAVE PER-USER PROFILE DATA (FIRESTORE + LOCALSTORAGE)
+    // 6. FIRESTORE + LOCAL STORAGE SYNC
     // ============================================================================
     async function loadUserProfile(defaultRegion = "reston", defaultName = "Friend") {
       if (!currentUser) return;
@@ -1049,11 +1007,11 @@ const app = initializeApp(firebaseConfig);
           console.warn("Firestore save error:", e.message);
         }
       }
-      if (badge) setTimeout(() => { badge.textContent = "• All changes saved"; }, 300);
+      if (badge) setTimeout(() => { badge.textContent = "• Saved"; }, 300);
     }
 
     // ============================================================================
-    // 9. UI RENDERING & INTERACTION LOGIC
+    // 7. WORKSPACE RENDERING
     // ============================================================================
     function enterWorkspace() {
       document.getElementById("authScreen").classList.add("hidden");
@@ -1089,7 +1047,6 @@ const app = initializeApp(firebaseConfig);
     };
 
     function renderAllSteps() {
-      // Budget banner & slider
       document.getElementById("bannerBudgetDisplay").textContent = `$${profileState.weeklyBudget}`;
       document.getElementById("budgetSliderLabel").textContent = `$${profileState.weeklyBudget}`;
       document.getElementById("budgetRangeInput").value = profileState.weeklyBudget;
@@ -1107,7 +1064,7 @@ const app = initializeApp(firebaseConfig);
       const quickContainer = document.getElementById("quickFridgePills");
       quickContainer.innerHTML = QUICK_FRIDGE_SUGGESTIONS.map((item) => {
         const active = profileState.fridgeItems.includes(item);
-        return `<button onclick="toggleArrayItem('fridgeItems', '${item.replace(/'/g, "\\'")}')"
+        return `<button type="button" onclick="toggleArrayItem('fridgeItems', '${item.replace(/'/g, "\\'")}')"
           class="px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-semibold transition ${active ? 'pill-active' : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'}">
           ${item} ${active ? '✓' : '+'}
         </button>`;
@@ -1120,7 +1077,7 @@ const app = initializeApp(firebaseConfig);
         activeList.innerHTML = profileState.fridgeItems.map((item) => `
           <span class="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-300 text-amber-900 px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold">
             ${item}
-            <button onclick="toggleArrayItem('fridgeItems', '${item.replace(/'/g, "\\'")}')" class="text-amber-700 hover:text-red-600 font-extrabold">✕</button>
+            <button type="button" onclick="toggleArrayItem('fridgeItems', '${item.replace(/'/g, "\\'")}')" class="text-amber-700 hover:text-red-600 font-extrabold">✕</button>
           </span>
         `).join("");
       }
@@ -1142,7 +1099,7 @@ const app = initializeApp(firebaseConfig);
       const grid = document.getElementById("equipmentGrid");
       grid.innerHTML = EQUIPMENT_OPTIONS.map((eq) => {
         const active = profileState.equipment.includes(eq.id);
-        return `<button onclick="toggleArrayItem('equipment', '${eq.id}')"
+        return `<button type="button" onclick="toggleArrayItem('equipment', '${eq.id}')"
           class="p-3.5 rounded-2xl border text-left transition flex items-center gap-3 ${active ? 'pill-active' : 'bg-stone-50 border-stone-200 text-stone-800 hover:bg-stone-100'}">
           <span class="text-2xl">${eq.icon}</span>
           <span class="text-xs sm:text-sm font-bold leading-snug">${eq.label}</span>
@@ -1153,7 +1110,7 @@ const app = initializeApp(firebaseConfig);
     function renderAllergiesAndPrefs() {
       document.getElementById("allergyGrid").innerHTML = ALLERGY_OPTIONS.map((al) => {
         const active = profileState.allergies.includes(al);
-        return `<button onclick="toggleArrayItem('allergies', '${al}')"
+        return `<button type="button" onclick="toggleArrayItem('allergies', '${al}')"
           class="px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-bold transition ${active ? 'bg-red-600 text-white border-red-600 shadow-sm' : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'}">
           ${al} ${active ? '✕' : ''}
         </button>`;
@@ -1161,7 +1118,7 @@ const app = initializeApp(firebaseConfig);
 
       document.getElementById("preferenceGrid").innerHTML = PREFERENCE_OPTIONS.map((pr) => {
         const active = profileState.preferences.includes(pr);
-        return `<button onclick="toggleArrayItem('preferences', '${pr}')"
+        return `<button type="button" onclick="toggleArrayItem('preferences', '${pr}')"
           class="px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-bold transition ${active ? 'pill-active' : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'}">
           ${pr}
         </button>`;
@@ -1171,7 +1128,7 @@ const app = initializeApp(firebaseConfig);
     function renderStaplesGrid() {
       document.getElementById("staplesGrid").innerHTML = STAPLE_OPTIONS.map((st) => {
         const active = profileState.staples.includes(st);
-        return `<button onclick="toggleArrayItem('staples', '${st}')"
+        return `<button type="button" onclick="toggleArrayItem('staples', '${st}')"
           class="px-3 py-1.5 rounded-xl border text-xs font-bold transition ${active ? 'bg-stone-800 text-white border-stone-800' : 'bg-stone-100 border-stone-200 text-stone-400 line-through'}">
           ${active ? '✓ ' : ''}${st}
         </button>`;
@@ -1181,11 +1138,8 @@ const app = initializeApp(firebaseConfig);
     window.toggleArrayItem = function (key, item) {
       const arr = profileState[key] || [];
       const idx = arr.indexOf(item);
-      if (idx > -1) {
-        arr.splice(idx, 1);
-      } else {
-        arr.push(item);
-      }
+      if (idx > -1) arr.splice(idx, 1);
+      else arr.push(item);
       profileState[key] = arr;
       saveUserProfile();
       renderAllSteps();
@@ -1205,7 +1159,6 @@ const app = initializeApp(firebaseConfig);
       }
 
       const filtered = STORES.filter((s) => s.region === region);
-      // Ensure selectedStoreId belongs to region or keep valid
       if (!filtered.some((s) => s.id === profileState.selectedStoreId)) {
         profileState.selectedStoreId = filtered[0].id;
       }
@@ -1250,7 +1203,7 @@ const app = initializeApp(firebaseConfig);
     };
 
     // ============================================================================
-    // 10. RECIPE & GROCERY BUDGET SOLVER (WITH FRIDGE DEDUPLICATION)
+    // 8. COMPLETE MEAL PLAN & CLOUDFLARE GEMINI SOLVER
     // ============================================================================
     window.generateWeeklyMealPlan = async function (silent = false) {
       if (!silent) {
@@ -1261,134 +1214,140 @@ const app = initializeApp(firebaseConfig);
 
       const store = STORES.find((s) => s.id === profileState.selectedStoreId) || STORES[0];
       const geminiKey = localStorage.getItem("smartcart_gemini_key") || DEFAULT_GEMINI_API_KEY;
+      const workerUrl = localStorage.getItem("smartcart_worker_url") || DEFAULT_WORKER_URL;
 
       let plan = null;
 
-     export default {
-  async fetch(request, env) {
-    const corsHeaders = {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type"
+      if ((workerUrl || geminiKey) && !silent) {
+        try {
+          plan = await generatePlanWithGemini(store, geminiKey, workerUrl);
+        } catch (e) {
+          console.warn("Gemini fallback to built-in solver:", e.message);
+        }
+      }
+
+      if (!plan) {
+        plan = buildSmartLocalPlan(store);
+      }
+
+      profileState.currentPlan = plan;
+      await saveUserProfile();
+
+      document.getElementById("planLoadingCard").classList.add("hidden");
+      document.getElementById("planResultsContainer").classList.remove("hidden");
+      renderPlanResults(plan);
     };
 
-    if (request.method === "OPTIONS") {
-      return new Response(null, { headers: corsHeaders });
-    }
+    function buildSmartLocalPlan(store) {
+      const fridgeLower = profileState.fridgeItems.join(" ").toLowerCase();
 
-    const url = new URL(request.url);
-    const provider = url.searchParams.get("provider") || "kroger";
-    const term = url.searchParams.get("term") || "milk";
+      let eligible = CURATED_RECIPES.filter((r) => {
+        const hasTool = profileState.equipment.includes(r.equipmentId);
+        const hasAllergen = r.allergens.some((a) => profileState.allergies.includes(a));
+        return hasTool && !hasAllergen;
+      });
 
-    try {
-      // 1. KROGER & HARRIS TEETER & FRED MEYER
-      // Reston Harris Teeter = 09700081 / 09700085 | Beaverton Fred Meyer = 70100045 / 70100660
-      if (provider === "kroger") {
-        const locationId = url.searchParams.get("locationId") || "09700081";
-        const credentials = btoa(`${env.KROGER_CLIENT_ID}:${env.KROGER_CLIENT_SECRET}`);
+      if (eligible.length === 0) eligible = CURATED_RECIPES;
 
-        const tokenRes = await fetch("https://api.kroger.com/v1/connect/oauth2/token", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Authorization": `Basic ${credentials}`
-          },
-          body: "grant_type=client_credentials&scope=product.compact"
+      const scored = eligible.map((r) => {
+        let matchScore = 0;
+        r.ingredients.forEach((ing) => {
+          if (fridgeLower.includes(ing.key.toLowerCase())) matchScore += 2;
         });
-        const { access_token } = await tokenRes.json();
+        return { recipe: r, score: matchScore + Math.random() };
+      }).sort((a, b) => b.score - a.score);
 
-        const prodUrl = `https://api.kroger.com/v1/products?filter.term=${encodeURIComponent(term)}&filter.locationId=${locationId}&filter.limit=5`;
-        const prodRes = await fetch(prodUrl, {
-          headers: {
-            "Authorization": `Bearer ${access_token}`,
-            "Accept": "application/json"
+      const chosenRecipes = scored.slice(0, profileState.mealsCount).map((x) => x.recipe);
+
+      const shoppingMap = new Map();
+      const usedFromKitchen = new Set();
+
+      chosenRecipes.forEach((recipe) => {
+        recipe.ingredients.forEach((ing) => {
+          if (fridgeLower.includes(ing.key.toLowerCase())) {
+            usedFromKitchen.add(ing.name);
+          } else if (!shoppingMap.has(ing.name)) {
+            const adjustedPrice = +(ing.basePrice * store.multiplier * (profileState.servingsCount > 3 ? 1.5 : 1)).toFixed(2);
+            shoppingMap.set(ing.name, {
+              name: ing.name,
+              aisle: ing.aisle,
+              price: adjustedPrice,
+              checked: false,
+              sourceBadge: store.chain === "traderjoes" ? "TJ's Everyday Price" : "Est. Local Price"
+            });
           }
         });
-        const data = await prodRes.json();
-        return new Response(JSON.stringify(data), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" }
-        });
-      }
-
-      // 2. TRADER JOE'S GRAPHQL API
-      // Reston TJ's = 646 | Beaverton TJ's = 143
-      if (provider === "traderjoes") {
-        const storeCode = url.searchParams.get("storeCode") || "646";
-        const graphqlQuery = {
-          operationName: "SearchProducts",
-          variables: {
-            storeCode,
-            availability: "1",
-            published: "1",
-            search: term,
-            currentPage: 1,
-            pageSize: 5
-          },
-          query: `query SearchProducts($storeCode: String, $availability: String, $published: String, $search: String, $currentPage: Int, $pageSize: Int) {
-            products(filter: { store_code: { eq: $storeCode }, published: { eq: $published }, availability: { match: $availability } }, search: $search, currentPage: $currentPage, pageSize: $pageSize) {
-              items { sku item_title retail_price sales_size sales_uom_description availability }
-            }
-          }`
-        };
-
-        const tjRes = await fetch("https://www.traderjoes.com/api/graphql", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Origin": "https://www.traderjoes.com",
-            "Referer": "https://www.traderjoes.com/home/products/category/food-8",
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
-          },
-          body: JSON.stringify(graphqlQuery)
-        });
-        const data = await tjRes.json();
-        return new Response(JSON.stringify(data), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" }
-        });
-      }
-
-      // 3. SAFEWAY WEEKLY AD DEALS (VIA FLIPP CIRCULAR FEED)
-      // Reston = 20191 | Beaverton = 97005
-      if (provider === "safeway") {
-        const zip = url.searchParams.get("zip") || "20191";
-        const flippUrl = `https://backflipp.wishabi.com/flipp/items/search?locale=en-us&postal_code=${zip}&q=${encodeURIComponent("Safeway " + term)}`;
-        const flippRes = await fetch(flippUrl);
-        const data = await flippRes.json();
-        return new Response(JSON.stringify(data), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" }
-        });
-      }
-
-      // 4. GEMINI AI RECIPE SOLVER (KEEPS YOUR GEMINI KEY 100% HIDDEN IN CLOUDFLARE)
-      if (provider === "gemini" && request.method === "POST") {
-        const body = await request.json();
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${env.GEMINI_API_KEY}`;
-        const geminiRes = await fetch(geminiUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body)
-        });
-        const data = await geminiRes.json();
-        return new Response(JSON.stringify(data), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" }
-        });
-      }
-
-      return new Response(JSON.stringify({ error: "Unknown provider" }), {
-        status: 400,
-        headers: corsHeaders
       });
-    } catch (err) {
-      return new Response(JSON.stringify({ error: err.message }), {
-        status: 500,
-        headers: corsHeaders
-      });
+
+      const shoppingList = Array.from(shoppingMap.values());
+      const totalCost = +shoppingList.reduce((sum, item) => sum + item.price, 0).toFixed(2);
+
+      return {
+        storeName: store.name,
+        storeId: store.id,
+        totalCost,
+        budget: profileState.weeklyBudget,
+        shoppingList,
+        usedFromKitchen: Array.from(usedFromKitchen),
+        recipes: chosenRecipes
+      };
     }
-  }
-};
+
+    async function generatePlanWithGemini(store, apiKey, workerUrl) {
+      const prompt = `
+        Create a weekly grocery plan and ${profileState.mealsCount} dinner recipes (${profileState.servingsCount} servings each) for a shopper at ${store.name} (${store.address}).
+        Maximum Weekly Budget: $${profileState.weeklyBudget}.
+        Kitchen Equipment Available: ${profileState.equipment.join(", ")}.
+        Allergies to Strictly Avoid: ${profileState.allergies.join(", ") || "None"}.
+        Preferences: ${profileState.preferences.join(", ")}.
+        Ingredients Already in Kitchen (Use these first, $0 cost): ${profileState.fridgeItems.join(", ")}.
+        Basic Staples on Hand: ${profileState.staples.join(", ")}.
+
+        Return ONLY valid JSON matching this exact structure:
+        {
+          "shoppingList": [
+            { "name": "Package Name & Size", "aisle": "Produce | Meat & Seafood | Dairy & Eggs | Pantry", "price": 4.99, "checked": false, "sourceBadge": "Store Estimate" }
+          ],
+          "usedFromKitchen": ["Item 1", "Item 2"],
+          "recipes": [
+            { "title": "Recipe Name", "time": "25 mins", "equipmentNeeded": "Skillet", "steps": ["Step 1", "Step 2", "Step 3"] }
+          ]
+        }
+      `;
+
+      let endpoint = "";
+      if (apiKey) {
+        endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+      } else {
+        const u = new URL(workerUrl);
+        u.searchParams.set("provider", "gemini");
+        endpoint = u.toString();
+      }
+
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { responseMimeType: "application/json" }
+        })
+      });
+      const data = await res.json();
+      const parsed = JSON.parse(data.candidates[0].content.parts[0].text);
+      const totalCost = +parsed.shoppingList.reduce((s, i) => s + Number(i.price || 0), 0).toFixed(2);
+      return {
+        storeName: store.name,
+        storeId: store.id,
+        totalCost,
+        budget: profileState.weeklyBudget,
+        shoppingList: parsed.shoppingList,
+        usedFromKitchen: parsed.usedFromKitchen || profileState.fridgeItems,
+        recipes: parsed.recipes
+      };
+    }
 
     // ============================================================================
-    // 11. RENDER MEAL PLAN & LIVE STORE PRICE VERIFICATION
+    // 9. RENDER PLAN & LIVE PRICE VERIFICATION
     // ============================================================================
     function renderPlanResults(plan) {
       if (!plan) return;
@@ -1414,7 +1373,6 @@ const app = initializeApp(firebaseConfig);
 
       document.getElementById("groceryCountBadge").textContent = `${plan.shoppingList.length} items`;
 
-      // Group grocery list by aisle
       const byAisle = {};
       plan.shoppingList.forEach((item, idx) => {
         const aisle = item.aisle || "Grocery";
@@ -1441,14 +1399,12 @@ const app = initializeApp(firebaseConfig);
         </div>
       `).join("");
 
-      // Used from kitchen pills
       const usedKitchenEl = document.getElementById("usingFromKitchenList");
       const usedList = plan.usedFromKitchen && plan.usedFromKitchen.length ? plan.usedFromKitchen : profileState.fridgeItems;
       usedKitchenEl.innerHTML = usedList.map((u) => `
         <span class="text-xs font-bold bg-green-50 border border-green-200 text-green-900 px-2.5 py-1 rounded-lg">${u}</span>
       `).join("");
 
-      // Recipes
       const recipesEl = document.getElementById("recipesContainer");
       recipesEl.innerHTML = plan.recipes.map((r, i) => `
         <div class="bg-white rounded-3xl p-5 sm:p-6 border border-stone-200 shadow-sm">
@@ -1478,7 +1434,6 @@ const app = initializeApp(firebaseConfig);
       }
     };
 
-    // Live Store Price Verification (Flipp Circular API + Optional Cloudflare Worker)
     window.verifyLiveStorePrices = async function () {
       if (!profileState.currentPlan) return;
       const btn = document.getElementById("verifyLivePricesBtn");
@@ -1509,7 +1464,6 @@ const app = initializeApp(firebaseConfig);
             }
           }
 
-          // Direct browser-friendly fallback via Flipp Weekly Ad Circular API for ZIP 20191 / 97005
           const flippUrl = `https://backflipp.wishabi.com/flipp/items/search?locale=en-us&postal_code=${store.zip}&q=${encodeURIComponent(cleanQuery)}`;
           const flippRes = await fetch(flippUrl);
           const flippData = await flippRes.json();
@@ -1535,9 +1489,6 @@ const app = initializeApp(firebaseConfig);
       }, 2500);
     };
 
-    // ============================================================================
-    // 12. ADMIN SETTINGS MODAL
-    // ============================================================================
     window.toggleAdminModal = function (show) {
       const modal = document.getElementById("adminModal");
       if (show) {
@@ -1563,7 +1514,6 @@ const app = initializeApp(firebaseConfig);
       window.location.reload();
     };
 
-    // Start App
     initFirebaseIfAvailable();
   </script>
 </body>
