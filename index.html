@@ -3,22 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SmartCart Kitchen — Weekly Meal & Grocery Budget Planner</title>
+  <title>SmartCart Kitchen — Weekly Meal &amp; Grocery Budget Planner</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ==========================================================================
-       100% SELF-CONTAINED NATIVE CSS (NEVER FAILS OR DEPENDS ON EXTERNAL CDN)
-       ========================================================================== */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    .hidden {
-      display: none !important;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    .hidden { display: none !important; }
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: #FAF8F5;
@@ -29,540 +20,110 @@
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
     }
-    button, input, select {
-      font-family: inherit;
-    }
-    button {
-      cursor: pointer;
-      touch-action: manipulation;
-      border: none;
-      background: none;
-    }
-
-    /* Top Header */
-    .top-header {
-      background: #FFFFFF;
-      border-bottom: 1px solid #E7E5E4;
-      position: sticky;
-      top: 0;
-      z-index: 30;
-    }
-    .header-inner {
-      max-width: 1024px;
-      margin: 0 auto;
-      padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .brand-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .brand-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      background: #15803D;
-      color: #FFFFFF;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 2px 6px rgba(21, 128, 61, 0.25);
-    }
-    .brand-title {
-      font-size: 19px;
-      font-weight: 800;
-      color: #1C1917;
-      line-height: 1.2;
-    }
-    .brand-sub {
-      font-size: 12px;
-      color: #78716C;
-    }
-    .user-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .user-pill {
-      background: #F5F5F4;
-      padding: 6px 14px;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      font-weight: 700;
-    }
-    .status-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: #16A34A;
-    }
-    .logout-btn {
-      font-size: 13px;
-      font-weight: 700;
-      color: #57534E;
-      padding: 7px 12px;
-      border-radius: 10px;
-      transition: all 0.15s ease;
-    }
-    .logout-btn:hover {
-      background: #FEE2E2;
-      color: #DC2626;
-    }
-
-    /* Auth Screen */
-    .auth-wrapper {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px 16px;
-    }
-    .auth-card {
-      background: #FFFFFF;
-      border: 1px solid #E7E5E4;
-      border-radius: 24px;
-      box-shadow: 0 16px 36px rgba(28, 25, 23, 0.07);
-      max-width: 440px;
-      width: 100%;
-      padding: 32px 28px;
-    }
-    .auth-hero-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 20px;
-      background: #F0FDF4;
-      border: 1px solid #BBF7D0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      margin: 0 auto 12px;
-    }
-    .live-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #DCFCE7;
-      color: #166534;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 4px 12px;
-      border-radius: 999px;
-      margin-bottom: 10px;
-    }
-    .auth-title {
-      font-size: 24px;
-      font-weight: 800;
-      color: #1C1917;
-      text-align: center;
-    }
-    .auth-subtitle {
-      font-size: 14px;
-      color: #57534E;
-      text-align: center;
-      margin-top: 6px;
-      margin-bottom: 22px;
-    }
-
-    /* Mode Switcher */
-    .mode-switcher {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      background: #F5F5F4;
-      padding: 4px;
-      border-radius: 16px;
-      margin-bottom: 22px;
-    }
-    .mode-btn {
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 700;
-      color: #57534E;
-      transition: all 0.15s ease;
-    }
-    .mode-btn.active {
-      background: #FFFFFF;
-      color: #1C1917;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-    }
-
-    /* Forms & Inputs */
-    .form-group {
-      margin-bottom: 16px;
-    }
-    .form-label {
-      display: block;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #57534E;
-      margin-bottom: 6px;
-    }
-    .text-input, .select-input {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1.5px solid #D6D3D1;
-      font-size: 15px;
-      background: #FFFFFF;
-      color: #1C1917;
-      outline: none;
-      transition: border-color 0.15s ease;
-    }
-    .text-input:focus, .select-input:focus {
-      border-color: #15803D;
-      box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.12);
-    }
-    .error-box {
-      background: #FEF2F2;
-      border: 1px solid #FECACA;
-      color: #B91C1C;
-      padding: 12px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 16px;
-    }
-    .btn-primary {
-      width: 100%;
-      padding: 14px 22px;
-      background: #15803D;
-      color: #FFFFFF;
-      font-size: 16px;
-      font-weight: 800;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(21, 128, 61, 0.22);
-      transition: background 0.15s ease, transform 0.1s ease;
-    }
-    .btn-primary:hover {
-      background: #166534;
-    }
-    .btn-primary:active {
-      transform: scale(0.99);
-    }
-    .demo-divider {
-      margin-top: 24px;
-      padding-top: 20px;
-      border-top: 1px solid #E7E5E4;
-    }
-    .demo-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .demo-btn {
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1.5px solid #D6D3D1;
-      background: #FFFFFF;
-      font-size: 12px;
-      font-weight: 700;
-      color: #44403C;
-      transition: all 0.15s ease;
-    }
-    .demo-btn:hover {
-      border-color: #15803D;
-      background: #F0FDF4;
-    }
-
-    /* Main Workspace */
-    .workspace {
-      max-width: 1024px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 24px 16px 48px;
-      flex: 1;
-    }
-    .card {
-      background: #FFFFFF;
-      border: 1px solid #E7E5E4;
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: 0 2px 8px rgba(28, 25, 23, 0.04);
-      margin-bottom: 20px;
-    }
-    .welcome-banner {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .budget-badge-box {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #F0FDF4;
-      border: 1px solid #BBF7D0;
-      padding: 10px 18px;
-      border-radius: 16px;
-    }
-
-    /* 3-Step Navigation */
-    .step-nav {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-    .step-tab {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 14px 10px;
-      border-radius: 16px;
-      font-size: 14px;
-      font-weight: 800;
-      border: 2px solid #E7E5E4;
-      background: #FFFFFF;
-      color: #57534E;
-      transition: all 0.15s ease;
-    }
-    .step-tab.active {
-      border-color: #15803D;
-      background: #15803D;
-      color: #FFFFFF;
-      box-shadow: 0 4px 12px rgba(21, 128, 61, 0.2);
-    }
-    .step-num {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.08);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-    }
-    .step-tab.active .step-num {
-      background: rgba(255,255,255,0.25);
-    }
-
-    /* Pills & Grids */
-    .pill-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .pill-btn {
-      padding: 9px 14px;
-      border-radius: 12px;
-      border: 1.5px solid #E7E5E4;
-      background: #FAF8F5;
-      color: #292524;
-      font-size: 13px;
-      font-weight: 700;
-      transition: all 0.15s ease;
-    }
-    .pill-btn:hover {
-      background: #F5F5F4;
-    }
-    .pill-active {
-      background: #15803D !important;
-      color: #FFFFFF !important;
-      border-color: #15803D !important;
-      box-shadow: 0 3px 10px rgba(21, 128, 61, 0.2);
-    }
-    .pill-danger-active {
-      background: #DC2626 !important;
-      color: #FFFFFF !important;
-      border-color: #DC2626 !important;
-    }
-    .pill-staple-active {
-      background: #292524 !important;
-      color: #FFFFFF !important;
-      border-color: #292524 !important;
-    }
-    .pill-staple-off {
-      background: #F5F5F4;
-      color: #A8A29E;
-      text-decoration: line-through;
-    }
-
-    .equip-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 10px;
-    }
-    .equip-card {
-      padding: 14px;
-      border-radius: 16px;
-      border: 1.5px solid #E7E5E4;
-      background: #FAF8F5;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-align: left;
-      font-size: 13px;
-      font-weight: 700;
-      color: #1C1917;
-      transition: all 0.15s ease;
-    }
-
-    .store-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 14px;
-    }
-    .store-card {
-      padding: 18px;
-      border-radius: 18px;
-      border: 2px solid #E7E5E4;
-      background: #FFFFFF;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .store-card-active {
-      border-color: #15803D !important;
-      background: #F0FDF4 !important;
-      box-shadow: 0 6px 16px rgba(21, 128, 61, 0.12);
-    }
-
-    .plan-layout {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-    @media (min-width: 860px) {
-      .plan-layout {
-        grid-template-columns: 5fr 7fr;
-      }
-    }
-
-    .grocery-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1.5px solid #E7E5E4;
-      background: #FFFFFF;
-      margin-bottom: 8px;
-      cursor: pointer;
-    }
-    .grocery-item.checked {
-      opacity: 0.55;
-      text-decoration: line-through;
-      background: #FAF8F5;
-    }
-
-    .progress-track {
-      width: 100%;
-      height: 14px;
-      background: #E7E5E4;
-      border-radius: 999px;
-      overflow: hidden;
-      margin-top: 10px;
-    }
-    .progress-fill {
-      height: 100%;
-      background: #16A34A;
-      transition: width 0.4s ease;
-    }
-
-    .counter-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 14px;
-    }
-    .counter-box {
-      padding: 16px;
-      border-radius: 16px;
-      border: 1.5px solid #E7E5E4;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .counter-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: #F5F5F4;
-      font-size: 18px;
-      font-weight: 800;
-    }
-    .footer-bar {
-      margin-top: auto;
-      border-top: 1px solid #E7E5E4;
-      background: #FFFFFF;
-      padding: 16px;
-      text-align: center;
-      font-size: 12px;
-      color: #78716C;
-    }
-    @media print {
-      .no-print { display: none !important; }
-      body { background: #FFFFFF; }
-    }
+    button, input, select { font-family: inherit; }
+    button { cursor: pointer; touch-action: manipulation; border: none; background: none; }
+    .top-header { background: #FFFFFF; border-bottom: 1px solid #E7E5E4; position: sticky; top: 0; z-index: 30; }
+    .header-inner { max-width: 1024px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
+    .brand-row { display: flex; align-items: center; gap: 12px; }
+    .brand-icon { width: 42px; height: 42px; border-radius: 14px; background: #15803D; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 6px rgba(21, 128, 61, 0.25); }
+    .brand-title { font-size: 19px; font-weight: 800; color: #1C1917; line-height: 1.2; }
+    .brand-sub { font-size: 12px; color: #78716C; }
+    .user-bar { display: flex; align-items: center; gap: 10px; }
+    .user-pill { background: #F5F5F4; padding: 6px 14px; border-radius: 999px; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; }
+    .status-dot { width: 9px; height: 9px; border-radius: 50%; background: #16A34A; }
+    .logout-btn { font-size: 13px; font-weight: 700; color: #57534E; padding: 7px 12px; border-radius: 10px; transition: all 0.15s ease; }
+    .logout-btn:hover { background: #FEE2E2; color: #DC2626; }
+    .auth-wrapper { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+    .auth-card { background: #FFFFFF; border: 1px solid #E7E5E4; border-radius: 24px; box-shadow: 0 16px 36px rgba(28, 25, 23, 0.07); max-width: 440px; width: 100%; padding: 32px 28px; }
+    .auth-hero-icon { width: 60px; height: 60px; border-radius: 20px; background: #F0FDF4; border: 1px solid #BBF7D0; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 12px; }
+    .live-badge { display: inline-flex; align-items: center; gap: 6px; background: #DCFCE7; color: #166534; font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 999px; margin-bottom: 10px; }
+    .auth-title { font-size: 24px; font-weight: 800; color: #1C1917; text-align: center; }
+    .auth-subtitle { font-size: 14px; color: #57534E; text-align: center; margin-top: 6px; margin-bottom: 22px; }
+    .mode-switcher { display: grid; grid-template-columns: 1fr 1fr; background: #F5F5F4; padding: 4px; border-radius: 16px; margin-bottom: 22px; }
+    .mode-btn { padding: 10px 12px; border-radius: 12px; font-size: 14px; font-weight: 700; color: #57534E; transition: all 0.15s ease; }
+    .mode-btn.active { background: #FFFFFF; color: #1C1917; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #57534E; margin-bottom: 6px; }
+    .text-input, .select-input { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #D6D3D1; font-size: 15px; background: #FFFFFF; color: #1C1917; outline: none; }
+    .text-input:focus, .select-input:focus { border-color: #15803D; box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.12); }
+    .error-box { background: #FEF2F2; border: 1px solid #FECACA; color: #B91C1C; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
+    .btn-primary { width: 100%; padding: 14px 22px; background: #15803D; color: #FFFFFF; font-size: 16px; font-weight: 800; border-radius: 16px; box-shadow: 0 4px 12px rgba(21, 128, 61, 0.22); transition: background 0.15s ease; }
+    .btn-primary:hover { background: #166534; }
+    .demo-divider { margin-top: 24px; padding-top: 20px; border-top: 1px solid #E7E5E4; }
+    .demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+    .demo-btn { padding: 10px 12px; border-radius: 12px; border: 1.5px solid #D6D3D1; background: #FFFFFF; font-size: 12px; font-weight: 700; color: #44403C; }
+    .demo-btn:hover { border-color: #15803D; background: #F0FDF4; }
+    .workspace { max-width: 1024px; width: 100%; margin: 0 auto; padding: 24px 16px 48px; flex: 1; }
+    .card { background: #FFFFFF; border: 1px solid #E7E5E4; border-radius: 24px; padding: 24px; box-shadow: 0 2px 8px rgba(28, 25, 23, 0.04); margin-bottom: 20px; }
+    .welcome-banner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+    .budget-badge-box { display: flex; align-items: center; gap: 12px; background: #F0FDF4; border: 1px solid #BBF7D0; padding: 10px 18px; border-radius: 16px; }
+    .step-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+    .step-tab { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 10px; border-radius: 16px; font-size: 14px; font-weight: 800; border: 2px solid #E7E5E4; background: #FFFFFF; color: #57534E; }
+    .step-tab.active { border-color: #15803D; background: #15803D; color: #FFFFFF; box-shadow: 0 4px 12px rgba(21, 128, 61, 0.2); }
+    .step-num { width: 24px; height: 24px; border-radius: 50%; background: rgba(0,0,0,0.08); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+    .step-tab.active .step-num { background: rgba(255,255,255,0.25); }
+    .pill-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill-btn { padding: 9px 14px; border-radius: 12px; border: 1.5px solid #E7E5E4; background: #FAF8F5; color: #292524; font-size: 13px; font-weight: 700; }
+    .pill-active { background: #15803D !important; color: #FFFFFF !important; border-color: #15803D !important; }
+    .pill-danger-active { background: #DC2626 !important; color: #FFFFFF !important; border-color: #DC2626 !important; }
+    .pill-staple-active { background: #292524 !important; color: #FFFFFF !important; border-color: #292524 !important; }
+    .pill-staple-off { background: #F5F5F4; color: #A8A29E; text-decoration: line-through; }
+    .equip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+    .equip-card { padding: 14px; border-radius: 16px; border: 1.5px solid #E7E5E4; background: #FAF8F5; display: flex; align-items: center; gap: 10px; text-align: left; font-size: 13px; font-weight: 700; color: #1C1917; }
+    .store-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+    .store-card { padding: 18px; border-radius: 18px; border: 2px solid #E7E5E4; background: #FFFFFF; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; }
+    .store-card-active { border-color: #15803D !important; background: #F0FDF4 !important; box-shadow: 0 6px 16px rgba(21, 128, 61, 0.12); }
+    .plan-layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    @media (min-width: 860px) { .plan-layout { grid-template-columns: 5fr 7fr; } }
+    .grocery-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: 14px; border: 1.5px solid #E7E5E4; background: #FFFFFF; margin-bottom: 8px; cursor: pointer; }
+    .grocery-item.checked { opacity: 0.55; text-decoration: line-through; background: #FAF8F5; }
+    .progress-track { width: 100%; height: 14px; background: #E7E5E4; border-radius: 999px; overflow: hidden; margin-top: 10px; }
+    .progress-fill { height: 100%; background: #16A34A; transition: width 0.4s ease; }
+    .counter-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+    .counter-box { padding: 16px; border-radius: 16px; border: 1.5px solid #E7E5E4; display: flex; align-items: center; justify-content: space-between; }
+    .counter-btn { width: 36px; height: 36px; border-radius: 10px; background: #F5F5F4; font-size: 18px; font-weight: 800; }
+    .footer-bar { margin-top: auto; border-top: 1px solid #E7E5E4; background: #FFFFFF; padding: 16px; text-align: center; font-size: 12px; color: #78716C; }
+    @media print { .no-print { display: none !important; } body { background: #FFFFFF; } }
   </style>
 </head>
 <body>
 
-  <!-- TOP NAVIGATION BAR -->
   <header class="top-header no-print">
     <div class="header-inner">
       <div class="brand-row">
         <div class="brand-icon">🛒</div>
         <div>
           <h1 class="brand-title">SmartCart Kitchen</h1>
-          <p class="brand-sub">Weekly Grocery Budget & Recipe Planner</p>
+          <p class="brand-sub">Weekly Grocery Budget &amp; Recipe Planner</p>
         </div>
       </div>
-
-      <!-- User Account Status (Hidden Until Logged In) -->
       <div id="userHeaderBar" class="user-bar hidden">
         <div class="user-pill">
           <span class="status-dot"></span>
           <span id="headerUsername">User</span>
           <span id="syncBadge" style="color:#78716C; font-weight:500;">• Saved</span>
         </div>
-        <button type="button" onclick="window.handleLogout()" class="logout-btn">
-          Log Out
-        </button>
+        <button type="button" onclick="window.handleLogout()" class="logout-btn">Log Out</button>
       </div>
     </div>
   </header>
 
-  <!-- ========================================== -->
-  <!-- VIEW 1: FRIENDLY LOGIN / SIGN-UP SCREEN    -->
-  <!-- ========================================== -->
+  <!-- VIEW 1: LOGIN / CREATE PROFILE -->
   <main id="authScreen" class="auth-wrapper">
     <div class="auth-card">
       <div style="text-align:center;">
         <div class="auth-hero-icon">🥗</div>
         <div class="live-badge">
           <span class="status-dot"></span>
-          <span id="cloudStatusText">v2.2 Live • Ready</span>
+          <span id="cloudStatusText">v2.4 Live • Ready</span>
         </div>
         <h2 class="auth-title">Welcome to Your Kitchen</h2>
-        <p class="auth-subtitle">
-          Sign in to load your kitchen tools, fridge inventory, favorite store, and weekly budget.
-        </p>
+        <p class="auth-subtitle">Sign in to load your kitchen tools, fridge inventory, favorite store, and weekly budget.</p>
       </div>
 
-      <!-- Sign In / Create Account Toggle -->
       <div class="mode-switcher">
-        <button type="button" id="tabLoginBtn" onclick="window.switchAuthMode('login')" class="mode-btn active">
-          Sign In
-        </button>
-        <button type="button" id="tabSignupBtn" onclick="window.switchAuthMode('signup')" class="mode-btn">
-          Create New Profile
-        </button>
+        <button type="button" id="tabLoginBtn" onclick="window.switchAuthMode('login')" class="mode-btn active">Sign In</button>
+        <button type="button" id="tabSignupBtn" onclick="window.switchAuthMode('signup')" class="mode-btn">Create New Profile</button>
       </div>
 
       <form id="authForm" onsubmit="window.handleAuthSubmit(event)">
@@ -591,92 +152,65 @@
 
         <div id="authErrorBox" class="error-box hidden"></div>
 
-        <button id="authSubmitBtn" type="submit" class="btn-primary">
-          Sign In to My Kitchen →
-        </button>
+        <button id="authSubmitBtn" type="submit" class="btn-primary">Sign In to My Kitchen →</button>
       </form>
 
-      <!-- Instant Demo Access for Testing -->
       <div class="demo-divider">
         <p style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; color:#A8A29E; text-align:center;">
           Or Try a Pre-Loaded Profile Immediately
         </p>
         <div class="demo-grid">
-          <button type="button" onclick="window.loginQuickDemo('reston_demo', 'Reston Friend', 'reston')" class="demo-btn">
-            🏡 Reston, VA Demo
-          </button>
-          <button type="button" onclick="window.loginQuickDemo('pnw_demo', 'Oregon Home', 'pnw')" class="demo-btn">
-            🌲 Oregon Demo
-          </button>
+          <button type="button" onclick="window.loginQuickDemo('reston_demo', 'Reston Friend', 'reston')" class="demo-btn">🏡 Reston, VA Demo</button>
+          <button type="button" onclick="window.loginQuickDemo('pnw_demo', 'Oregon Home', 'pnw')" class="demo-btn">🌲 Oregon Demo</button>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- ========================================== -->
-  <!-- VIEW 2: MAIN APPLICATION WORKSPACE         -->
-  <!-- ========================================== -->
+  <!-- VIEW 2: MAIN WORKSPACE -->
   <div id="appWorkspace" class="workspace hidden">
-
-    <!-- Friendly Welcome Banner -->
     <div class="card welcome-banner no-print">
       <div>
         <h2 id="welcomeHeadline" style="font-size:22px; font-weight:800;">Hello! Let's plan this week's meals.</h2>
-        <p style="font-size:14px; color:#57534E; margin-top:2px;">
-          Everything you tap below automatically saves to your personal profile.
-        </p>
+        <p style="font-size:14px; color:#57534E; margin-top:2px;">Everything you tap below automatically saves to your personal profile.</p>
       </div>
       <div class="budget-badge-box">
         <span style="font-size:24px;">💰</span>
         <div>
           <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#166534;">Weekly Budget</div>
-          <div id="bannerBudgetDisplay" style="font-size:20px; font-weight:800; color:#14532D;">$125</div>
+          <div id="bannerBudgetDisplay" style="font-size:20px; font-weight:800; color:#14532D;">&#36;125</div>
         </div>
       </div>
     </div>
 
-    <!-- 3-Step Guided Navigation Bar -->
     <div class="step-nav no-print">
       <button type="button" id="stepBtn1" onclick="window.goToStep(1)" class="step-tab active">
-        <span class="step-num">1</span>
-        <span>My Kitchen & Fridge</span>
+        <span class="step-num">1</span><span>My Kitchen &amp; Fridge</span>
       </button>
       <button type="button" id="stepBtn2" onclick="window.goToStep(2)" class="step-tab">
-        <span class="step-num">2</span>
-        <span>Store & Budget</span>
+        <span class="step-num">2</span><span>Store &amp; Budget</span>
       </button>
       <button type="button" id="stepBtn3" onclick="window.goToStep(3)" class="step-tab">
-        <span class="step-num">3</span>
-        <span>Meals & Grocery List</span>
+        <span class="step-num">3</span><span>Meals &amp; Grocery List</span>
       </button>
     </div>
 
-    <!-- STEP 1: MY KITCHEN, PANTRY & ALLERGIES -->
+    <!-- STEP 1 -->
     <section id="stepPanel1">
       <div class="card">
-        <span style="display:inline-block; font-size:11px; font-weight:800; text-transform:uppercase; background:#FEF3C7; color:#92400E; padding:4px 10px; border-radius:999px; margin-bottom:8px;">
-          Save Money First
-        </span>
+        <span style="display:inline-block; font-size:11px; font-weight:800; text-transform:uppercase; background:#FEF3C7; color:#92400E; padding:4px 10px; border-radius:999px; margin-bottom:8px;">Save Money First</span>
         <h3 style="font-size:19px; font-weight:800; margin-bottom:4px;">1. What ingredients do you already have on hand?</h3>
-        <p style="font-size:14px; color:#57534E; margin-bottom:16px;">
-          Tap or type anything sitting in your fridge, freezer, or garden. Your recipes will use these first so you don't buy duplicates!
-        </p>
-
+        <p style="font-size:14px; color:#57534E; margin-bottom:16px;">Tap or type anything sitting in your fridge, freezer, or garden. Your recipes will use these first so you don't buy duplicates!</p>
         <div style="margin-bottom:16px;">
           <div class="form-label">Quick-Tap Common Items in Your Fridge / Pantry:</div>
           <div id="quickFridgePills" class="pill-wrap"></div>
         </div>
-
         <div style="display:flex; gap:8px; margin-top:14px;">
           <input id="customFridgeInput" type="text" placeholder="Type anything else you have (e.g., 2 chicken breasts, spinach)..."
-            onkeydown="if(event.key==='Enter'){event.preventDefault();window.addCustomFridgeItem();}"
-            class="text-input" />
+            onkeydown="if(event.key==='Enter'){event.preventDefault();window.addCustomFridgeItem();}" class="text-input" />
           <button type="button" onclick="window.addCustomFridgeItem()"
-            style="padding:0 20px; background:#1C1917; color:#FFF; font-weight:800; border-radius:12px; font-size:14px; white-space:nowrap;">
-            + Add Item
-          </button>
+            style="padding:0 20px; background:#1C1917; color:#FFF; font-weight:800; border-radius:12px; font-size:14px; white-space:nowrap;">+ Add Item</button>
         </div>
-
         <div style="margin-top:18px; padding-top:16px; border-top:1px solid #E7E5E4;">
           <div class="form-label">Currently in Your Kitchen to Use Up:</div>
           <div id="activeFridgeList" class="pill-wrap"></div>
@@ -685,19 +219,15 @@
 
       <div class="card">
         <h3 style="font-size:19px; font-weight:800; margin-bottom:4px;">2. Which cooking tools do you have?</h3>
-        <p style="font-size:14px; color:#57534E; margin-bottom:16px;">
-          Tap the appliances and pans you have in your kitchen. We will only give you recipes you can actually cook.
-        </p>
+        <p style="font-size:14px; color:#57534E; margin-bottom:16px;">Tap the appliances and pans you have in your kitchen. We will only give you recipes you can actually cook.</p>
         <div id="equipmentGrid" class="equip-grid"></div>
       </div>
 
       <div class="card">
         <h3 style="font-size:19px; font-weight:800; margin-bottom:4px;">3. Any allergies or food preferences?</h3>
-        <p style="font-size:14px; color:#57534E; margin-bottom:16px;">
-          Select any allergies to strictly avoid, plus the style of meals you enjoy.
-        </p>
+        <p style="font-size:14px; color:#57534E; margin-bottom:16px;">Select any allergies to strictly avoid, plus the style of meals you enjoy.</p>
         <div style="margin-bottom:18px;">
-          <div class="form-label" style="color:#B91C1C;">🚫 Allergies & Dislikes (Strictly Excluded)</div>
+          <div class="form-label" style="color:#B91C1C;">🚫 Allergies &amp; Dislikes (Strictly Excluded)</div>
           <div id="allergyGrid" class="pill-wrap"></div>
         </div>
         <div>
@@ -713,13 +243,11 @@
       </div>
 
       <div style="display:flex; justify-content:flex-end;">
-        <button type="button" onclick="window.goToStep(2)" class="btn-primary" style="max-width:340px;">
-          Next: Choose Store & Weekly Budget →
-        </button>
+        <button type="button" onclick="window.goToStep(2)" class="btn-primary" style="max-width:340px;">Next: Choose Store &amp; Weekly Budget →</button>
       </div>
     </section>
 
-    <!-- STEP 2: STORE & WEEKLY BUDGET -->
+    <!-- STEP 2 -->
     <section id="stepPanel2" class="hidden">
       <div class="card">
         <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px;">
@@ -728,12 +256,8 @@
             <p style="font-size:14px; color:#57534E;">Select your store to load local package prices and weekly specials.</p>
           </div>
           <div style="display:inline-flex; background:#F5F5F4; padding:4px; border-radius:12px;">
-            <button type="button" id="regionBtnReston" onclick="window.filterStoresByRegion('reston')" class="mode-btn active" style="font-size:12px; padding:7px 12px;">
-              📍 Reston, VA (20191)
-            </button>
-            <button type="button" id="regionBtnPnw" onclick="window.filterStoresByRegion('pnw')" class="mode-btn" style="font-size:12px; padding:7px 12px;">
-              🌲 Beaverton / OR
-            </button>
+            <button type="button" id="regionBtnReston" onclick="window.filterStoresByRegion('reston')" class="mode-btn active" style="font-size:12px; padding:7px 12px;">📍 Reston, VA (20191)</button>
+            <button type="button" id="regionBtnPnw" onclick="window.filterStoresByRegion('pnw')" class="mode-btn" style="font-size:12px; padding:7px 12px;">🌲 Beaverton / OR</button>
           </div>
         </div>
         <div id="storeSelectionGrid" class="store-grid"></div>
@@ -741,22 +265,16 @@
 
       <div class="card">
         <h3 style="font-size:19px; font-weight:800; margin-bottom:4px;">2. Set Your Weekly Grocery Budget</h3>
-        <p style="font-size:14px; color:#57534E; margin-bottom:18px;">
-          Slide to set your maximum spend at the register.
-        </p>
-
+        <p style="font-size:14px; color:#57534E; margin-bottom:18px;">Slide to set your maximum spend at the register.</p>
         <div style="background:#FAF8F5; border:1px solid #E7E5E4; border-radius:18px; padding:20px; margin-bottom:20px;">
           <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;">
             <span style="font-size:14px; font-weight:700; color:#57534E;">Maximum Weekly Spend:</span>
-            <span id="budgetSliderLabel" style="font-size:32px; font-weight:800; color:#15803D;">$125</span>
+            <span id="budgetSliderLabel" style="font-size:32px; font-weight:800; color:#15803D;">&#36;125</span>
           </div>
           <input id="budgetRangeInput" type="range" min="45" max="300" step="5" value="125"
-            oninput="window.updateBudgetValue(this.value)"
-            style="width:100%; height:10px; cursor:pointer; accent-color:#15803D;" />
+            oninput="window.updateBudgetValue(this.value)" style="width:100%; height:10px; cursor:pointer; accent-color:#15803D;" />
           <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; color:#78716C; margin-top:8px;">
-            <span>$45 / wk</span>
-            <span>$125 / wk</span>
-            <span>$300 / wk</span>
+            <span>&#36;45 / wk</span><span>&#36;125 / wk</span><span>&#36;300 / wk</span>
           </div>
         </div>
 
@@ -788,23 +306,17 @@
       </div>
 
       <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px;">
-        <button type="button" onclick="window.goToStep(1)" class="demo-btn" style="padding:14px 20px; font-size:14px;">
-          ← Back to My Kitchen
-        </button>
-        <button type="button" onclick="window.generateWeeklyMealPlan()" class="btn-primary" style="max-width:360px;">
-          ✨ Build My Grocery List & Recipes
-        </button>
+        <button type="button" onclick="window.goToStep(1)" class="demo-btn" style="padding:14px 20px; font-size:14px;">← Back to My Kitchen</button>
+        <button type="button" onclick="window.generateWeeklyMealPlan()" class="btn-primary" style="max-width:360px;">✨ Build My Grocery List &amp; Recipes</button>
       </div>
     </section>
 
-    <!-- STEP 3: MEAL PLAN & GROCERY LIST -->
+    <!-- STEP 3 -->
     <section id="stepPanel3" class="hidden">
       <div id="planLoadingCard" class="card hidden" style="text-align:center; padding:44px 20px;">
         <div style="font-size:42px; margin-bottom:10px;">🛒</div>
-        <h3 style="font-size:20px; font-weight:800; margin-bottom:6px;">Building Your Custom Meal Plan & Checking Store Prices...</h3>
-        <p style="font-size:14px; color:#57534E;">
-          Matching your kitchen tools, using up your fridge items first, and keeping your cart under budget.
-        </p>
+        <h3 style="font-size:20px; font-weight:800; margin-bottom:6px;">Building Your Custom Meal Plan &amp; Checking Store Prices...</h3>
+        <p style="font-size:14px; color:#57534E;">Matching your kitchen tools, using up your fridge items first, and keeping your cart under budget.</p>
       </div>
 
       <div id="planResultsContainer">
@@ -812,10 +324,9 @@
           <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px; margin-bottom:16px;">
             <div>
               <div id="planStoreBadge" class="live-badge">📍 Store Selected</div>
-              <h3 style="font-size:22px; font-weight:800;">Your Weekly Grocery Cart & Meal Plan</h3>
+              <h3 style="font-size:22px; font-weight:800;">Your Weekly Grocery Cart &amp; Meal Plan</h3>
               <p style="font-size:14px; color:#57534E;">All recipes fit your kitchen equipment and stay within your budget.</p>
             </div>
-
             <div class="no-print" style="display:flex; flex-wrap:wrap; gap:8px;">
               <button type="button" onclick="window.verifyLiveStorePrices()" id="verifyLivePricesBtn"
                 style="padding:10px 16px; border-radius:12px; background:#FEF3C7; border:1px solid #FCD34D; color:#92400E; font-weight:800; font-size:13px;">
@@ -832,8 +343,8 @@
             <div style="display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:8px;">
               <div>
                 <span style="font-size:12px; font-weight:800; text-transform:uppercase; color:#78716C;">Estimated Register Total:</span>
-                <span id="cartTotalDisplay" style="font-size:28px; font-weight:800; color:#15803D; margin-left:8px;">$0.00</span>
-                <span id="cartBudgetLimitDisplay" style="font-size:14px; color:#78716C; font-weight:600;">of $125.00 budget</span>
+                <span id="cartTotalDisplay" style="font-size:28px; font-weight:800; color:#15803D; margin-left:8px;">&#36;0.00</span>
+                <span id="cartBudgetLimitDisplay" style="font-size:14px; color:#78716C; font-weight:600;">of &#36;125.00 budget</span>
               </div>
               <div id="savingsPill" class="live-badge">Under Budget!</div>
             </div>
@@ -844,7 +355,6 @@
         </div>
 
         <div class="plan-layout">
-          <!-- Left Column: Grocery List -->
           <div class="card" style="height:fit-content;">
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
               <div>
@@ -853,16 +363,13 @@
               </div>
               <span id="groceryCountBadge" style="font-size:12px; font-weight:800; background:#F5F5F4; padding:4px 10px; border-radius:999px;">0 items</span>
             </div>
-
             <div id="shoppingListContainer"></div>
-
             <div style="margin-top:20px; padding-top:16px; border-top:1px solid #E7E5E4;">
-              <div class="form-label" style="color:#166534;">✅ Using From Your Kitchen ($0 Extra Cost)</div>
+              <div class="form-label" style="color:#166534;">✅ Using From Your Kitchen (&#36;0 Extra Cost)</div>
               <div id="usingFromKitchenList" class="pill-wrap"></div>
             </div>
           </div>
 
-          <!-- Right Column: Recipes -->
           <div>
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
               <h4 style="font-size:18px; font-weight:800;">🍳 Your Recipes for the Week</h4>
@@ -877,16 +384,14 @@
     </section>
   </div>
 
-  <!-- FOOTER -->
   <footer class="footer-bar no-print">
-    SmartCart Kitchen v2.2 — Reston, VA (20191) & Beaverton, OR
+    SmartCart Kitchen v2.4 — Reston, VA (20191) &amp; Beaverton, OR
   </footer>
 
-  <!-- ========================================================================= -->
-  <!-- APPLICATION LOGIC                                                         -->
-  <!-- ========================================================================= -->
   <script>
-    const DEFAULT_FIREBASE_CONFIG = {
+    window.CURRENCY_SIGN = "\x24";
+
+    window.DEFAULT_FIREBASE_CONFIG = {
       apiKey: "AIzaSyAl5hOXY8_lAuQeIZS-T4uq5ZBTDayn40o",
       authDomain: "grocery-planner-v1.firebaseapp.com",
       projectId: "grocery-planner-v1",
@@ -895,9 +400,13 @@
       appId: "1:794850230910:web:932506759e1f0726b7ce2f"
     };
 
-    const DEFAULT_WORKER_URL = "https://smartcart-proxy.nategraves29.workers.dev/";
+    window.DEFAULT_WORKER_URL = "https://smartcart-proxy.nategraves29.workers.dev/";
 
-    const STORES = [
+    function pickVal(a, b) {
+      return (a !== undefined && a !== null && a !== "") ? a : b;
+    }
+
+    var STORES = [
       { id: "ht_reston_spectrum", region: "reston", chain: "harristeeter", name: "Harris Teeter — Spectrum Center", address: "11806 Spectrum Ctr, Reston, VA 20190", badge: "VIC Card & Live Kroger API", provider: "kroger", locationId: "09700081", zip: "20191", multiplier: 1.02 },
       { id: "ht_reston_woodland", region: "reston", chain: "harristeeter", name: "Harris Teeter — Woodland Park", address: "12960 Highland Crossing Dr, Herndon, VA", badge: "VIC Card & Live Kroger API", provider: "kroger", locationId: "09700085", zip: "20191", multiplier: 1.02 },
       { id: "tj_reston", region: "reston", chain: "traderjoes", name: "Trader Joe's — Reston", address: "11958 Killingsworth Ave, Reston, VA 20194", badge: "Store #646 Everyday Low Prices", provider: "traderjoes", storeCode: "646", zip: "20191", multiplier: 0.90 },
@@ -908,7 +417,7 @@
       { id: "safeway_beaverton", region: "pnw", chain: "safeway", name: "Safeway — Beaverton (SW Teal / Murray)", address: "Beaverton, OR 97005", badge: "Weekly Ad Deals (97005)", provider: "safeway", zip: "97005", multiplier: 1.04 }
     ];
 
-    const EQUIPMENT_OPTIONS = [
+    var EQUIPMENT_OPTIONS = [
       { id: "skillet", label: "Skillet / Frying Pan", icon: "🍳" },
       { id: "sheet_pan", label: "Oven & Sheet Pan", icon: "♨️" },
       { id: "pot", label: "Large Soup Pot", icon: "🍲" },
@@ -921,31 +430,31 @@
       { id: "microwave", label: "Microwave", icon: "📟" }
     ];
 
-    const QUICK_FRIDGE_SUGGESTIONS = [
-      "🥚 Eggs", "🍚 Rice", "🍝 Pasta", "🧅 Yellow Onions", "🥔 Potatoes",
-      "🍅 Tomatoes", "🍗 Chicken Breast", "🥩 Ground Beef", "🧀 Cheddar Cheese",
-      "🥬 Spinach / Greens", "🥕 Carrots", "🫑 Bell Peppers", "🫘 Canned Beans",
-      "🌮 Tortillas", "🥫 Crushed Tomatoes"
+    var QUICK_FRIDGE_SUGGESTIONS = [
+      "Eggs", "Rice", "Pasta", "Yellow Onions", "Potatoes",
+      "Tomatoes", "Chicken Breast", "Ground Beef", "Cheddar Cheese",
+      "Spinach / Greens", "Carrots", "Bell Peppers", "Canned Beans",
+      "Tortillas", "Crushed Tomatoes"
     ];
 
-    const ALLERGY_OPTIONS = [
-      "🥜 Peanuts / Tree Nuts", "🦐 Shellfish", "🥛 Dairy / Lactose",
-      "🌾 Gluten / Wheat", "🥚 Eggs", "🌱 Soy", "🐟 Fish", "🍄 Mushrooms"
+    var ALLERGY_OPTIONS = [
+      "Peanuts / Tree Nuts", "Shellfish", "Dairy / Lactose",
+      "Gluten / Wheat", "Eggs", "Soy", "Fish", "Mushrooms"
     ];
 
-    const PREFERENCE_OPTIONS = [
-      "⏱️ Quick (Under 30 Mins)", "💪 High Protein", "🥗 Kid & Family Friendly",
-      "🍲 Cozy One-Pan Meals", "🌮 Bold & Spicy Flavors", "🥦 Extra Veggies",
-      "🍱 Great for Leftovers"
+    var PREFERENCE_OPTIONS = [
+      "Quick (Under 30 Mins)", "High Protein", "Kid & Family Friendly",
+      "Cozy One-Pan Meals", "Bold & Spicy Flavors", "Extra Veggies",
+      "Great for Leftovers"
     ];
 
-    const STAPLE_OPTIONS = [
+    var STAPLE_OPTIONS = [
       "Olive / Cooking Oil", "Butter", "Salt & Black Pepper", "Garlic / Garlic Powder",
       "Soy Sauce", "All-Purpose Flour", "Sugar / Honey", "Vinegar",
       "Chili Powder / Paprika", "Italian Seasoning", "Chicken / Veggie Broth"
     ];
 
-    const CURATED_RECIPES = [
+    var CURATED_RECIPES = [
       {
         title: "Crispy Sheet-Pan Garlic Herb Chicken & Baby Potatoes",
         time: "30 mins",
@@ -953,9 +462,9 @@
         equipmentId: "sheet_pan",
         allergens: [],
         steps: [
-          "Preheat oven to 425°F. Halve the baby potatoes and toss on a sheet pan with olive oil, salt, pepper, and garlic.",
+          "Preheat oven to 425F. Halve the baby potatoes and toss on a sheet pan with olive oil, salt, pepper, and garlic.",
           "Season chicken thighs or breasts with Italian seasoning and paprika; nestle onto the pan beside the potatoes.",
-          "Roast for 22–25 minutes, adding broccoli florets for the final 12 minutes until golden and tender."
+          "Roast for 22-25 minutes, adding broccoli florets for the final 12 minutes until golden and tender."
         ],
         ingredients: [
           { name: "Boneless Skinless Chicken Thighs (1.5 lb)", aisle: "Meat & Seafood", basePrice: 6.49, key: "chicken" },
@@ -968,7 +477,7 @@
         time: "25 mins",
         equipmentNeeded: "Skillet / Frying Pan",
         equipmentId: "skillet",
-        allergens: ["🥛 Dairy / Lactose"],
+        allergens: ["Dairy / Lactose"],
         steps: [
           "Brown the ground beef with diced yellow onion and bell pepper in a large skillet over medium-high heat.",
           "Stir in black beans, salsa or crushed tomatoes, chili powder, and uncooked rice with broth; cover and simmer 15 minutes.",
@@ -987,7 +496,7 @@
         time: "25 mins",
         equipmentNeeded: "Skillet / Frying Pan",
         equipmentId: "skillet",
-        allergens: ["🌾 Gluten / Wheat", "🥛 Dairy / Lactose"],
+        allergens: ["Gluten / Wheat", "Dairy / Lactose"],
         steps: [
           "Boil pasta in salted water until tender while browning sliced Italian sausage in your skillet.",
           "Add garlic, crushed tomatoes, and a splash of cream or cream cheese to the skillet to create a velvety sauce.",
@@ -1005,11 +514,11 @@
         time: "25 mins",
         equipmentNeeded: "Oven & Sheet Pan",
         equipmentId: "sheet_pan",
-        allergens: ["🐟 Fish", "🌱 Soy"],
+        allergens: ["Fish", "Soy"],
         steps: [
-          "Slice peeled carrots on a bias, toss with oil, salt, and pepper, and roast at 400°F for 12 minutes.",
+          "Slice peeled carrots on a bias, toss with oil, salt, and pepper, and roast at 400F for 12 minutes.",
           "Whisk soy sauce, honey, and minced garlic; brush over salmon fillets placed on the center of the sheet pan.",
-          "Roast another 10–12 minutes until the salmon flakes easily, serving over warm rice."
+          "Roast another 10-12 minutes until the salmon flakes easily, serving over warm rice."
         ],
         ingredients: [
           { name: "Atlantic or Coho Salmon Portions (12 oz)", aisle: "Meat & Seafood", basePrice: 8.99, key: "salmon" },
@@ -1022,9 +531,9 @@
         time: "20 mins",
         equipmentNeeded: "Skillet / Frying Pan",
         equipmentId: "skillet",
-        allergens: ["🥚 Eggs", "🌱 Soy"],
+        allergens: ["Eggs", "Soy"],
         steps: [
-          "Sauté diced carrots, onions, and peas in hot oil for 4 minutes until tender-crisp.",
+          "Saute diced carrots, onions, and peas in hot oil for 4 minutes until tender-crisp.",
           "Push veggies to the side, scramble the eggs in the pan, then toss with cooked rice and soy sauce over high heat.",
           "Finish with sliced green onions and serve hot."
         ],
@@ -1040,19 +549,21 @@
     window.currentUser = null;
     window.fbApi = null;
 
-    window.createDefaultProfile = function (region = "reston", displayName = "Friend") {
+    window.createDefaultProfile = function (region, displayName) {
+      var r = pickVal(region, "reston");
+      var d = pickVal(displayName, "Friend");
       return {
-        displayName,
-        region,
-        selectedStoreId: region === "reston" ? "ht_reston_spectrum" : "fm_beaverton",
+        displayName: d,
+        region: r,
+        selectedStoreId: r === "reston" ? "ht_reston_spectrum" : "fm_beaverton",
         weeklyBudget: 125,
         mealsCount: 5,
         servingsCount: 2,
-        fridgeItems: ["🥚 Eggs", "🧅 Yellow Onions", "🍚 Rice"],
+        fridgeItems: ["Eggs", "Yellow Onions", "Rice"],
         equipment: ["skillet", "sheet_pan", "pot", "microwave"],
         allergies: [],
-        preferences: ["⏱️ Quick (Under 30 Mins)", "💪 High Protein"],
-        staples: [...STAPLE_OPTIONS],
+        preferences: ["Quick (Under 30 Mins)", "High Protein"],
+        staples: STAPLE_OPTIONS.slice(),
         currentPlan: null,
         updatedAt: new Date().toISOString()
       };
@@ -1062,12 +573,12 @@
 
     window.switchAuthMode = function (mode) {
       window.authMode = mode;
-      const loginBtn = document.getElementById("tabLoginBtn");
-      const signupBtn = document.getElementById("tabSignupBtn");
-      const nameGroup = document.getElementById("displayNameGroup");
-      const regionGroup = document.getElementById("regionPresetGroup");
-      const submitBtn = document.getElementById("authSubmitBtn");
-      const errorBox = document.getElementById("authErrorBox");
+      var loginBtn = document.getElementById("tabLoginBtn");
+      var signupBtn = document.getElementById("tabSignupBtn");
+      var nameGroup = document.getElementById("displayNameGroup");
+      var regionGroup = document.getElementById("regionPresetGroup");
+      var submitBtn = document.getElementById("authSubmitBtn");
+      var errorBox = document.getElementById("authErrorBox");
       if (errorBox) errorBox.classList.add("hidden");
 
       if (mode === "signup") {
@@ -1086,66 +597,73 @@
     };
 
     function usernameToEmail(usernameInput) {
-      const cleaned = usernameInput.trim().toLowerCase().replace(/[^a-z0-9._-]/g, "");
-      return usernameInput.includes("@") ? usernameInput.trim() : `${cleaned || "user"}@kitchenplanner.app`;
+      var cleaned = usernameInput.trim().toLowerCase().replace(/[^a-z0-9._-]/g, "");
+      if (usernameInput.indexOf("@") !== -1) return usernameInput.trim();
+      var base = pickVal(cleaned, "user");
+      return base + "@kitchenplanner.app";
     }
 
     window.handleAuthSubmit = async function (event) {
       event.preventDefault();
-      const rawUsername = document.getElementById("authUsername").value.trim();
-      const password = document.getElementById("authPassword").value;
-      const displayName = document.getElementById("authDisplayName").value.trim() || rawUsername;
-      const regionPreset = document.getElementById("authRegionPreset").value || "reston";
-      const errorBox = document.getElementById("authErrorBox");
-      const submitBtn = document.getElementById("authSubmitBtn");
+      var rawUsername = document.getElementById("authUsername").value.trim();
+      var password = document.getElementById("authPassword").value;
+      var rawDisplay = document.getElementById("authDisplayName").value.trim();
+      var displayName = pickVal(rawDisplay, rawUsername);
+      var regionPreset = pickVal(document.getElementById("authRegionPreset").value, "reston");
+      var errorBox = document.getElementById("authErrorBox");
+      var submitBtn = document.getElementById("authSubmitBtn");
 
       errorBox.classList.add("hidden");
-      submitBtn.textContent = "⏳ Loading Your Kitchen...";
+      submitBtn.textContent = "Loading Your Kitchen...";
       submitBtn.disabled = true;
 
-      const cleanUsername = rawUsername.toLowerCase().replace(/\s+/g, "_");
+      var cleanUsername = rawUsername.toLowerCase().replace(/\s+/g, "_");
 
       try {
         if (window.fbApi && window.fbApi.auth) {
-          const email = usernameToEmail(cleanUsername);
+          var email = usernameToEmail(cleanUsername);
           if (window.authMode === "signup") {
-            const cred = await window.fbApi.createUserWithEmailAndPassword(window.fbApi.auth, email, password);
-            await window.fbApi.updateProfile(cred.user, { displayName });
+            var cred = await window.fbApi.createUserWithEmailAndPassword(window.fbApi.auth, email, password);
+            await window.fbApi.updateProfile(cred.user, { displayName: displayName });
             window.profileState = window.createDefaultProfile(regionPreset, displayName);
-            window.currentUser = { uid: cred.user.uid, username: cleanUsername, displayName, isLocal: false };
+            window.currentUser = { uid: cred.user.uid, username: cleanUsername, displayName: displayName, isLocal: false };
             await window.saveUserProfile();
             window.enterWorkspace();
           } else {
             await window.fbApi.signInWithEmailAndPassword(window.fbApi.auth, email, password);
           }
         } else {
-          const accounts = JSON.parse(localStorage.getItem("smartcart_local_accounts") || "{}");
+          var savedRaw = pickVal(localStorage.getItem("smartcart_local_accounts"), "{}");
+          var accounts = JSON.parse(savedRaw);
           if (window.authMode === "signup") {
-            accounts[cleanUsername] = { password, displayName, region: regionPreset };
+            accounts[cleanUsername] = { password: password, displayName: displayName, region: regionPreset };
             localStorage.setItem("smartcart_local_accounts", JSON.stringify(accounts));
             window.profileState = window.createDefaultProfile(regionPreset, displayName);
-            window.currentUser = { uid: `local_${cleanUsername}`, username: cleanUsername, displayName, isLocal: true };
+            window.currentUser = { uid: "local_" + cleanUsername, username: cleanUsername, displayName: displayName, isLocal: true };
             localStorage.setItem("smartcart_active_local_user", JSON.stringify(window.currentUser));
             await window.saveUserProfile();
             window.enterWorkspace();
           } else {
-            const acct = accounts[cleanUsername];
-            if (!acct || acct.password !== password) {
+            var acct = accounts[cleanUsername];
+            if (!acct) {
               throw new Error("Account not found. Tap 'Create New Profile' above to create your account!");
             }
-            window.currentUser = { uid: `local_${cleanUsername}`, username: cleanUsername, displayName: acct.displayName || cleanUsername, isLocal: true };
+            if (acct.password !== password) {
+              throw new Error("Incorrect password. Please try again.");
+            }
+            window.currentUser = { uid: "local_" + cleanUsername, username: cleanUsername, displayName: pickVal(acct.displayName, cleanUsername), isLocal: true };
             localStorage.setItem("smartcart_active_local_user", JSON.stringify(window.currentUser));
             await window.loadUserProfile();
             window.enterWorkspace();
           }
         }
       } catch (err) {
-        let msg = err.message ? err.message.replace("Firebase: ", "") : "Unable to sign in.";
-        if (msg.includes("auth/unauthorized-domain")) {
+        var msg = err.message ? err.message.replace("Firebase: ", "") : "Unable to sign in.";
+        if (msg.indexOf("auth/unauthorized-domain") !== -1) {
           msg = "Domain not authorized in Firebase yet: Go to Firebase Console -> Authentication -> Settings -> Authorized domains -> Add nategraves29.github.io";
-        } else if (msg.includes("auth/operation-not-allowed")) {
+        } else if (msg.indexOf("auth/operation-not-allowed") !== -1) {
           msg = "Email/Password sign-in is turned off in Firebase: Go to Firebase Console -> Authentication -> Sign-in method -> Enable Email/Password.";
-        } else if (msg.includes("requests-from-referer") || msg.includes("API_KEY_HTTP_REFERRER_BLOCKED")) {
+        } else if (msg.indexOf("requests-from-referer") !== -1) {
           msg = "API Key Website Restriction blocked this URL: Make sure https://nategraves29.github.io/* (with the asterisk) is saved in Google Cloud Credentials.";
         }
         errorBox.textContent = msg;
@@ -1157,7 +675,7 @@
     };
 
     window.loginQuickDemo = async function (username, displayName, region) {
-      window.currentUser = { uid: `local_${username}`, username, displayName, isLocal: true };
+      window.currentUser = { uid: "local_" + username, username: username, displayName: displayName, isLocal: true };
       localStorage.setItem("smartcart_active_local_user", JSON.stringify(window.currentUser));
       await window.loadUserProfile(region, displayName);
       window.enterWorkspace();
@@ -1174,15 +692,17 @@
       document.getElementById("authScreen").classList.remove("hidden");
     };
 
-    window.loadUserProfile = async function (defaultRegion = "reston", defaultName = "Friend") {
+    window.loadUserProfile = async function (defaultRegion, defaultName) {
       if (!window.currentUser) return;
-      const localKey = `smartcart_profile_${window.currentUser.uid}`;
+      var r = pickVal(defaultRegion, "reston");
+      var d = pickVal(defaultName, "Friend");
+      var localKey = "smartcart_profile_" + window.currentUser.uid;
 
       if (window.fbApi && window.fbApi.db && !window.currentUser.isLocal) {
         try {
-          const snap = await window.fbApi.getDoc(window.fbApi.doc(window.fbApi.db, "users", window.currentUser.uid));
+          var snap = await window.fbApi.getDoc(window.fbApi.doc(window.fbApi.db, "users", window.currentUser.uid));
           if (snap.exists()) {
-            window.profileState = { ...window.createDefaultProfile(defaultRegion, defaultName), ...snap.data() };
+            window.profileState = Object.assign(window.createDefaultProfile(r, d), snap.data());
             return;
           }
         } catch (e) {
@@ -1190,11 +710,11 @@
         }
       }
 
-      const savedLocal = localStorage.getItem(localKey);
+      var savedLocal = localStorage.getItem(localKey);
       if (savedLocal) {
-        window.profileState = { ...window.createDefaultProfile(defaultRegion, defaultName), ...JSON.parse(savedLocal) };
+        window.profileState = Object.assign(window.createDefaultProfile(r, d), JSON.parse(savedLocal));
       } else {
-        window.profileState = window.createDefaultProfile(defaultRegion, window.currentUser.displayName || defaultName);
+        window.profileState = window.createDefaultProfile(r, pickVal(window.currentUser.displayName, d));
         await window.saveUserProfile();
       }
     };
@@ -1202,10 +722,10 @@
     window.saveUserProfile = async function () {
       if (!window.currentUser) return;
       window.profileState.updatedAt = new Date().toISOString();
-      const localKey = `smartcart_profile_${window.currentUser.uid}`;
+      var localKey = "smartcart_profile_" + window.currentUser.uid;
       localStorage.setItem(localKey, JSON.stringify(window.profileState));
 
-      const badge = document.getElementById("syncBadge");
+      var badge = document.getElementById("syncBadge");
       if (badge) badge.textContent = "• Saving...";
 
       if (window.fbApi && window.fbApi.db && !window.currentUser.isLocal) {
@@ -1215,7 +735,7 @@
           console.warn("Firestore save error:", e.message);
         }
       }
-      if (badge) setTimeout(() => { badge.textContent = "• Saved"; }, 300);
+      if (badge) setTimeout(function () { badge.textContent = "• Saved"; }, 300);
     };
 
     window.enterWorkspace = function () {
@@ -1223,9 +743,9 @@
       document.getElementById("appWorkspace").classList.remove("hidden");
       document.getElementById("userHeaderBar").classList.remove("hidden");
 
-      const name = window.profileState.displayName || window.currentUser.displayName || window.currentUser.username;
+      var name = pickVal(window.profileState.displayName, pickVal(window.currentUser.displayName, window.currentUser.username));
       document.getElementById("headerUsername").textContent = name;
-      document.getElementById("welcomeHeadline").textContent = `${name}'s Kitchen & Grocery Planner`;
+      document.getElementById("welcomeHeadline").textContent = name + "'s Kitchen & Grocery Planner";
 
       window.renderAllSteps();
       if (window.profileState.currentPlan) {
@@ -1237,9 +757,9 @@
     };
 
     window.goToStep = function (stepNumber) {
-      [1, 2, 3].forEach((n) => {
-        const panel = document.getElementById(`stepPanel${n}`);
-        const btn = document.getElementById(`stepBtn${n}`);
+      [1, 2, 3].forEach(function (n) {
+        var panel = document.getElementById("stepPanel" + n);
+        var btn = document.getElementById("stepBtn" + n);
         if (n === stepNumber) {
           panel.classList.remove("hidden");
           btn.className = "step-tab active";
@@ -1252,8 +772,8 @@
     };
 
     window.renderAllSteps = function () {
-      document.getElementById("bannerBudgetDisplay").textContent = `$${window.profileState.weeklyBudget}`;
-      document.getElementById("budgetSliderLabel").textContent = `$${window.profileState.weeklyBudget}`;
+      document.getElementById("bannerBudgetDisplay").textContent = window.CURRENCY_SIGN + window.profileState.weeklyBudget;
+      document.getElementById("budgetSliderLabel").textContent = window.CURRENCY_SIGN + window.profileState.weeklyBudget;
       document.getElementById("budgetRangeInput").value = window.profileState.weeklyBudget;
       document.getElementById("mealsCountDisplay").textContent = window.profileState.mealsCount;
       document.getElementById("servingsCountDisplay").textContent = window.profileState.servingsCount;
@@ -1262,37 +782,34 @@
       window.renderEquipmentGrid();
       window.renderAllergiesAndPrefs();
       window.renderStaplesGrid();
-      window.filterStoresByRegion(window.profileState.region || "reston");
+      window.filterStoresByRegion(pickVal(window.profileState.region, "reston"));
     };
 
     window.renderFridgeSection = function () {
-      const quickContainer = document.getElementById("quickFridgePills");
-      quickContainer.innerHTML = QUICK_FRIDGE_SUGGESTIONS.map((item) => {
-        const active = window.profileState.fridgeItems.includes(item);
-        return `<button type="button" onclick="window.toggleArrayItem('fridgeItems', '${item.replace(/'/g, "\\'")}')"
-          class="pill-btn ${active ? 'pill-active' : ''}">
-          ${item} ${active ? '✓' : '+'}
-        </button>`;
+      var quickContainer = document.getElementById("quickFridgePills");
+      quickContainer.innerHTML = QUICK_FRIDGE_SUGGESTIONS.map(function (item) {
+        var active = window.profileState.fridgeItems.indexOf(item) !== -1;
+        return '<button type="button" onclick="window.toggleArrayItem(\'fridgeItems\', \'' + item + '\')" class="pill-btn ' + (active ? 'pill-active' : '') + '">' + item + (active ? ' ✓' : ' +') + '</button>';
       }).join("");
 
-      const activeList = document.getElementById("activeFridgeList");
+      var activeList = document.getElementById("activeFridgeList");
       if (window.profileState.fridgeItems.length === 0) {
-        activeList.innerHTML = `<span style="font-size:13px; color:#A8A29E; font-style:italic;">No fridge items selected yet — tap any item above or type one in!</span>`;
+        activeList.innerHTML = '<span style="font-size:13px; color:#A8A29E; font-style:italic;">No fridge items selected yet — tap any item above or type one in!</span>';
       } else {
-        activeList.innerHTML = window.profileState.fridgeItems.map((item) => `
-          <span style="display:inline-flex; align-items:center; gap:6px; background:#FEF3C7; border:1px solid #FCD34D; color:#92400E; padding:6px 12px; border-radius:999px; font-size:13px; font-weight:700;">
-            ${item}
-            <button type="button" onclick="window.toggleArrayItem('fridgeItems', '${item.replace(/'/g, "\\'")}')" style="color:#92400E; font-weight:800; margin-left:4px;">✕</button>
-          </span>
-        `).join("");
+        activeList.innerHTML = window.profileState.fridgeItems.map(function (item) {
+          var safeItem = item.replace(/'/g, "");
+          return '<span style="display:inline-flex; align-items:center; gap:6px; background:#FEF3C7; border:1px solid #FCD34D; color:#92400E; padding:6px 12px; border-radius:999px; font-size:13px; font-weight:700;">' +
+            item +
+            '<button type="button" onclick="window.toggleArrayItem(\'fridgeItems\', \'' + safeItem + '\')" style="color:#92400E; font-weight:800; margin-left:4px;">✕</button></span>';
+        }).join("");
       }
     };
 
     window.addCustomFridgeItem = function () {
-      const input = document.getElementById("customFridgeInput");
-      const val = input.value.trim();
+      var input = document.getElementById("customFridgeInput");
+      var val = input.value.trim().replace(/'/g, "");
       if (!val) return;
-      if (!window.profileState.fridgeItems.includes(val)) {
+      if (window.profileState.fridgeItems.indexOf(val) === -1) {
         window.profileState.fridgeItems.push(val);
         window.saveUserProfile();
         window.renderFridgeSection();
@@ -1301,48 +818,36 @@
     };
 
     window.renderEquipmentGrid = function () {
-      const grid = document.getElementById("equipmentGrid");
-      grid.innerHTML = EQUIPMENT_OPTIONS.map((eq) => {
-        const active = window.profileState.equipment.includes(eq.id);
-        return `<button type="button" onclick="window.toggleArrayItem('equipment', '${eq.id}')"
-          class="equip-card ${active ? 'pill-active' : ''}">
-          <span style="font-size:22px;">${eq.icon}</span>
-          <span>${eq.label}</span>
-        </button>`;
+      var grid = document.getElementById("equipmentGrid");
+      grid.innerHTML = EQUIPMENT_OPTIONS.map(function (eq) {
+        var active = window.profileState.equipment.indexOf(eq.id) !== -1;
+        return '<button type="button" onclick="window.toggleArrayItem(\'equipment\', \'' + eq.id + '\')" class="equip-card ' + (active ? 'pill-active' : '') + '">' +
+          '<span style="font-size:22px;">' + eq.icon + '</span><span>' + eq.label + '</span></button>';
       }).join("");
     };
 
     window.renderAllergiesAndPrefs = function () {
-      document.getElementById("allergyGrid").innerHTML = ALLERGY_OPTIONS.map((al) => {
-        const active = window.profileState.allergies.includes(al);
-        return `<button type="button" onclick="window.toggleArrayItem('allergies', '${al}')"
-          class="pill-btn ${active ? 'pill-danger-active' : ''}">
-          ${al} ${active ? '✕' : ''}
-        </button>`;
+      document.getElementById("allergyGrid").innerHTML = ALLERGY_OPTIONS.map(function (al) {
+        var active = window.profileState.allergies.indexOf(al) !== -1;
+        return '<button type="button" onclick="window.toggleArrayItem(\'allergies\', \'' + al + '\')" class="pill-btn ' + (active ? 'pill-danger-active' : '') + '">' + al + (active ? ' ✕' : '') + '</button>';
       }).join("");
 
-      document.getElementById("preferenceGrid").innerHTML = PREFERENCE_OPTIONS.map((pr) => {
-        const active = window.profileState.preferences.includes(pr);
-        return `<button type="button" onclick="window.toggleArrayItem('preferences', '${pr}')"
-          class="pill-btn ${active ? 'pill-active' : ''}">
-          ${pr}
-        </button>`;
+      document.getElementById("preferenceGrid").innerHTML = PREFERENCE_OPTIONS.map(function (pr) {
+        var active = window.profileState.preferences.indexOf(pr) !== -1;
+        return '<button type="button" onclick="window.toggleArrayItem(\'preferences\', \'' + pr + '\')" class="pill-btn ' + (active ? 'pill-active' : '') + '">' + pr + '</button>';
       }).join("");
     };
 
     window.renderStaplesGrid = function () {
-      document.getElementById("staplesGrid").innerHTML = STAPLE_OPTIONS.map((st) => {
-        const active = window.profileState.staples.includes(st);
-        return `<button type="button" onclick="window.toggleArrayItem('staples', '${st}')"
-          class="pill-btn ${active ? 'pill-staple-active' : 'pill-staple-off'}">
-          ${active ? '✓ ' : ''}${st}
-        </button>`;
+      document.getElementById("staplesGrid").innerHTML = STAPLE_OPTIONS.map(function (st) {
+        var active = window.profileState.staples.indexOf(st) !== -1;
+        return '<button type="button" onclick="window.toggleArrayItem(\'staples\', \'' + st + '\')" class="pill-btn ' + (active ? 'pill-staple-active' : 'pill-staple-off') + '">' + (active ? '✓ ' : '') + st + '</button>';
       }).join("");
     };
 
     window.toggleArrayItem = function (key, item) {
-      const arr = window.profileState[key] || [];
-      const idx = arr.indexOf(item);
+      var arr = window.profileState[key] ? window.profileState[key] : [];
+      var idx = arr.indexOf(item);
       if (idx > -1) arr.splice(idx, 1);
       else arr.push(item);
       window.profileState[key] = arr;
@@ -1352,8 +857,8 @@
 
     window.filterStoresByRegion = function (region) {
       window.profileState.region = region;
-      const btnReston = document.getElementById("regionBtnReston");
-      const btnPnw = document.getElementById("regionBtnPnw");
+      var btnReston = document.getElementById("regionBtnReston");
+      var btnPnw = document.getElementById("regionBtnPnw");
 
       if (region === "reston") {
         btnReston.className = "mode-btn active";
@@ -1363,27 +868,20 @@
         btnReston.className = "mode-btn";
       }
 
-      const filtered = STORES.filter((s) => s.region === region);
-      if (!filtered.some((s) => s.id === window.profileState.selectedStoreId)) {
+      var filtered = STORES.filter(function (s) { return s.region === region; });
+      if (!filtered.some(function (s) { return s.id === window.profileState.selectedStoreId; })) {
         window.profileState.selectedStoreId = filtered[0].id;
       }
 
-      const grid = document.getElementById("storeSelectionGrid");
-      grid.innerHTML = filtered.map((store) => {
-        const active = store.id === window.profileState.selectedStoreId;
-        return `<div onclick="window.selectStore('${store.id}')"
-          class="store-card ${active ? 'store-card-active' : ''}">
-          <div>
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:4px;">
-              <span style="font-weight:800; font-size:16px;">${store.name}</span>
-              ${active ? '<span style="font-size:11px; font-weight:800; background:#15803D; color:#FFF; padding:3px 10px; border-radius:999px;">Selected ✓</span>' : ''}
-            </div>
-            <p style="font-size:12px; color:#78716C; margin-bottom:12px;">${store.address}</p>
-          </div>
-          <div class="live-badge" style="width:fit-content; margin-bottom:0;">
-            🏷️ ${store.badge}
-          </div>
-        </div>`;
+      var grid = document.getElementById("storeSelectionGrid");
+      grid.innerHTML = filtered.map(function (store) {
+        var active = store.id === window.profileState.selectedStoreId;
+        return '<div onclick="window.selectStore(\'' + store.id + '\')" class="store-card ' + (active ? 'store-card-active' : '') + '">' +
+          '<div><div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:4px;">' +
+          '<span style="font-weight:800; font-size:16px;">' + store.name + '</span>' +
+          (active ? '<span style="font-size:11px; font-weight:800; background:#15803D; color:#FFF; padding:3px 10px; border-radius:999px;">Selected ✓</span>' : '') +
+          '</div><p style="font-size:12px; color:#78716C; margin-bottom:12px;">' + store.address + '</p></div>' +
+          '<div class="live-badge" style="width:fit-content; margin-bottom:0;">🏷️ ' + store.badge + '</div></div>';
       }).join("");
     };
 
@@ -1395,31 +893,33 @@
 
     window.updateBudgetValue = function (val) {
       window.profileState.weeklyBudget = Number(val);
-      document.getElementById("budgetSliderLabel").textContent = `$${val}`;
-      document.getElementById("bannerBudgetDisplay").textContent = `$${val}`;
+      document.getElementById("budgetSliderLabel").textContent = window.CURRENCY_SIGN + val;
+      document.getElementById("bannerBudgetDisplay").textContent = window.CURRENCY_SIGN + val;
       window.saveUserProfile();
     };
 
     window.adjustCount = function (field, delta) {
-      const next = Math.max(1, Math.min(10, (window.profileState[field] || 2) + delta));
+      var curr = window.profileState[field] ? window.profileState[field] : 2;
+      var next = Math.max(1, Math.min(10, curr + delta));
       window.profileState[field] = next;
-      document.getElementById(`${field}Display`).textContent = next;
+      document.getElementById(field + "Display").textContent = next;
       window.saveUserProfile();
     };
 
-    window.generateWeeklyMealPlan = async function (silent = false) {
+    window.generateWeeklyMealPlan = async function (silent) {
       if (!silent) {
         window.goToStep(3);
         document.getElementById("planLoadingCard").classList.remove("hidden");
         document.getElementById("planResultsContainer").classList.add("hidden");
       }
 
-      const store = STORES.find((s) => s.id === window.profileState.selectedStoreId) || STORES[0];
-      let plan = null;
+      var foundStore = STORES.find(function (s) { return s.id === window.profileState.selectedStoreId; });
+      var store = foundStore ? foundStore : STORES[0];
+      var plan = null;
 
       if (!silent) {
         try {
-          plan = await window.generatePlanWithGemini(store, DEFAULT_WORKER_URL);
+          plan = await window.generatePlanWithGemini(store, window.DEFAULT_WORKER_URL);
         } catch (e) {
           console.warn("Gemini fallback to built-in solver:", e.message);
         }
@@ -1438,33 +938,33 @@
     };
 
     window.buildSmartLocalPlan = function (store) {
-      const fridgeLower = window.profileState.fridgeItems.join(" ").toLowerCase();
+      var fridgeLower = window.profileState.fridgeItems.join(" ").toLowerCase();
 
-      let eligible = CURATED_RECIPES.filter((r) => {
-        const hasTool = window.profileState.equipment.includes(r.equipmentId);
-        const hasAllergen = r.allergens.some((a) => window.profileState.allergies.includes(a));
+      var eligible = CURATED_RECIPES.filter(function (r) {
+        var hasTool = window.profileState.equipment.indexOf(r.equipmentId) !== -1;
+        var hasAllergen = r.allergens.some(function (a) { return window.profileState.allergies.indexOf(a) !== -1; });
         return hasTool && !hasAllergen;
       });
       if (eligible.length === 0) eligible = CURATED_RECIPES;
 
-      const scored = eligible.map((r) => {
-        let matchScore = 0;
-        r.ingredients.forEach((ing) => {
-          if (fridgeLower.includes(ing.key.toLowerCase())) matchScore += 2;
+      var scored = eligible.map(function (r) {
+        var matchScore = 0;
+        r.ingredients.forEach(function (ing) {
+          if (fridgeLower.indexOf(ing.key.toLowerCase()) !== -1) matchScore += 2;
         });
         return { recipe: r, score: matchScore + Math.random() };
-      }).sort((a, b) => b.score - a.score);
+      }).sort(function (a, b) { return b.score - a.score; });
 
-      const chosenRecipes = scored.slice(0, window.profileState.mealsCount).map((x) => x.recipe);
-      const shoppingMap = new Map();
-      const usedFromKitchen = new Set();
+      var chosenRecipes = scored.slice(0, window.profileState.mealsCount).map(function (x) { return x.recipe; });
+      var shoppingMap = new Map();
+      var usedFromKitchen = [];
 
-      chosenRecipes.forEach((recipe) => {
-        recipe.ingredients.forEach((ing) => {
-          if (fridgeLower.includes(ing.key.toLowerCase())) {
-            usedFromKitchen.add(ing.name);
+      chosenRecipes.forEach(function (recipe) {
+        recipe.ingredients.forEach(function (ing) {
+          if (fridgeLower.indexOf(ing.key.toLowerCase()) !== -1) {
+            if (usedFromKitchen.indexOf(ing.name) === -1) usedFromKitchen.push(ing.name);
           } else if (!shoppingMap.has(ing.name)) {
-            const adjustedPrice = +(ing.basePrice * store.multiplier * (window.profileState.servingsCount > 3 ? 1.5 : 1)).toFixed(2);
+            var adjustedPrice = +(ing.basePrice * store.multiplier * (window.profileState.servingsCount > 3 ? 1.5 : 1)).toFixed(2);
             shoppingMap.set(ing.name, {
               name: ing.name,
               aisle: ing.aisle,
@@ -1476,46 +976,36 @@
         });
       });
 
-      const shoppingList = Array.from(shoppingMap.values());
-      const totalCost = +shoppingList.reduce((sum, item) => sum + item.price, 0).toFixed(2);
+      var shoppingList = Array.from(shoppingMap.values());
+      var totalCost = +shoppingList.reduce(function (sum, item) { return sum + item.price; }, 0).toFixed(2);
 
       return {
         storeName: store.name,
         storeId: store.id,
-        totalCost,
+        totalCost: totalCost,
         budget: window.profileState.weeklyBudget,
-        shoppingList,
-        usedFromKitchen: Array.from(usedFromKitchen),
+        shoppingList: shoppingList,
+        usedFromKitchen: usedFromKitchen,
         recipes: chosenRecipes
       };
     };
 
     window.generatePlanWithGemini = async function (store, workerUrl) {
-      const prompt = `
-        Create a weekly grocery plan and ${window.profileState.mealsCount} dinner recipes (${window.profileState.servingsCount} servings each) for a shopper at ${store.name} (${store.address}).
-        Maximum Weekly Budget: $${window.profileState.weeklyBudget}.
-        Kitchen Equipment Available: ${window.profileState.equipment.join(", ")}.
-        Allergies to Strictly Avoid: ${window.profileState.allergies.join(", ") || "None"}.
-        Preferences: ${window.profileState.preferences.join(", ")}.
-        Ingredients Already in Kitchen (Use these first, $0 cost): ${window.profileState.fridgeItems.join(", ")}.
-        Basic Staples on Hand: ${window.profileState.staples.join(", ")}.
+      var allergyText = window.profileState.allergies.length > 0 ? window.profileState.allergies.join(", ") : "None";
+      var prompt = "Create a weekly grocery plan and " + window.profileState.mealsCount +
+        " dinner recipes (" + window.profileState.servingsCount + " servings each) for a shopper at " +
+        store.name + " (" + store.address + "). Maximum Weekly Budget: " + window.CURRENCY_SIGN + window.profileState.weeklyBudget +
+        ". Kitchen Equipment Available: " + window.profileState.equipment.join(", ") +
+        ". Allergies to Strictly Avoid: " + allergyText +
+        ". Preferences: " + window.profileState.preferences.join(", ") +
+        ". Ingredients Already in Kitchen (Use these first, zero extra cost): " + window.profileState.fridgeItems.join(", ") +
+        ". Basic Staples on Hand: " + window.profileState.staples.join(", ") +
+        '. Return ONLY valid JSON with keys: "shoppingList" (array of {name, aisle, price, checked, sourceBadge}), "usedFromKitchen" (array of strings), and "recipes" (array of {title, time, equipmentNeeded, steps}).';
 
-        Return ONLY valid JSON matching this exact structure:
-        {
-          "shoppingList": [
-            { "name": "Package Name & Size", "aisle": "Produce | Meat & Seafood | Dairy & Eggs | Pantry", "price": 4.99, "checked": false, "sourceBadge": "Store Estimate" }
-          ],
-          "usedFromKitchen": ["Item 1", "Item 2"],
-          "recipes": [
-            { "title": "Recipe Name", "time": "25 mins", "equipmentNeeded": "Skillet", "steps": ["Step 1", "Step 2", "Step 3"] }
-          ]
-        }
-      `;
-
-      const u = new URL(workerUrl);
+      var u = new URL(workerUrl);
       u.searchParams.set("provider", "gemini");
 
-      const res = await fetch(u.toString(), {
+      var res = await fetch(u.toString(), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1523,94 +1013,87 @@
           generationConfig: { responseMimeType: "application/json" }
         })
       });
-      const data = await res.json();
-      const parsed = JSON.parse(data.candidates[0].content.parts[0].text);
-      const totalCost = +parsed.shoppingList.reduce((s, i) => s + Number(i.price || 0), 0).toFixed(2);
+      var data = await res.json();
+      var parsed = JSON.parse(data.candidates[0].content.parts[0].text);
+      var totalCost = +parsed.shoppingList.reduce(function (s, i) { return s + Number(i.price ? i.price : 0); }, 0).toFixed(2);
       return {
         storeName: store.name,
         storeId: store.id,
-        totalCost,
+        totalCost: totalCost,
         budget: window.profileState.weeklyBudget,
         shoppingList: parsed.shoppingList,
-        usedFromKitchen: parsed.usedFromKitchen || window.profileState.fridgeItems,
+        usedFromKitchen: parsed.usedFromKitchen ? parsed.usedFromKitchen : window.profileState.fridgeItems,
         recipes: parsed.recipes
       };
     };
 
     window.renderPlanResults = function (plan) {
       if (!plan) return;
-      document.getElementById("planStoreBadge").textContent = `📍 ${plan.storeName}`;
-      document.getElementById("cartTotalDisplay").textContent = `$${plan.totalCost.toFixed(2)}`;
-      document.getElementById("cartBudgetLimitDisplay").textContent = `of $${window.profileState.weeklyBudget.toFixed(2)} budget`;
+      document.getElementById("planStoreBadge").textContent = "📍 " + plan.storeName;
+      document.getElementById("cartTotalDisplay").textContent = window.CURRENCY_SIGN + plan.totalCost.toFixed(2);
+      document.getElementById("cartBudgetLimitDisplay").textContent = "of " + window.CURRENCY_SIGN + window.profileState.weeklyBudget.toFixed(2) + " budget";
 
-      const pct = Math.min(100, Math.round((plan.totalCost / window.profileState.weeklyBudget) * 100));
-      const bar = document.getElementById("budgetProgressBar");
-      bar.style.width = `${pct}%`;
+      var pct = Math.min(100, Math.round((plan.totalCost / window.profileState.weeklyBudget) * 100));
+      var bar = document.getElementById("budgetProgressBar");
+      bar.style.width = pct + "%";
 
-      const diff = +(window.profileState.weeklyBudget - plan.totalCost).toFixed(2);
-      const pill = document.getElementById("savingsPill");
+      var diff = +(window.profileState.weeklyBudget - plan.totalCost).toFixed(2);
+      var pill = document.getElementById("savingsPill");
       if (diff >= 0) {
         bar.style.background = "#16A34A";
-        pill.textContent = `🎉 $${diff.toFixed(2)} Under Your Budget!`;
+        pill.textContent = "🎉 " + window.CURRENCY_SIGN + diff.toFixed(2) + " Under Your Budget!";
       } else {
         bar.style.background = "#F59E0B";
-        pill.textContent = `⚠️ $${Math.abs(diff).toFixed(2)} Over Budget`;
+        pill.textContent = "⚠️ " + window.CURRENCY_SIGN + Math.abs(diff).toFixed(2) + " Over Budget";
       }
 
-      document.getElementById("groceryCountBadge").textContent = `${plan.shoppingList.length} items`;
+      document.getElementById("groceryCountBadge").textContent = plan.shoppingList.length + " items";
 
-      const byAisle = {};
-      plan.shoppingList.forEach((item, idx) => {
-        const aisle = item.aisle || "Grocery";
+      var byAisle = {};
+      plan.shoppingList.forEach(function (item, idx) {
+        var aisle = pickVal(item.aisle, "Grocery");
         if (!byAisle[aisle]) byAisle[aisle] = [];
-        byAisle[aisle].push({ ...item, index: idx });
+        byAisle[aisle].push(Object.assign({}, item, { index: idx }));
       });
 
-      const listContainer = document.getElementById("shoppingListContainer");
-      listContainer.innerHTML = Object.keys(byAisle).map((aisle) => `
-        <div style="margin-bottom:14px;">
-          <div class="form-label">${aisle}</div>
-          <div>
-            ${byAisle[aisle].map((item) => `
-              <label onclick="window.toggleGroceryCheck(${item.index})"
-                class="grocery-item ${item.checked ? 'checked' : ''}">
-                <div style="display:flex; align-items:center; gap:10px;">
-                  <input type="checkbox" ${item.checked ? 'checked' : ''} style="width:18px; height:18px; accent-color:#15803D; pointer-events:none;" />
-                  <div>
-                    <div style="font-size:14px; font-weight:700;">${item.name}</div>
-                    <div style="font-size:11px; font-weight:700; color:#15803D;">${item.sourceBadge \vert{}\vert{} ''}</div>                   </div>                 </div>                 <div style="font-size:14px; font-weight:800;">$${Number(item.price).toFixed(2)}</div>
-              </label>
-            `).join("")}
-          </div>
-        </div>
-      `).join("");
+      var listContainer = document.getElementById("shoppingListContainer");
+      listContainer.innerHTML = Object.keys(byAisle).map(function (aisle) {
+        var rows = byAisle[aisle].map(function (item) {
+          var badgeText = pickVal(item.sourceBadge, "");
+          return '<label onclick="window.toggleGroceryCheck(' + item.index + ')" class="grocery-item ' + (item.checked ? 'checked' : '') + '">' +
+            '<div style="display:flex; align-items:center; gap:10px;">' +
+            '<input type="checkbox" ' + (item.checked ? 'checked' : '') + ' style="width:18px; height:18px; accent-color:#15803D; pointer-events:none;" />' +
+            '<div><div style="font-size:14px; font-weight:700;">' + item.name + '</div>' +
+            '<div style="font-size:11px; font-weight:700; color:#15803D;">' + badgeText + '</div></div></div>' +
+            '<div style="font-size:14px; font-weight:800;">' + window.CURRENCY_SIGN + Number(item.price).toFixed(2) + '</div></label>';
+        }).join("");
+        return '<div style="margin-bottom:14px;"><div class="form-label">' + aisle + '</div><div>' + rows + '</div></div>';
+      }).join("");
 
-      const usedKitchenEl = document.getElementById("usingFromKitchenList");
-      const usedList = plan.usedFromKitchen && plan.usedFromKitchen.length ? plan.usedFromKitchen : window.profileState.fridgeItems;
-      usedKitchenEl.innerHTML = usedList.map((u) => `
-        <span class="live-badge" style="margin-bottom:0;">${u}</span>
-      `).join("");
+      var usedKitchenEl = document.getElementById("usingFromKitchenList");
+      var usedList = (plan.usedFromKitchen && plan.usedFromKitchen.length) ? plan.usedFromKitchen : window.profileState.fridgeItems;
+      usedKitchenEl.innerHTML = usedList.map(function (u) {
+        return '<span class="live-badge" style="margin-bottom:0;">' + u + '</span>';
+      }).join("");
 
-      const recipesEl = document.getElementById("recipesContainer");
-      recipesEl.innerHTML = plan.recipes.map((r, i) => `
-        <div class="card">
-          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;">
-            <span class="live-badge" style="margin-bottom:0;">Dinner #${i + 1} • ${r.time}</span>
-            <span style="font-size:12px; font-weight:700; color:#57534E; background:#F5F5F4; padding:4px 10px; border-radius:999px;">
-              Uses: ${r.equipmentNeeded}
-            </span>
-          </div>
-          <h5 style="font-size:18px; font-weight:800; margin-bottom:12px;">${r.title}</h5>
-          <ol style="padding-left:20px; font-size:14px; color:#44403C;">
-            ${r.steps.map((s) => `<li style="margin-bottom:6px;">${s}</li>`).join("")}
-          </ol>
-        </div>
-      `).join("");
+      var recipesEl = document.getElementById("recipesContainer");
+      recipesEl.innerHTML = plan.recipes.map(function (r, i) {
+        var stepsArr = r.steps ? r.steps : [];
+        var stepItems = stepsArr.map(function (s) {
+          return '<li style="margin-bottom:6px;">' + s + '</li>';
+        }).join("");
+        return '<div class="card">' +
+          '<div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;">' +
+          '<span class="live-badge" style="margin-bottom:0;">Dinner #' + (i + 1) + ' • ' + r.time + '</span>' +
+          '<span style="font-size:12px; font-weight:700; color:#57534E; background:#F5F5F4; padding:4px 10px; border-radius:999px;">Uses: ' + r.equipmentNeeded + '</span>' +
+          '</div><h5 style="font-size:18px; font-weight:800; margin-bottom:12px;">' + r.title + '</h5>' +
+          '<ol style="padding-left:20px; font-size:14px; color:#44403C;">' + stepItems + '</ol></div>';
+      }).join("");
     };
 
     window.toggleGroceryCheck = function (idx) {
       if (!window.profileState.currentPlan) return;
-      const item = window.profileState.currentPlan.shoppingList[idx];
+      var item = window.profileState.currentPlan.shoppingList[idx];
       if (item) {
         item.checked = !item.checked;
         window.saveUserProfile();
@@ -1620,43 +1103,43 @@
 
     window.verifyLiveStorePrices = async function () {
       if (!window.profileState.currentPlan) return;
-      const btn = document.getElementById("verifyLivePricesBtn");
+      var btn = document.getElementById("verifyLivePricesBtn");
       btn.textContent = "⏳ Checking Local Store Deals...";
       btn.disabled = true;
 
-      const store = STORES.find((s) => s.id === window.profileState.selectedStoreId) || STORES[0];
+      var foundStore = STORES.find(function (s) { return s.id === window.profileState.selectedStoreId; });
+      var store = foundStore ? foundStore : STORES[0];
 
-      for (let item of window.profileState.currentPlan.shoppingList) {
-        const cleanQuery = item.name.split("(")[0].trim();
+      for (var i = 0; i < window.profileState.currentPlan.shoppingList.length; i++) {
+        var item = window.profileState.currentPlan.shoppingList[i];
+        var cleanQuery = item.name.split("(")[0].trim();
         try {
-          const u = new URL(DEFAULT_WORKER_URL);
+          var u = new URL(window.DEFAULT_WORKER_URL);
           u.searchParams.set("provider", store.provider);
           u.searchParams.set("term", cleanQuery);
           if (store.locationId) u.searchParams.set("locationId", store.locationId);
           if (store.storeCode) u.searchParams.set("storeCode", store.storeCode);
           if (store.zip) u.searchParams.set("zip", store.zip);
 
-          const res = await fetch(u.toString());
-          const data = await res.json();
-          if (store.provider === "kroger" && data.data && data.data[0]?.items?.[0]?.price) {
-            const p = data.data[0].items[0].price;
-            item.price = Number(p.promo || p.regular || item.price);
-            item.sourceBadge = p.promo ? `🏷️ Live Sale ($${p.promo})` : "✓ Live Store Price";
-            continue;
+          var res = await fetch(u.toString());
+          var data = await res.json();
+          if (store.provider === "kroger" && data.data && data.data[0] && data.data[0].items && data.data[0].items[0] && data.data[0].items[0].price) {
+            var p = data.data[0].items[0].price;
+            var bestPrice = p.promo ? p.promo : (p.regular ? p.regular : item.price);
+            item.price = Number(bestPrice);
+            item.sourceBadge = p.promo ? ("🏷️ Live Sale (" + window.CURRENCY_SIGN + p.promo + ")") : "✓ Live Store Price";
           }
-        } catch (e) {
-          // Keep baseline store price if network call fails
-        }
+        } catch (e) {}
       }
 
       window.profileState.currentPlan.totalCost = +window.profileState.currentPlan.shoppingList
-        .reduce((sum, i) => sum + Number(i.price), 0)
+        .reduce(function (sum, it) { return sum + Number(it.price); }, 0)
         .toFixed(2);
 
       await window.saveUserProfile();
       window.renderPlanResults(window.profileState.currentPlan);
       btn.textContent = "✅ Live Store Prices Updated!";
-      setTimeout(() => {
+      setTimeout(function () {
         btn.textContent = "🔄 Check Live Store Sale Prices";
         btn.disabled = false;
       }, 2500);
@@ -1682,33 +1165,33 @@
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     try {
-      const app = initializeApp(DEFAULT_FIREBASE_CONFIG);
+      const app = initializeApp(window.DEFAULT_FIREBASE_CONFIG);
       const auth = getAuth(app);
       const db = getFirestore(app);
 
       window.fbApi = {
-        auth,
-        db,
-        createUserWithEmailAndPassword,
-        signInWithEmailAndPassword,
-        signOut,
-        updateProfile,
-        doc,
-        setDoc,
-        getDoc
+        auth: auth,
+        db: db,
+        createUserWithEmailAndPassword: createUserWithEmailAndPassword,
+        signInWithEmailAndPassword: signInWithEmailAndPassword,
+        signOut: signOut,
+        updateProfile: updateProfile,
+        doc: doc,
+        setDoc: setDoc,
+        getDoc: getDoc
       };
 
       const statusEl = document.getElementById("cloudStatusText");
-      if (statusEl) statusEl.textContent = "v2.2 Live • Cloud Connected";
+      if (statusEl) statusEl.textContent = "v2.4 Live • Cloud Connected";
 
-      onAuthStateChanged(auth, async (user) => {
+      onAuthStateChanged(auth, async function (user) {
         if (user) {
-          const rawEmail = user.email || "user@kitchenplanner.app";
+          const rawEmail = user.email ? user.email : "user@kitchenplanner.app";
           const cleanUsername = rawEmail.split("@")[0];
           window.currentUser = {
             uid: user.uid,
             username: cleanUsername,
-            displayName: user.displayName || cleanUsername,
+            displayName: user.displayName ? user.displayName : cleanUsername,
             isLocal: false
           };
           await window.loadUserProfile();
