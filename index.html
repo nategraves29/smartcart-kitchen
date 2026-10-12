@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartCart Kitchen — Weekly Meal & Grocery Budget Planner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #FAF8F5;
+      color: #1F2937;
+    }
+    .pill-active {
+      background-color: #15803D !important;
+      color: #FFFFFF !important;
+      border-color: #15803D !important;
+      box-shadow: 0 4px 12px rgba(21, 128, 61, 0.2);
+    }
+    .store-card-active {
+      border-color: #15803D !important;
+      background-color: #F0FDF4 !important;
+      box-shadow: 0 6px 16px rgba(21, 128, 61, 0.12);
+    }
+    input[type="range"] {
+      accent-color: #15803D;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="bg-white border-b border-stone-200 sticky top-0 z-30 no-print">
+    <div class="max-w-5xl mx-auto px-4 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-green-700 flex items-center justify-center text-white text-xl shadow-sm">
+          🛒
+        </div>
+        <div>
+          <h1 class="font-extrabold text-lg sm:text-xl text-stone-900 leading-tight">SmartCart Kitchen</h1>
+          <p class="text-xs text-stone-500">Weekly Grocery Budget & Recipe Planner</p>
+        </div>
+      </div>
+
+      <!-- User Account Status -->
+      <div id="userHeaderBar" class="hidden flex items-center gap-2 sm:gap-3">
+        <div class="bg-stone-100 px-3 py-1.5 rounded-full flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-green-600"></span>
+          <span id="headerUsername" class="text-sm font-semibold text-stone-800">User</span>
+          <span id="syncBadge" class="text-[11px] text-stone-500 hidden sm:inline">• Saved</span>
+        </div>
+        <button onclick="handleLogout()" class="text-xs sm:text-sm font-semibold text-stone-600 hover:text-red-600 px-3 py-1.5 rounded-xl hover:bg-stone-100 transition">
+          Log Out
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- VIEW 1: FRIENDLY LOGIN / SIGN-UP SCREEN    -->
+  <!-- ========================================== -->
+  <main id="authScreen" class="flex-1 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-xl border border-stone-200/80 max-w-md w-full p-6 sm:p-8">
+      <div class="text-center mb-6">
+        <div class="w-16 h-16 rounded-3xl bg-green-50 border border-green-200 flex items-center justify-center text-3xl mx-auto mb-3">
+          🥗
+        </div>
+        <h2 class="text-2xl font-extrabold text-stone-900">Welcome to Your Kitchen</h2>
+        <p class="text-sm text-stone-600 mt-1">
+          Sign in to load your kitchen tools, fridge inventory, favorite store, and weekly budget.
+        </p>
+      </div>
+
+      <!-- Sign In / Create Account Toggle -->
+      <div class="grid grid-cols-2 bg-stone-100 p-1 rounded-2xl mb-6">
+        <button id="tabLoginBtn" onclick="switchAuthMode('login')" class="py-2.5 rounded-xl font-bold text-sm bg-white text-stone-900 shadow-sm transition">
+          Sign In
+        </button>
+        <button id="tabSignupBtn" onclick="switchAuthMode('signup')" class="py-2.5 rounded-xl font-bold text-sm text-stone-600 transition">
+          Create New Profile
+        </button>
+      </div>
+
+      <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+        <div id="displayNameGroup" class="hidden">
+          <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Your First Name</label>
+          <input id="authDisplayName" type="text" placeholder="e.g., Sarah or Nate"
+            class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-green-700 focus:ring-2 focus:ring-green-700/20 outline-none text-base" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Username</label>
+          <input id="authUsername" type="text" required placeholder="e.g., sarah_reston" autocomplete="username"
+            class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-green-700 focus:ring-2 focus:ring-green-700/20 outline-none text-base" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Password</label>
+          <input id="authPassword" type="password" required minlength="6" placeholder="At least 6 characters" autocomplete="current-password"
+            class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-green-700 focus:ring-2 focus:ring-green-700/20 outline-none text-base" />
+        </div>
+
+        <div id="regionPresetGroup" class="hidden">
+          <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Your Area</label>
+          <select id="authRegionPreset" class="w-full px-4 py-3 rounded-xl border border-stone-300 bg-white text-base font-medium">
+            <option value="reston">Reston, VA (20191) — Harris Teeter, TJ's, Safeway</option>
+            <option value="pnw">Beaverton / Portland, OR — Fred Meyer, TJ's, Safeway</option>
+          </select>
+        </div>
+
+        <div id="authErrorBox" class="hidden bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl p-3 font-medium"></div>
+
+        <button id="authSubmitBtn" type="submit"
+          class="w-full py-3.5 bg-green-700 hover:bg-green-800 active:scale-[0.99] text-white font-bold rounded-2xl shadow-md hover:shadow-lg transition text-base">
+          Sign In to My Kitchen →
+        </button>
+      </form>
+
+      <!-- Instant Demo Access for Testing -->
+      <div class="mt-6 pt-5 border-t border-stone-200">
+        <p class="text-xs font-bold uppercase tracking-wider text-stone-400 text-center mb-3">
+          Or Try a Pre-Loaded Profile Immediately
+        </p>
+        <div class="grid grid-cols-2 gap-2.5">
+          <button onclick="loginQuickDemo('reston_demo', 'Reston Friend', 'reston')"
+            class="py-2.5 px-3 rounded-xl border border-stone-300 hover:border-green-700 hover:bg-green-50 text-xs font-bold text-stone-700 transition">
+            🏡 Reston, VA Demo
+          </button>
+          <button onclick="loginQuickDemo('pnw_demo', 'Oregon Home', 'pnw')"
+            class="py-2.5 px-3 rounded-xl border border-stone-300 hover:border-green-700 hover:bg-green-50 text-xs font-bold text-stone-700 transition">
+            🌲 Oregon Demo
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- VIEW 2: MAIN APPLICATION WORKSPACE         -->
+  <!-- ========================================== -->
+  <div id="appWorkspace" class="hidden flex-1 max-w-5xl w-full mx-auto px-4 py-6">
+
+    <!-- Friendly Welcome Banner -->
+    <div class="bg-white rounded-3xl p-5 sm:p-6 border border-stone-200/90 shadow-sm mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 no-print">
+      <div>
+        <h2 id="welcomeHeadline" class="text-xl sm:text-2xl font-extrabold text-stone-900">Hello! Let's plan this week's meals.</h2>
+        <p class="text-sm text-stone-600 mt-0.5">
+          Everything you tap below automatically saves to your personal profile.
+        </p>
+      </div>
+      <div class="flex items-center gap-3 bg-green-50 border border-green-200 px-4 py-2.5 rounded-2xl">
+        <span class="text-2xl">💰</span>
+        <div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-green-800">Weekly Budget</div>
+          <div id="bannerBudgetDisplay" class="text-lg font-extrabold text-green-900">$125</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3-Step Guided Navigation Bar -->
+    <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-6 no-print">
+      <button id="stepBtn1" onclick="goToStep(1)"
+        class="step-tab flex flex-col sm:flex-row items-center justify-center gap-2 py-3.5 px-3 rounded-2xl font-bold text-xs sm:text-sm border-2 border-green-700 bg-green-700 text-white shadow-sm transition">
+        <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs font-extrabold">1</span>
+        <span>My Kitchen & Fridge</span>
+      </button>
+      <button id="stepBtn2" onclick="goToStep(2)"
+        class="step-tab flex flex-col sm:flex-row items-center justify-center gap-2 py-3.5 px-3 rounded-2xl font-bold text-xs sm:text-sm border-2 border-stone-200 bg-white text-stone-700 hover:border-stone-300 transition">
+        <span class="w-6 h-6 rounded-full bg-stone-100 flex items-center justify-center text-xs font-extrabold">2</span>
+        <span>Store & Budget</span>
+      </button>
+      <button id="stepBtn3" onclick="goToStep(3)"
+        class="step-tab flex flex-col sm:flex-row items-center justify-center gap-2 py-3.5 px-3 rounded-2xl font-bold text-xs sm:text-sm border-2 border-stone-200 bg-white text-stone-700 hover:border-stone-300 transition">
+        <span class="w-6 h-6 rounded-full bg-stone-100 flex items-center justify-center text-xs font-extrabold">3</span>
+        <span>Meals & Grocery List</span>
+      </button>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- STEP 1: MY KITCHEN, PANTRY & ALLERGIES     -->
+    <!-- ========================================== -->
+    <section id="stepPanel1" class="space-y-6">
+
+      <!-- Card 1A: What's in your Fridge/Pantry to use up first? -->
+      <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-sm">
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <span class="inline-block text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2.5 py-1 rounded-full mb-2">
+              Save Money First
+            </span>
+            <h3 class="text-lg sm:text-xl font-extrabold text-stone-900">1. What ingredients do you already have on hand?</h3>
+            <p class="text-sm text-stone-600 mt-0.5">
+              Tap or type anything sitting in your fridge, freezer, or garden. Your recipes will use these first so you don't buy duplicates!
+            </p>
+          </div>
+        </div>
+
+        <!-- Quick-Tap Common Have-On-Hand Items -->
+        <div class="mb-4">
+          <div class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-2">Quick-Tap Common Items in Your Fridge / Pantry:</div>
+          <div id="quickFridgePills" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Custom Item Input -->
+        <div class="flex gap-2 mt-4">
+          <input id="customFridgeInput" type="text" placeholder="Type anything else you have (e.g., 2 chicken breasts, half bag of spinach)..."
+            onkeydown="if(event.key==='Enter'){event.preventDefault();addCustomFridgeItem();}"
+            class="flex-1 px-4 py-3 rounded-xl border border-stone-300 focus:border-green-700 outline-none text-sm sm:text-base" />
+          <button onclick="addCustomFridgeItem()"
+            class="px-5 py-3 bg-stone-900 hover:bg-stone-800 text-white font-bold rounded-xl text-sm shrink-0 transition">
+            + Add Item
+          </button>
+        </div>
+
+        <!-- Active Fridge Items List -->
+        <div class="mt-4 pt-4 border-t border-stone-100">
+          <div class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-2">Currently in Your Kitchen to Use Up:</div>
+          <div id="activeFridgeList" class="flex flex-wrap gap-2"></div>
+        </div>
+      </div>
+
+      <!-- Card 1B: Cooking Equipment & Utensils -->
+      <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-sm">
+        <h3 class="text-lg sm:text-xl font-extrabold text-stone-900">2. Which cooking tools do you have?</h3>
+        <p class="text-sm text-stone-600 mt-0.5 mb-4">
+          Tap the appliances and pans you have in your kitchen. We will only give you recipes you can actually cook.
+        </p>
+        <div id="equipmentGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5"></div>
+      </div>
+
+      <!-- Card 1C: Allergies & Food Preferences -->
+      <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-sm">
+        <h3 class="text-lg sm:text-xl font-extrabold text-stone-900">3. Any allergies or food preferences?</h3>
+        <p class="text-sm text-stone-600 mt-0.5 mb-4">
+          Select any allergies to strictly avoid, plus the style of meals you enjoy.
+        </p>
+
+        <div class="mb-5">
+          <div class="text-xs font-bold uppercase tracking-wider text-red-700 mb-2">🚫 Allergies & Dislikes (Strictly Excluded)</div>
+          <div id="allergyGrid" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-green-800 mb-2">😋 Meal Styles You Like</div>
+          <div id="preferenceGrid" class="flex flex-wrap gap-2"></div>
+        </div>
+      </div>
+
+      <!-- Card 1D: Basic Spice & Oil Rack -->
+      <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="text-lg font-extrabold text-stone-900">4. Basic Pantry Staples</h3>
+            <p class="text-sm text-stone-600">Uncheck anything you are completely out of so we add it to your grocery list.</p>
+          </div>
+        </div>
+        <div id="staplesGrid" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <div class="flex justify-end">
+        <button onclick="goToStep(2)"
+          class="w-full sm:w-auto px-8 py-4 bg-green-700 hover:bg-green-800 text-white font-extrabold rounded-2xl shadow-md text-base transition">
+          Next: Choose Store & Weekly Budget →
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STEP 2: STORE & WEEKLY BUDGET              -->
+    <!-- ========================================== -->
+    <section id="stepPanel2" class="hidden space-y-6">
+
+      <!-- Card 2A: Pick Your Local Grocery Store -->
+      <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <div>
+            <h3 class="text-lg sm:text-xl font-extrabold text-stone-900">1. Where are you grocery shopping this week?</h3>
+            <p class="text-sm text-stone-600">Select your store to load local package prices and weekly specials.</p>
+          </div>
+          <!-- Region Filter Pills -->
+          <div class="inline-flex bg-stone-100 p-1 rounded-xl self-start">
+            <button id="regionBtnReston" onclick="filterStoresByRegion('reston')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition">
+              📍 Reston, VA (20191)
+            </button>
+            <button id="regionBtnPnw" onclick="filterStoresByRegion('pnw')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition">
+              🌲 Beaverton / OR
+            </button>
+          </div>
+        </div>
+
+        <div id="storeSelectionGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5"></div>
+      </div>
+
+      <!-- Card 2B: Set Your Weekly Grocery Budget & Household Size -->
+      <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-sm">
+        <h3 class="text-lg sm:text-xl font-extrabold text-stone-900 mb-1">2. Set Your Weekly Grocery Budget</h3>
+        <p class="text-sm text-stone-600 mb-6">
+          Slide to set your maximum spend at the register. We automatically reserve a 10% safety cushion so you never go over budget.
+        </p>
+
+        <div class="bg-stone-50 border border-stone-200 rounded-2xl p-5 mb-6">
+          <div class="flex items-baseline justify-between mb-3">
+            <span class="text-sm font-bold text-stone-600">Maximum Weekly Spend:</span>
+            <span id="budgetSliderLabel" class="text-3xl sm:text-4xl font-extrabold text-green-800">$125</span>
+          </div>
+          <input id="budgetRangeInput" type="range" min="45" max="300" step="5" value="125"
+            oninput="updateBudgetValue(this.value)"
+            class="w-full h-3 bg-stone-200 rounded-lg cursor-pointer" />
+          <div class="flex justify-between text-xs font-semibold text-stone-400 mt-2">
+            <span>$45 / wk (Tight Budget)</span>
+            <span>$125 / wk (Average)</span>
+            <span>$300 / wk (Family Feast)</span>
+          </div>
+        </div>
+
+        <!-- Number of Dinners & Servings -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-4 rounded-2xl border border-stone-200 flex items-center justify-between">
+            <div>
+              <div class="font-bold text-stone-900">How many dinners this week?</div>
+              <div class="text-xs text-stone-500">Number of recipes to plan</div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="adjustCount('mealsCount', -1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">-</button>
+              <span id="mealsCountDisplay" class="font-extrabold text-lg w-6 text-center">5</span>
+              <button onclick="adjustCount('mealsCount', 1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">+</button>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl border border-stone-200 flex items-center justify-between">
+            <div>
+              <div class="font-bold text-stone-900">Servings per meal?</div>
+              <div class="text-xs text-stone-500">Portions cooked each night</div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="adjustCount('servingsCount', -1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">-</button>
+              <span id="servingsCountDisplay" class="font-extrabold text-lg w-6 text-center">2</span>
+              <button onclick="adjustCount('servingsCount', 1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Generate Button Row -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+        <button onclick="goToStep(1)" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl border border-stone-300 font-bold text-stone-700 hover:bg-stone-100 transition">
+          ← Back to My Kitchen
+        </button>
+        <button onclick="generateWeeklyMealPlan()"
+          class="w-full sm:w-auto px-8 py-4 bg-green-700 hover:bg-green-800 text-white font-extrabold rounded-2xl shadow-lg text-base sm:text-lg transition flex items-center justify-center gap-2">
+          <span>✨ Build My Grocery List & Recipes</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STEP 3: MEAL PLAN & GROCERY LIST           -->
+    <!-- ========================================== -->
+    <section id="stepPanel3" class="hidden space-y-6">
+
+      <!-- Loading Spinner Overlay -->
+      <div id="planLoadingCard" class="hidden bg-white rounded-3xl p-10 border border-stone-200 text-center space-y-3">
+        <div class="text-4xl animate-bounce">🛒</div>
+        <h3 class="text-xl font-extrabold text-stone-900">Building Your Custom Meal Plan & Checking Store Prices...</h3>
+        <p id="loadingSubtext" class="text-sm text-stone-600 max-w-md mx-auto">
+          Matching your kitchen tools, using up your fridge items first, and keeping your cart under budget.
+        </p>
+      </div>
+
+      <!-- Results Container -->
+      <div id="planResultsContainer" class="space-y-6">
+
+        <!-- Budget Summary Banner -->
+        <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-sm">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+            <div>
+              <div id="planStoreBadge" class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-green-800 bg-green-100 px-3 py-1 rounded-full mb-2">
+                📍 Store Selected
+              </div>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-stone-900">Your Weekly Grocery Cart & Meal Plan</h3>
+              <p id="planSummarySub" class="text-sm text-stone-600">All recipes fit your kitchen equipment and stay within your budget.</p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 no-print">
+              <button onclick="verifyLiveStorePrices()" id="verifyLivePricesBtn"
+                class="px-4 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-bold text-xs sm:text-sm transition">
+                🔄 Check Live Store Sale Prices
+              </button>
+              <button onclick="window.print()"
+                class="px-4 py-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold text-xs sm:text-sm transition">
+                🖨️ Print / Save PDF
+              </button>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="bg-stone-50 rounded-2xl p-4 border border-stone-200">
+            <div class="flex flex-wrap items-baseline justify-between gap-2 mb-2">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-stone-500">Estimated Register Total:</span>
+                <span id="cartTotalDisplay" class="text-2xl sm:text-3xl font-extrabold text-green-800 ml-2">$0.00</span>
+                <span id="cartBudgetLimitDisplay" class="text-sm text-stone-500 font-semibold">of $125.00 budget</span>
+              </div>
+              <div id="savingsPill" class="text-xs font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full">
+                Under Budget!
+              </div>
+            </div>
+            <div class="w-full h-3.5 bg-stone-200 rounded-full overflow-hidden">
+              <div id="budgetProgressBar" class="h-full bg-green-600 transition-all duration-500" style="width: 60%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two-Column Layout: Left = Shopping List, Right = Recipes -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+          <!-- Left Column: Checkable Grocery List (5 cols) -->
+          <div class="lg:col-span-5 bg-white rounded-3xl p-5 sm:p-6 border border-stone-200 shadow-sm h-fit">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h4 class="text-lg font-extrabold text-stone-900">📋 Grocery List to Buy</h4>
+                <p class="text-xs text-stone-500">Tap items as you put them in your cart</p>
+              </div>
+              <span id="groceryCountBadge" class="text-xs font-bold bg-stone-100 text-stone-700 px-2.5 py-1 rounded-full">0 items</span>
+            </div>
+
+            <div id="shoppingListContainer" class="space-y-4"></div>
+
+            <!-- Already Have Section -->
+            <div class="mt-6 pt-4 border-t border-stone-200">
+              <div class="text-xs font-bold uppercase tracking-wider text-green-800 mb-2">
+                ✅ Using From Your Kitchen ($0 Extra Cost)
+              </div>
+              <div id="usingFromKitchenList" class="flex flex-wrap gap-1.5"></div>
+            </div>
+          </div>
+
+          <!-- Right Column: Step-by-Step Recipes (7 cols) -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="flex items-center justify-between">
+              <h4 class="text-lg font-extrabold text-stone-900">🍳 Your Recipes for the Week</h4>
+              <button onclick="generateWeeklyMealPlan()" class="text-xs font-bold text-green-700 hover:underline no-print">
+                ↻ Shuffle New Recipes
+              </button>
+            </div>
+            <div id="recipesContainer" class="space-y-4"></div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FOOTER WITH DISCREET ADMIN / SETUP GEAR -->
+  <footer class="mt-auto border-t border-stone-200 bg-white py-4 px-4 no-print">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-stone-500">
+      <div>SmartCart Kitchen — Built for Reston, VA (20191) & Beaverton, OR</div>
+      <button onclick="toggleAdminModal(true)" class="font-semibold text-stone-500 hover:text-stone-900 flex items-center gap-1">
+        <span>⚙️ Admin & Cloud Setup</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- ========================================== -->
+  <!-- HIDDEN ADMIN MODAL (FOR YOU, NOT FRIENDS)  -->
+  <!-- ========================================== -->
+  <div id="adminModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-7 max-h-[90vh] overflow-y-auto shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-extrabold text-stone-900">⚙️ Admin & Cloud Setup</h3>
+        <button onclick="toggleAdminModal(false)" class="text-stone-400 hover:text-stone-700 text-xl font-bold">✕</button>
+      </div>
+      <p class="text-xs text-stone-600 mb-4">
+        Paste your shared Cloudflare Worker URL or Gemini API key here, or hardcode them at the top of <code class="bg-stone-100 px-1 rounded">index.html</code> so your friends never have to touch this screen.
+      </p>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase text-stone-600 mb-1">Cloudflare Worker Proxy URL (Kroger / Harris Teeter / TJ's / Safeway)</label>
+          <input id="adminWorkerUrl" type="url" placeholder="https://grocery-proxy.yourname.workers.dev"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase text-stone-600 mb-1">Gemini API Key (Optional — Enables Custom AI Recipe Generation)</label>
+          <input id="adminGeminiKey" type="password" placeholder="AIzaSy..."
+            class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase text-stone-600 mb-1">Firebase Config JSON (Optional if not hardcoded)</label>
+          <textarea id="adminFirebaseJson" rows="4" placeholder='{"apiKey":"...","authDomain":"...","projectId":"..."}'
+            class="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs font-mono"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2">
+          <button onclick="toggleAdminModal(false)" class="px-4 py-2 rounded-xl border border-stone-300 text-sm font-bold">Cancel</button>
+          <button onclick="saveAdminSettings()" class="px-5 py-2 rounded-xl bg-green-700 text-white text-sm font-bold">Save Settings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- APPLICATION LOGIC & FIREBASE INTEGRATION   -->
+  <!-- ========================================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    // ============================================================================
+    // 1. PUT YOUR FIREBASE CONFIG & OPTIONAL SHARED KEYS HERE ONCE FOR ALL FRIENDS
+    // ============================================================================
+    const firebaseConfig = {
+  apiKey: "AIzaSyAl5hOXY8_lAuQeIZS-T4uq5ZBTDayn40o",
+  authDomain: "grocery-planner-v1.firebaseapp.com",
+  projectId: "grocery-planner-v1",
+  storageBucket: "grocery-planner-v1.firebasestorage.app",
+  messagingSenderId: "794850230910",
+  appId: "1:794850230910:web:932506759e1f0726b7ce2f"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+    const DEFAULT_WORKER_URL = "https://smartcart-proxy.nategraves29.workers.dev/"; // e.g. "https://grocery-proxy.yourname.workers.dev"
+    const DEFAULT_GEMINI_API_KEY = ""; // Optional: Google AI Studio key
+
+    // ============================================================================
+    // 2. STORE DIRECTORY (RESTON, VA 20191 + BEAVERTON, OR 97005)
+    // ============================================================================
+    const STORES = [
+      {
+        id: "ht_reston_spectrum",
+        region: "reston",
+        chain: "harristeeter",
+        name: "Harris Teeter — Spectrum Center",
+        address: "11806 Spectrum Ctr, Reston, VA 20190",
+        badge: "VIC Card & Live Kroger API",
+        provider: "kroger",
+        locationId: "09700081",
+        zip: "20191",
+        multiplier: 1.02
+      },
+      {
+        id: "ht_reston_woodland",
+        region: "reston",
+        chain: "harristeeter",
+        name: "Harris Teeter — Woodland Park",
+        address: "12960 Highland Crossing Dr, Herndon, VA (Near 20191)",
+        badge: "VIC Card & Live Kroger API",
+        provider: "kroger",
+        locationId: "09700085",
+        zip: "20191",
+        multiplier: 1.02
+      },
+      {
+        id: "tj_reston",
+        region: "reston",
+        chain: "traderjoes",
+        name: "Trader Joe's — Reston",
+        address: "11958 Killingsworth Ave, Reston, VA 20194",
+        badge: "Store #646 Everyday Low Prices",
+        provider: "traderjoes",
+        storeCode: "646",
+        zip: "20191",
+        multiplier: 0.90
+      },
+      {
+        id: "safeway_reston_hunters",
+        region: "reston",
+        chain: "safeway",
+        name: "Safeway — Hunters Woods / South Lakes",
+        address: "2304 Hunters Woods Plaza, Reston, VA 20191",
+        badge: "Weekly Ad & Member Deals (20191)",
+        provider: "safeway",
+        zip: "20191",
+        multiplier: 1.05
+      },
+      {
+        id: "fm_beaverton",
+        region: "pnw",
+        chain: "fredmeyer",
+        name: "Fred Meyer — Beaverton Town Square",
+        address: "11425 SW Beaverton Hillsdale Hwy, Beaverton, OR",
+        badge: "Yellow Tag & Live Kroger API",
+        provider: "kroger",
+        locationId: "70100045",
+        zip: "97005",
+        multiplier: 1.00
+      },
+      {
+        id: "fm_walker",
+        region: "pnw",
+        chain: "fredmeyer",
+        name: "Fred Meyer — Walker Road",
+        address: "15995 SW Walker Rd, Beaverton, OR",
+        badge: "Yellow Tag & Live Kroger API",
+        provider: "kroger",
+        locationId: "70100660",
+        zip: "97006",
+        multiplier: 1.00
+      },
+      {
+        id: "tj_beaverton",
+        region: "pnw",
+        chain: "traderjoes",
+        name: "Trader Joe's — Beaverton",
+        address: "11753 SW Beaverton Hillsdale Hwy, Beaverton, OR",
+        badge: "Store #143 Everyday Value",
+        provider: "traderjoes",
+        storeCode: "143",
+        zip: "97005",
+        multiplier: 0.90
+      },
+      {
+        id: "safeway_beaverton",
+        region: "pnw",
+        chain: "safeway",
+        name: "Safeway — Beaverton (SW Teal / Murray)",
+        address: "Beaverton, OR 97005",
+        badge: "Weekly Ad Deals (97005)",
+        provider: "safeway",
+        zip: "97005",
+        multiplier: 1.04
+      }
+    ];
+
+    // ============================================================================
+    // 3. FRIENDLY KITCHEN OPTIONS (ICONS + PLAIN LANGUAGE)
+    // ============================================================================
+    const EQUIPMENT_OPTIONS = [
+      { id: "skillet", label: "Skillet / Frying Pan", icon: "🍳" },
+      { id: "sheet_pan", label: "Oven & Sheet Pan", icon: "♨️" },
+      { id: "pot", label: "Large Soup Pot", icon: "🍲" },
+      { id: "slow_cooker", label: "Slow Cooker / Crockpot", icon: "🥘" },
+      { id: "instant_pot", label: "Instant Pot / Pressure", icon: "⚡" },
+      { id: "air_fryer", label: "Air Fryer", icon: "🍟" },
+      { id: "grill", label: "Grill / Pellet Smoker", icon: "🔥" },
+      { id: "rice_cooker", label: "Rice Cooker", icon: "🍚" },
+      { id: "blender", label: "Blender / Processor", icon: "🌪️" },
+      { id: "microwave", label: "Microwave", icon: "📟" }
+    ];
+
+    const QUICK_FRIDGE_SUGGESTIONS = [
+      "🥚 Eggs", "🍚 Rice", "🍝 Pasta", "🧅 Yellow Onions", "🥔 Potatoes",
+      "🍅 Tomatoes", "🍗 Chicken Breast", "🥩 Ground Beef", "🧀 Cheddar Cheese",
+      "🥬 Spinach / Greens", "🥕 Carrots", "🫑 Bell Peppers", "🫘 Canned Beans",
+      " tortillas", "🥫 Crushed Tomatoes"
+    ];
+
+    const ALLERGY_OPTIONS = [
+      "🥜 Peanuts / Tree Nuts", "🦐 Shellfish", "🥛 Dairy / Lactose",
+      "🌾 Gluten / Wheat", "🥚 Eggs", "🌱 Soy", "🐟 Fish", "🍄 Mushrooms"
+    ];
+
+    const PREFERENCE_OPTIONS = [
+      "⏱️ Quick (Under 30 Mins)", "💪 High Protein", "🥗 Kid & Family Friendly",
+      "🍲 Cozy One-Pan Meals", "🌮 Bold & Spicy Flavors", "🥦 Extra Veggies",
+      "🍱 Great for Leftovers"
+    ];
+
+    const STAPLE_OPTIONS = [
+      "Olive / Cooking Oil", "Butter", "Salt & Black Pepper", "Garlic / Garlic Powder",
+      "Soy Sauce", "All-Purpose Flour", "Sugar / Honey", "Vinegar",
+      "Chili Powder / Paprika", "Italian Seasoning", "Chicken / Veggie Broth"
+    ];
+
+    // ============================================================================
+    // 4. BUILT-IN SMART RECIPE LIBRARY (WORKS EVEN WITHOUT AN AI KEY)
+    // ============================================================================
+    const CURATED_RECIPES = [
+      {
+        title: "Crispy Sheet-Pan Garlic Herb Chicken & Baby Potatoes",
+        time: "30 mins",
+        equipmentNeeded: "Oven & Sheet Pan",
+        equipmentId: "sheet_pan",
+        allergens: [],
+        tags: ["💪 High Protein", "🥗 Kid & Family Friendly", "🍲 Cozy One-Pan Meals"],
+        steps: [
+          "Preheat oven to 425°F. Halve the baby potatoes and toss on a sheet pan with olive oil, salt, pepper, and garlic.",
+          "Season chicken thighs or breasts with Italian seasoning and paprika; nestle onto the pan beside the potatoes.",
+          "Roast for 22–25 minutes, adding broccoli florets for the final 12 minutes until golden and tender."
+        ],
+        ingredients: [
+          { name: "Boneless Skinless Chicken Thighs (1.5 lb)", aisle: "Meat & Seafood", basePrice: 6.49, key: "chicken" },
+          { name: "Baby Gold Potatoes (1.5 lb bag)", aisle: "Produce", basePrice: 3.49, key: "potatoes" },
+          { name: "Fresh Broccoli Crowns (1 lb)", aisle: "Produce", basePrice: 2.29, key: "broccoli" }
+        ]
+      },
+      {
+        title: "One-Skillet Beef & Black Bean Taco Rice Bowls",
+        time: "25 mins",
+        equipmentNeeded: "Skillet / Frying Pan",
+        equipmentId: "skillet",
+        allergens: ["🥛 Dairy / Lactose"],
+        tags: ["⏱️ Quick (Under 30 Mins)", "💪 High Protein", "🌮 Bold & Spicy Flavors", "🍱 Great for Leftovers"],
+        steps: [
+          "Brown the ground beef with diced yellow onion and bell pepper in a large skillet over medium-high heat.",
+          "Stir in black beans, salsa or crushed tomatoes, chili powder, and uncooked rice with broth; cover and simmer 15 minutes.",
+          "Top with shredded cheddar cheese and diced tomatoes before serving."
+        ],
+        ingredients: [
+          { name: "Lean Ground Beef 85/15 (1 lb)", aisle: "Meat & Seafood", basePrice: 5.99, key: "ground beef" },
+          { name: "Canned Black Beans (15 oz)", aisle: "Pantry", basePrice: 1.29, key: "beans" },
+          { name: "Chunky Restaurant Salsa (16 oz jar)", aisle: "Pantry", basePrice: 2.99, key: "tomatoes" },
+          { name: "Sharp Cheddar Cheese Shredded (8 oz)", aisle: "Dairy & Eggs", basePrice: 2.79, key: "cheddar cheese" },
+          { name: "Green & Red Bell Peppers (2 ct)", aisle: "Produce", basePrice: 2.50, key: "bell peppers" }
+        ]
+      },
+      {
+        title: "Creamy Tuscan Garlic Spinach & Sausage Skillet Pasta",
+        time: "25 mins",
+        equipmentNeeded: "Skillet / Frying Pan",
+        equipmentId: "skillet",
+        allergens: ["🌾 Gluten / Wheat", "🥛 Dairy / Lactose"],
+        tags: ["⏱️ Quick (Under 30 Mins)", "🍲 Cozy One-Pan Meals", "🥗 Kid & Family Friendly"],
+        steps: [
+          "Boil pasta in salted water until tender while browning sliced Italian sausage in your skillet.",
+          "Add garlic, crushed tomatoes, and a splash of cream or cream cheese to the skillet to create a velvety rose sauce.",
+          "Toss the pasta and fresh spinach into the sauce until the greens wilt."
+        ],
+        ingredients: [
+          { name: "Mild Italian Dinner Sausage (1 lb)", aisle: "Meat & Seafood", basePrice: 4.99, key: "sausage" },
+          { name: "Penne or Rigatoni Pasta (16 oz box)", aisle: "Pantry", basePrice: 1.49, key: "pasta" },
+          { name: "Fresh Baby Spinach (8 oz bag)", aisle: "Produce", basePrice: 2.49, key: "spinach" },
+          { name: "Crushed Tomatoes (28 oz can)", aisle: "Pantry", basePrice: 1.89, key: "crushed tomatoes" }
+        ]
+      },
+      {
+        title: "Smoky Honey-Garlic Glazed Salmon & Roasted Carrots",
+        time: "25 mins",
+        equipmentNeeded: "Oven & Sheet Pan",
+        equipmentId: "sheet_pan",
+        allergens: ["🐟 Fish", "🌱 Soy"],
+        tags: ["⏱️ Quick (Under 30 Mins)", "💪 High Protein", "🥦 Extra Veggies"],
+        steps: [
+          "Slice peeled carrots on a bias, toss with oil, salt, and pepper, and roast at 400°F for 12 minutes.",
+          "Whisk soy sauce, honey, and minced garlic; brush over salmon fillets placed on the center of the sheet pan.",
+          "Roast another 10–12 minutes until the salmon flakes easily, serving over warm rice."
+        ],
+        ingredients: [
+          { name: "Atlantic or Coho Salmon Portions (12 oz)", aisle: "Meat & Seafood", basePrice: 8.99, key: "salmon" },
+          { name: "Whole Carrots (2 lb bag)", aisle: "Produce", basePrice: 1.99, key: "carrots" },
+          { name: "Jasmine Rice (2 lb bag)", aisle: "Pantry", basePrice: 3.29, key: "rice" }
+        ]
+      },
+      {
+        title: "Golden Crispy Veggie & Egg Fried Rice Skillet",
+        time: "20 mins",
+        equipmentNeeded: "Skillet / Frying Pan",
+        equipmentId: "skillet",
+        allergens: ["🥚 Eggs", "🌱 Soy"],
+        tags: ["⏱️ Quick (Under 30 Mins)", "🥗 Kid & Family Friendly", "🥦 Extra Veggies", "🍱 Great for Leftovers"],
+        steps: [
+          "Sauté diced carrots, onions, and peas in hot oil for 4 minutes until tender-crisp.",
+          "Push veggies to the side, scramble the eggs in the pan, then toss with cooked rice and soy sauce over high heat.",
+          "Finish with sliced green onions and a drizzle of toasted oil."
+        ],
+        ingredients: [
+          { name: "Large Grade A Eggs (12 ct)", aisle: "Dairy & Eggs", basePrice: 3.29, key: "eggs" },
+          { name: "Frozen Peas & Carrots (12 oz bag)", aisle: "Frozen", basePrice: 1.79, key: "carrots" },
+          { name: "Yellow Onions (3 lb bag)", aisle: "Produce", basePrice: 2.99, key: "onions" },
+          { name: "Fresh Green Onions (1 bunch)", aisle: "Produce", basePrice: 0.99, key: "onions" }
+        ]
+      },
+      {
+        title: "Hearty Slow-Simmered Chicken & Potato Herb Soup",
+        time: "35 mins",
+        equipmentNeeded: "Large Soup Pot",
+        equipmentId: "pot",
+        allergens: [],
+        tags: ["🍲 Cozy One-Pan Meals", "🍱 Great for Leftovers", "💪 High Protein"],
+        steps: [
+          "Sweat diced onions and carrots in a soup pot with oil or butter until fragrant.",
+          "Add diced potatoes, chicken breast, and broth; simmer gently for 20 minutes until potatoes are tender.",
+          "Shred the chicken right in the pot, adjust seasoning, and ladle into warm bowls."
+        ],
+        ingredients: [
+          { name: "Boneless Skinless Chicken Breast (1.5 lb)", aisle: "Meat & Seafood", basePrice: 6.99, key: "chicken" },
+          { name: "Baby Gold Potatoes (1.5 lb bag)", aisle: "Produce", basePrice: 3.49, key: "potatoes" },
+          { name: "Whole Carrots (2 lb bag)", aisle: "Produce", basePrice: 1.99, key: "carrots" }
+        ]
+      },
+      {
+        title: "Flame-Kissed Grill Burgers & Crispy Oven Wedges",
+        time: "30 mins",
+        equipmentNeeded: "Grill / Pellet Smoker",
+        equipmentId: "grill",
+        allergens: ["🌾 Gluten / Wheat", "🥛 Dairy / Lactose"],
+        tags: ["💪 High Protein", "🥗 Kid & Family Friendly"],
+        steps: [
+          "Cut potatoes into wedges, toss with oil and seasoning, and roast or air-fry until crisp.",
+          "Shape seasoned ground beef into patties and sear on the grill or skillet to medium-well, melting cheddar on top.",
+          "Serve on toasted buns with sliced tomatoes and onions."
+        ],
+        ingredients: [
+          { name: "Lean Ground Beef 85/15 (1 lb)", aisle: "Meat & Seafood", basePrice: 5.99, key: "ground beef" },
+          { name: "Brioche or Classic Burger Buns (8 ct)", aisle: "Bakery", basePrice: 2.99, key: "buns" },
+          { name: "Vine-Ripe Tomatoes (1 lb)", aisle: "Produce", basePrice: 2.29, key: "tomatoes" }
+        ]
+      }
+    ];
+
+    // ============================================================================
+    // 5. STATE MANAGEMENT & USER PROFILE STRUCTURE
+    // ============================================================================
+    let firebaseApp = null;
+    let auth = null;
+    let db = null;
+    let authMode = "login";
+    let currentUser = null; // { uid, username, displayName, isLocal }
+
+    function createDefaultProfile(region = "reston", displayName = "Friend") {
+      return {
+        displayName,
+        region,
+        selectedStoreId: region === "reston" ? "ht_reston_spectrum" : "fm_beaverton",
+        weeklyBudget: 125,
+        mealsCount: 5,
+        servingsCount: 2,
+        fridgeItems: ["🥚 Eggs", "🧅 Yellow Onions", "🍚 Rice"],
+        equipment: ["skillet", "sheet_pan", "pot", "microwave"],
+        allergies: [],
+        preferences: ["⏱️ Quick (Under 30 Mins)", "💪 High Protein"],
+        staples: [...STAPLE_OPTIONS],
+        currentPlan: null,
+        updatedAt: new Date().toISOString()
+      };
+    }
+
+    let profileState = createDefaultProfile("reston", "Friend");
+
+    // ============================================================================
+    // 6. INITIALIZE FIREBASE (IF CONFIGURED) OR FALLBACK TO LOCAL ACCOUNTS
+    // ============================================================================
+    function initFirebaseIfAvailable() {
+      try {
+        const savedJson = localStorage.getItem("smartcart_firebase_config");
+        const config = DEFAULT_FIREBASE_CONFIG || (savedJson ? JSON.parse(savedJson) : null);
+        if (config && config.apiKey && config.projectId) {
+          firebaseApp = initializeApp(config);
+          auth = getAuth(firebaseApp);
+          db = getFirestore(firebaseApp);
+
+          onAuthStateChanged(auth, async (user) => {
+            if (user) {
+              const rawEmail = user.email || "user@kitchenplanner.app";
+              const cleanUsername = rawEmail.split("@")[0];
+              currentUser = {
+                uid: user.uid,
+                username: cleanUsername,
+                displayName: user.displayName || cleanUsername,
+                isLocal: false
+              };
+              await loadUserProfile();
+              enterWorkspace();
+            }
+          });
+        } else {
+          // Check if a local session was active
+          const activeLocalUser = localStorage.getItem("smartcart_active_local_user");
+          if (activeLocalUser) {
+            currentUser = JSON.parse(activeLocalUser);
+            loadUserProfile().then(() => enterWorkspace());
+          }
+        }
+      } catch (err) {
+        console.warn("Firebase init skipped, using local profile accounts:", err.message);
+      }
+    }
+
+    // Convert plain username (e.g. "sarah") into valid email for Firebase Auth
+    function usernameToEmail(usernameInput) {
+      const cleaned = usernameInput.trim().toLowerCase().replace(/\s+/g, "_");
+      return cleaned.includes("@") ? cleaned : `${cleaned}@kitchenplanner.app`;
+    }
+
+    // ============================================================================
+    // 7. AUTHENTICATION HANDLERS (LOGIN / SIGNUP / DEMO / LOGOUT)
+    // ============================================================================
+    window.switchAuthMode = function (mode) {
+      authMode = mode;
+      const loginBtn = document.getElementById("tabLoginBtn");
+      const signupBtn = document.getElementById("tabSignupBtn");
+      const nameGroup = document.getElementById("displayNameGroup");
+      const regionGroup = document.getElementById("regionPresetGroup");
+      const submitBtn = document.getElementById("authSubmitBtn");
+      document.getElementById("authErrorBox").classList.add("hidden");
+
+      if (mode === "signup") {
+        signupBtn.className = "py-2.5 rounded-xl font-bold text-sm bg-white text-stone-900 shadow-sm transition";
+        loginBtn.className = "py-2.5 rounded-xl font-bold text-sm text-stone-600 transition";
+        nameGroup.classList.remove("hidden");
+        regionGroup.classList.remove("hidden");
+        submitBtn.textContent = "Create My Personal Profile →";
+      } else {
+        loginBtn.className = "py-2.5 rounded-xl font-bold text-sm bg-white text-stone-900 shadow-sm transition";
+        signupBtn.className = "py-2.5 rounded-xl font-bold text-sm text-stone-600 transition";
+        nameGroup.classList.add("hidden");
+        regionGroup.classList.add("hidden");
+        submitBtn.textContent = "Sign In to My Kitchen →";
+      }
+    };
+
+    window.handleAuthSubmit = async function (event) {
+      event.preventDefault();
+      const rawUsername = document.getElementById("authUsername").value.trim();
+      const password = document.getElementById("authPassword").value;
+      const displayName = document.getElementById("authDisplayName").value.trim() || rawUsername;
+      const regionPreset = document.getElementById("authRegionPreset").value || "reston";
+      const errorBox = document.getElementById("authErrorBox");
+      errorBox.classList.add("hidden");
+
+      const cleanUsername = rawUsername.toLowerCase().replace(/\s+/g, "_");
+
+      try {
+        if (auth) {
+          // Real Firebase Authentication
+          const email = usernameToEmail(cleanUsername);
+          if (authMode === "signup") {
+            const cred = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(cred.user, { displayName });
+            profileState = createDefaultProfile(regionPreset, displayName);
+            currentUser = { uid: cred.user.uid, username: cleanUsername, displayName, isLocal: false };
+            await saveUserProfile();
+            enterWorkspace();
+          } else {
+            await signInWithEmailAndPassword(auth, email, password);
+          }
+        } else {
+          // Local Multi-Account Fallback (Works immediately before Firebase config is pasted)
+          const accounts = JSON.parse(localStorage.getItem("smartcart_local_accounts") || "{}");
+          if (authMode === "signup") {
+            if (accounts[cleanUsername]) {
+              throw new Error("That username is already taken. Try signing in instead!");
+            }
+            accounts[cleanUsername] = {
+              password,
+              displayName,
+              region: regionPreset
+            };
+            localStorage.setItem("smartcart_local_accounts", JSON.stringify(accounts));
+            profileState = createDefaultProfile(regionPreset, displayName);
+            currentUser = { uid: `local_${cleanUsername}`, username: cleanUsername, displayName, isLocal: true };
+            localStorage.setItem("smartcart_active_local_user", JSON.stringify(currentUser));
+            await saveUserProfile();
+            enterWorkspace();
+          } else {
+            const acct = accounts[cleanUsername];
+            if (!acct || acct.password !== password) {
+              throw new Error("Incorrect username or password. Need an account? Click 'Create New Profile' above.");
+            }
+            currentUser = {
+              uid: `local_${cleanUsername}`,
+              username: cleanUsername,
+              displayName: acct.displayName || cleanUsername,
+              isLocal: true
+            };
+            localStorage.setItem("smartcart_active_local_user", JSON.stringify(currentUser));
+            await loadUserProfile();
+            enterWorkspace();
+          }
+        }
+      } catch (err) {
+        errorBox.textContent = err.message.replace("Firebase: ", "");
+        errorBox.classList.remove("hidden");
+      }
+    };
+
+    window.loginQuickDemo = async function (username, displayName, region) {
+      currentUser = { uid: `local_${username}`, username, displayName, isLocal: true };
+      localStorage.setItem("smartcart_active_local_user", JSON.stringify(currentUser));
+      await loadUserProfile(region, displayName);
+      enterWorkspace();
+    };
+
+    window.handleLogout = async function () {
+      if (auth && currentUser && !currentUser.isLocal) {
+        await signOut(auth);
+      }
+      localStorage.removeItem("smartcart_active_local_user");
+      currentUser = null;
+      document.getElementById("appWorkspace").classList.add("hidden");
+      document.getElementById("userHeaderBar").classList.add("hidden");
+      document.getElementById("authScreen").classList.remove("hidden");
+    };
+
+    // ============================================================================
+    // 8. LOAD & SAVE PER-USER PROFILE DATA (FIRESTORE + LOCALSTORAGE)
+    // ============================================================================
+    async function loadUserProfile(defaultRegion = "reston", defaultName = "Friend") {
+      if (!currentUser) return;
+      const localKey = `smartcart_profile_${currentUser.uid}`;
+
+      if (db && !currentUser.isLocal) {
+        try {
+          const snap = await getDoc(doc(db, "users", currentUser.uid));
+          if (snap.exists()) {
+            profileState = { ...createDefaultProfile(defaultRegion, defaultName), ...snap.data() };
+            return;
+          }
+        } catch (e) {
+          console.warn("Firestore read fallback:", e.message);
+        }
+      }
+
+      const savedLocal = localStorage.getItem(localKey);
+      if (savedLocal) {
+        profileState = { ...createDefaultProfile(defaultRegion, defaultName), ...JSON.parse(savedLocal) };
+      } else {
+        profileState = createDefaultProfile(defaultRegion, currentUser.displayName || defaultName);
+        await saveUserProfile();
+      }
+    }
+
+    async function saveUserProfile() {
+      if (!currentUser) return;
+      profileState.updatedAt = new Date().toISOString();
+      const localKey = `smartcart_profile_${currentUser.uid}`;
+      localStorage.setItem(localKey, JSON.stringify(profileState));
+
+      const badge = document.getElementById("syncBadge");
+      if (badge) badge.textContent = "• Saving...";
+
+      if (db && !currentUser.isLocal) {
+        try {
+          await setDoc(doc(db, "users", currentUser.uid), profileState, { merge: true });
+        } catch (e) {
+          console.warn("Firestore save error:", e.message);
+        }
+      }
+      if (badge) setTimeout(() => { badge.textContent = "• All changes saved"; }, 300);
+    }
+
+    // ============================================================================
+    // 9. UI RENDERING & INTERACTION LOGIC
+    // ============================================================================
+    function enterWorkspace() {
+      document.getElementById("authScreen").classList.add("hidden");
+      document.getElementById("appWorkspace").classList.remove("hidden");
+      document.getElementById("userHeaderBar").classList.remove("hidden");
+
+      const name = profileState.displayName || currentUser.displayName || currentUser.username;
+      document.getElementById("headerUsername").textContent = name;
+      document.getElementById("welcomeHeadline").textContent = `${name}'s Kitchen & Grocery Planner`;
+
+      renderAllSteps();
+      if (profileState.currentPlan) {
+        renderPlanResults(profileState.currentPlan);
+      } else {
+        generateWeeklyMealPlan(true);
+      }
+      goToStep(1);
+    }
+
+    window.goToStep = function (stepNumber) {
+      [1, 2, 3].forEach((n) => {
+        const panel = document.getElementById(`stepPanel${n}`);
+        const btn = document.getElementById(`stepBtn${n}`);
+        if (n === stepNumber) {
+          panel.classList.remove("hidden");
+          btn.className = "step-tab flex flex-col sm:flex-row items-center justify-center gap-2 py-3.5 px-3 rounded-2xl font-bold text-xs sm:text-sm border-2 border-green-700 bg-green-700 text-white shadow-sm transition";
+        } else {
+          panel.classList.add("hidden");
+          btn.className = "step-tab flex flex-col sm:flex-row items-center justify-center gap-2 py-3.5 px-3 rounded-2xl font-bold text-xs sm:text-sm border-2 border-stone-200 bg-white text-stone-700 hover:border-stone-300 transition";
+        }
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    function renderAllSteps() {
+      // Budget banner & slider
+      document.getElementById("bannerBudgetDisplay").textContent = `$${profileState.weeklyBudget}`;
+      document.getElementById("budgetSliderLabel").textContent = `$${profileState.weeklyBudget}`;
+      document.getElementById("budgetRangeInput").value = profileState.weeklyBudget;
+      document.getElementById("mealsCountDisplay").textContent = profileState.mealsCount;
+      document.getElementById("servingsCountDisplay").textContent = profileState.servingsCount;
+
+      renderFridgeSection();
+      renderEquipmentGrid();
+      renderAllergiesAndPrefs();
+      renderStaplesGrid();
+      filterStoresByRegion(profileState.region || "reston");
+    }
+
+    function renderFridgeSection() {
+      const quickContainer = document.getElementById("quickFridgePills");
+      quickContainer.innerHTML = QUICK_FRIDGE_SUGGESTIONS.map((item) => {
+        const active = profileState.fridgeItems.includes(item);
+        return `<button onclick="toggleArrayItem('fridgeItems', '${item.replace(/'/g, "\\'")}')"
+          class="px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-semibold transition ${active ? 'pill-active' : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'}">
+          ${item} ${active ? '✓' : '+'}
+        </button>`;
+      }).join("");
+
+      const activeList = document.getElementById("activeFridgeList");
+      if (profileState.fridgeItems.length === 0) {
+        activeList.innerHTML = `<span class="text-xs text-stone-400 italic">No fridge items selected yet — tap any item above or type one in!</span>`;
+      } else {
+        activeList.innerHTML = profileState.fridgeItems.map((item) => `
+          <span class="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-300 text-amber-900 px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold">
+            ${item}
+            <button onclick="toggleArrayItem('fridgeItems', '${item.replace(/'/g, "\\'")}')" class="text-amber-700 hover:text-red-600 font-extrabold">✕</button>
+          </span>
+        `).join("");
+      }
+    }
+
+    window.addCustomFridgeItem = function () {
+      const input = document.getElementById("customFridgeInput");
+      const val = input.value.trim();
+      if (!val) return;
+      if (!profileState.fridgeItems.includes(val)) {
+        profileState.fridgeItems.push(val);
+        saveUserProfile();
+        renderFridgeSection();
+      }
+      input.value = "";
+    };
+
+    function renderEquipmentGrid() {
+      const grid = document.getElementById("equipmentGrid");
+      grid.innerHTML = EQUIPMENT_OPTIONS.map((eq) => {
+        const active = profileState.equipment.includes(eq.id);
+        return `<button onclick="toggleArrayItem('equipment', '${eq.id}')"
+          class="p-3.5 rounded-2xl border text-left transition flex items-center gap-3 ${active ? 'pill-active' : 'bg-stone-50 border-stone-200 text-stone-800 hover:bg-stone-100'}">
+          <span class="text-2xl">${eq.icon}</span>
+          <span class="text-xs sm:text-sm font-bold leading-snug">${eq.label}</span>
+        </button>`;
+      }).join("");
+    }
+
+    function renderAllergiesAndPrefs() {
+      document.getElementById("allergyGrid").innerHTML = ALLERGY_OPTIONS.map((al) => {
+        const active = profileState.allergies.includes(al);
+        return `<button onclick="toggleArrayItem('allergies', '${al}')"
+          class="px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-bold transition ${active ? 'bg-red-600 text-white border-red-600 shadow-sm' : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'}">
+          ${al} ${active ? '✕' : ''}
+        </button>`;
+      }).join("");
+
+      document.getElementById("preferenceGrid").innerHTML = PREFERENCE_OPTIONS.map((pr) => {
+        const active = profileState.preferences.includes(pr);
+        return `<button onclick="toggleArrayItem('preferences', '${pr}')"
+          class="px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-bold transition ${active ? 'pill-active' : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'}">
+          ${pr}
+        </button>`;
+      }).join("");
+    }
+
+    function renderStaplesGrid() {
+      document.getElementById("staplesGrid").innerHTML = STAPLE_OPTIONS.map((st) => {
+        const active = profileState.staples.includes(st);
+        return `<button onclick="toggleArrayItem('staples', '${st}')"
+          class="px-3 py-1.5 rounded-xl border text-xs font-bold transition ${active ? 'bg-stone-800 text-white border-stone-800' : 'bg-stone-100 border-stone-200 text-stone-400 line-through'}">
+          ${active ? '✓ ' : ''}${st}
+        </button>`;
+      }).join("");
+    }
+
+    window.toggleArrayItem = function (key, item) {
+      const arr = profileState[key] || [];
+      const idx = arr.indexOf(item);
+      if (idx > -1) {
+        arr.splice(idx, 1);
+      } else {
+        arr.push(item);
+      }
+      profileState[key] = arr;
+      saveUserProfile();
+      renderAllSteps();
+    };
+
+    window.filterStoresByRegion = function (region) {
+      profileState.region = region;
+      const btnReston = document.getElementById("regionBtnReston");
+      const btnPnw = document.getElementById("regionBtnPnw");
+
+      if (region === "reston") {
+        btnReston.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-stone-900 shadow-sm";
+        btnPnw.className = "px-3 py-1.5 rounded-lg text-xs font-bold text-stone-500";
+      } else {
+        btnPnw.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-stone-900 shadow-sm";
+        btnReston.className = "px-3 py-1.5 rounded-lg text-xs font-bold text-stone-500";
+      }
+
+      const filtered = STORES.filter((s) => s.region === region);
+      // Ensure selectedStoreId belongs to region or keep valid
+      if (!filtered.some((s) => s.id === profileState.selectedStoreId)) {
+        profileState.selectedStoreId = filtered[0].id;
+      }
+
+      const grid = document.getElementById("storeSelectionGrid");
+      grid.innerHTML = filtered.map((store) => {
+        const active = store.id === profileState.selectedStoreId;
+        return `<div onclick="selectStore('${store.id}')"
+          class="cursor-pointer p-4 rounded-2xl border-2 transition flex flex-col justify-between ${active ? 'store-card-active' : 'border-stone-200 bg-white hover:border-stone-300'}">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="font-extrabold text-base text-stone-900">${store.name}</span>
+              ${active ? '<span class="text-xs font-extrabold bg-green-700 text-white px-2.5 py-0.5 rounded-full">Selected ✓</span>' : ''}
+            </div>
+            <p class="text-xs text-stone-500 mb-3">${store.address}</p>
+          </div>
+          <div class="text-[11px] font-bold text-green-800 bg-green-100/80 px-2.5 py-1 rounded-lg w-fit">
+            🏷️ ${store.badge}
+          </div>
+        </div>`;
+      }).join("");
+    };
+
+    window.selectStore = function (storeId) {
+      profileState.selectedStoreId = storeId;
+      saveUserProfile();
+      filterStoresByRegion(profileState.region);
+    };
+
+    window.updateBudgetValue = function (val) {
+      profileState.weeklyBudget = Number(val);
+      document.getElementById("budgetSliderLabel").textContent = `$${val}`;
+      document.getElementById("bannerBudgetDisplay").textContent = `$${val}`;
+      saveUserProfile();
+    };
+
+    window.adjustCount = function (field, delta) {
+      const next = Math.max(1, Math.min(10, (profileState[field] || 2) + delta));
+      profileState[field] = next;
+      document.getElementById(`${field}Display`).textContent = next;
+      saveUserProfile();
+    };
+
+    // ============================================================================
+    // 10. RECIPE & GROCERY BUDGET SOLVER (WITH FRIDGE DEDUPLICATION)
+    // ============================================================================
+    window.generateWeeklyMealPlan = async function (silent = false) {
+      if (!silent) {
+        goToStep(3);
+        document.getElementById("planLoadingCard").classList.remove("hidden");
+        document.getElementById("planResultsContainer").classList.add("hidden");
+      }
+
+      const store = STORES.find((s) => s.id === profileState.selectedStoreId) || STORES[0];
+      const geminiKey = localStorage.getItem("smartcart_gemini_key") || DEFAULT_GEMINI_API_KEY;
+
+      let plan = null;
+
+     export default {
+  async fetch(request, env) {
+    const corsHeaders = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type"
+    };
+
+    if (request.method === "OPTIONS") {
+      return new Response(null, { headers: corsHeaders });
+    }
+
+    const url = new URL(request.url);
+    const provider = url.searchParams.get("provider") || "kroger";
+    const term = url.searchParams.get("term") || "milk";
+
+    try {
+      // 1. KROGER & HARRIS TEETER & FRED MEYER
+      // Reston Harris Teeter = 09700081 / 09700085 | Beaverton Fred Meyer = 70100045 / 70100660
+      if (provider === "kroger") {
+        const locationId = url.searchParams.get("locationId") || "09700081";
+        const credentials = btoa(`${env.KROGER_CLIENT_ID}:${env.KROGER_CLIENT_SECRET}`);
+
+        const tokenRes = await fetch("https://api.kroger.com/v1/connect/oauth2/token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": `Basic ${credentials}`
+          },
+          body: "grant_type=client_credentials&scope=product.compact"
+        });
+        const { access_token } = await tokenRes.json();
+
+        const prodUrl = `https://api.kroger.com/v1/products?filter.term=${encodeURIComponent(term)}&filter.locationId=${locationId}&filter.limit=5`;
+        const prodRes = await fetch(prodUrl, {
+          headers: {
+            "Authorization": `Bearer ${access_token}`,
+            "Accept": "application/json"
+          }
+        });
+        const data = await prodRes.json();
+        return new Response(JSON.stringify(data), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        });
+      }
+
+      // 2. TRADER JOE'S GRAPHQL API
+      // Reston TJ's = 646 | Beaverton TJ's = 143
+      if (provider === "traderjoes") {
+        const storeCode = url.searchParams.get("storeCode") || "646";
+        const graphqlQuery = {
+          operationName: "SearchProducts",
+          variables: {
+            storeCode,
+            availability: "1",
+            published: "1",
+            search: term,
+            currentPage: 1,
+            pageSize: 5
+          },
+          query: `query SearchProducts($storeCode: String, $availability: String, $published: String, $search: String, $currentPage: Int, $pageSize: Int) {
+            products(filter: { store_code: { eq: $storeCode }, published: { eq: $published }, availability: { match: $availability } }, search: $search, currentPage: $currentPage, pageSize: $pageSize) {
+              items { sku item_title retail_price sales_size sales_uom_description availability }
+            }
+          }`
+        };
+
+        const tjRes = await fetch("https://www.traderjoes.com/api/graphql", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Origin": "https://www.traderjoes.com",
+            "Referer": "https://www.traderjoes.com/home/products/category/food-8",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+          },
+          body: JSON.stringify(graphqlQuery)
+        });
+        const data = await tjRes.json();
+        return new Response(JSON.stringify(data), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        });
+      }
+
+      // 3. SAFEWAY WEEKLY AD DEALS (VIA FLIPP CIRCULAR FEED)
+      // Reston = 20191 | Beaverton = 97005
+      if (provider === "safeway") {
+        const zip = url.searchParams.get("zip") || "20191";
+        const flippUrl = `https://backflipp.wishabi.com/flipp/items/search?locale=en-us&postal_code=${zip}&q=${encodeURIComponent("Safeway " + term)}`;
+        const flippRes = await fetch(flippUrl);
+        const data = await flippRes.json();
+        return new Response(JSON.stringify(data), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        });
+      }
+
+      // 4. GEMINI AI RECIPE SOLVER (KEEPS YOUR GEMINI KEY 100% HIDDEN IN CLOUDFLARE)
+      if (provider === "gemini" && request.method === "POST") {
+        const body = await request.json();
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${env.GEMINI_API_KEY}`;
+        const geminiRes = await fetch(geminiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        const data = await geminiRes.json();
+        return new Response(JSON.stringify(data), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        });
+      }
+
+      return new Response(JSON.stringify({ error: "Unknown provider" }), {
+        status: 400,
+        headers: corsHeaders
+      });
+    } catch (err) {
+      return new Response(JSON.stringify({ error: err.message }), {
+        status: 500,
+        headers: corsHeaders
+      });
+    }
+  }
+};
+
+    // ============================================================================
+    // 11. RENDER MEAL PLAN & LIVE STORE PRICE VERIFICATION
+    // ============================================================================
+    function renderPlanResults(plan) {
+      if (!plan) return;
+      document.getElementById("planStoreBadge").textContent = `📍 ${plan.storeName}`;
+      document.getElementById("cartTotalDisplay").textContent = `$${plan.totalCost.toFixed(2)}`;
+      document.getElementById("cartBudgetLimitDisplay").textContent = `of $${profileState.weeklyBudget.toFixed(2)} budget`;
+
+      const pct = Math.min(100, Math.round((plan.totalCost / profileState.weeklyBudget) * 100));
+      const bar = document.getElementById("budgetProgressBar");
+      bar.style.width = `${pct}%`;
+
+      const diff = +(profileState.weeklyBudget - plan.totalCost).toFixed(2);
+      const pill = document.getElementById("savingsPill");
+      if (diff >= 0) {
+        bar.className = "h-full bg-green-600 transition-all duration-500";
+        pill.className = "text-xs font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full";
+        pill.textContent = `🎉 $${diff.toFixed(2)} Under Your Budget!`;
+      } else {
+        bar.className = "h-full bg-amber-500 transition-all duration-500";
+        pill.className = "text-xs font-bold text-amber-900 bg-amber-100 px-3 py-1 rounded-full";
+        pill.textContent = `⚠️ $${Math.abs(diff).toFixed(2)} Over Budget`;
+      }
+
+      document.getElementById("groceryCountBadge").textContent = `${plan.shoppingList.length} items`;
+
+      // Group grocery list by aisle
+      const byAisle = {};
+      plan.shoppingList.forEach((item, idx) => {
+        const aisle = item.aisle || "Grocery";
+        if (!byAisle[aisle]) byAisle[aisle] = [];
+        byAisle[aisle].push({ ...item, index: idx });
+      });
+
+      const listContainer = document.getElementById("shoppingListContainer");
+      listContainer.innerHTML = Object.keys(byAisle).map((aisle) => `
+        <div>
+          <div class="text-xs font-extrabold uppercase tracking-wider text-stone-400 mb-2">${aisle}</div>
+          <div class="space-y-2">
+            ${byAisle[aisle].map((item) => `
+              <label onclick="toggleGroceryCheck(${item.index})"
+                class="flex items-center justify-between gap-3 p-3 rounded-2xl border cursor-pointer transition ${item.checked ? 'bg-stone-50 border-stone-200 opacity-60 line-through' : 'bg-white border-stone-200 hover:border-green-600'}">
+                <div class="flex items-center gap-3">
+                  <input type="checkbox" ${item.checked ? 'checked' : ''} class="w-5 h-5 rounded text-green-700 pointer-events-none" />
+                  <div>
+                    <div class="text-sm font-bold text-stone-900">${item.name}</div>
+                    <div class="text-[11px] font-semibold text-green-700">${item.sourceBadge \vert{}\vert{} ''}</div>                   </div>                 </div>                 <div class="text-sm font-extrabold text-stone-900">$${Number(item.price).toFixed(2)}</div>
+              </label>
+            `).join("")}
+          </div>
+        </div>
+      `).join("");
+
+      // Used from kitchen pills
+      const usedKitchenEl = document.getElementById("usingFromKitchenList");
+      const usedList = plan.usedFromKitchen && plan.usedFromKitchen.length ? plan.usedFromKitchen : profileState.fridgeItems;
+      usedKitchenEl.innerHTML = usedList.map((u) => `
+        <span class="text-xs font-bold bg-green-50 border border-green-200 text-green-900 px-2.5 py-1 rounded-lg">${u}</span>
+      `).join("");
+
+      // Recipes
+      const recipesEl = document.getElementById("recipesContainer");
+      recipesEl.innerHTML = plan.recipes.map((r, i) => `
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border border-stone-200 shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-green-800 bg-green-100 px-2.5 py-1 rounded-full">
+              Dinner #${i + 1} • ${r.time}
+            </span>
+            <span class="text-xs font-bold text-stone-500 bg-stone-100 px-2.5 py-1 rounded-full">
+              Uses: ${r.equipmentNeeded}
+            </span>
+          </div>
+          <h5 class="text-lg font-extrabold text-stone-900 mb-3">${r.title}</h5>
+          <ol class="space-y-2 text-sm text-stone-700 list-decimal list-inside">
+            ${r.steps.map((s) => `<li class="leading-relaxed">${s}</li>`).join("")}
+          </ol>
+        </div>
+      `).join("");
+    }
+
+    window.toggleGroceryCheck = function (idx) {
+      if (!profileState.currentPlan) return;
+      const item = profileState.currentPlan.shoppingList[idx];
+      if (item) {
+        item.checked = !item.checked;
+        saveUserProfile();
+        renderPlanResults(profileState.currentPlan);
+      }
+    };
+
+    // Live Store Price Verification (Flipp Circular API + Optional Cloudflare Worker)
+    window.verifyLiveStorePrices = async function () {
+      if (!profileState.currentPlan) return;
+      const btn = document.getElementById("verifyLivePricesBtn");
+      btn.textContent = "⏳ Checking Local Store Deals...";
+      btn.disabled = true;
+
+      const store = STORES.find((s) => s.id === profileState.selectedStoreId) || STORES[0];
+      const workerUrl = localStorage.getItem("smartcart_worker_url") || DEFAULT_WORKER_URL;
+
+      for (let item of profileState.currentPlan.shoppingList) {
+        const cleanQuery = item.name.split("(")[0].trim();
+        try {
+          if (workerUrl) {
+            const u = new URL(workerUrl);
+            u.searchParams.set("provider", store.provider);
+            u.searchParams.set("term", cleanQuery);
+            if (store.locationId) u.searchParams.set("locationId", store.locationId);
+            if (store.storeCode) u.searchParams.set("storeCode", store.storeCode);
+            if (store.zip) u.searchParams.set("zip", store.zip);
+
+            const res = await fetch(u.toString());
+            const data = await res.json();
+            if (store.provider === "kroger" && data.data && data.data[0]?.items?.[0]?.price) {
+              const p = data.data[0].items[0].price;
+              item.price = Number(p.promo || p.regular || item.price);
+              item.sourceBadge = p.promo ? `🏷️ Live Sale ($${p.promo})` : "✓ Live Store Price";
+              continue;
+            }
+          }
+
+          // Direct browser-friendly fallback via Flipp Weekly Ad Circular API for ZIP 20191 / 97005
+          const flippUrl = `https://backflipp.wishabi.com/flipp/items/search?locale=en-us&postal_code=${store.zip}&q=${encodeURIComponent(cleanQuery)}`;
+          const flippRes = await fetch(flippUrl);
+          const flippData = await flippRes.json();
+          if (flippData.items && flippData.items.length > 0 && flippData.items[0].current_price) {
+            item.price = Number(flippData.items[0].current_price);
+            item.sourceBadge = `📰 Weekly Ad Deal (${store.zip})`;
+          }
+        } catch (e) {
+          // Keep baseline store price if network call fails
+        }
+      }
+
+      profileState.currentPlan.totalCost = +profileState.currentPlan.shoppingList
+        .reduce((sum, i) => sum + Number(i.price), 0)
+        .toFixed(2);
+
+      await saveUserProfile();
+      renderPlanResults(profileState.currentPlan);
+      btn.textContent = "✅ Live Store Prices Updated!";
+      setTimeout(() => {
+        btn.textContent = "🔄 Check Live Store Sale Prices";
+        btn.disabled = false;
+      }, 2500);
+    };
+
+    // ============================================================================
+    // 12. ADMIN SETTINGS MODAL
+    // ============================================================================
+    window.toggleAdminModal = function (show) {
+      const modal = document.getElementById("adminModal");
+      if (show) {
+        document.getElementById("adminWorkerUrl").value = localStorage.getItem("smartcart_worker_url") || DEFAULT_WORKER_URL;
+        document.getElementById("adminGeminiKey").value = localStorage.getItem("smartcart_gemini_key") || DEFAULT_GEMINI_API_KEY;
+        document.getElementById("adminFirebaseJson").value = localStorage.getItem("smartcart_firebase_config") || "";
+        modal.classList.remove("hidden");
+      } else {
+        modal.classList.add("hidden");
+      }
+    };
+
+    window.saveAdminSettings = function () {
+      const worker = document.getElementById("adminWorkerUrl").value.trim();
+      const gemini = document.getElementById("adminGeminiKey").value.trim();
+      const fbJson = document.getElementById("adminFirebaseJson").value.trim();
+
+      if (worker) localStorage.setItem("smartcart_worker_url", worker);
+      if (gemini) localStorage.setItem("smartcart_gemini_key", gemini);
+      if (fbJson) localStorage.setItem("smartcart_firebase_config", fbJson);
+
+      toggleAdminModal(false);
+      window.location.reload();
+    };
+
+    // Start App
+    initFirebaseIfAvailable();
+  </script>
+</body>
+</html>
