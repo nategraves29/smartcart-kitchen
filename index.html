@@ -4,62 +4,534 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SmartCart Kitchen — Weekly Meal & Grocery Budget Planner</title>
-  <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
-  <link href="[https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap](https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap)" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    /* ==========================================================================
+       100% SELF-CONTAINED NATIVE CSS (NEVER FAILS OR DEPENDS ON EXTERNAL CDN)
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    .hidden {
+      display: none !important;
+    }
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: #FAF8F5;
-      color: #1F2937;
-      -webkit-tap-highlight-color: transparent;
+      color: #1C1917;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select {
+      font-family: inherit;
+    }
+    button {
+      cursor: pointer;
+      touch-action: manipulation;
+      border: none;
+      background: none;
+    }
+
+    /* Top Header */
+    .top-header {
+      background: #FFFFFF;
+      border-bottom: 1px solid #E7E5E4;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+    .header-inner {
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: #15803D;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 2px 6px rgba(21, 128, 61, 0.25);
+    }
+    .brand-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: #1C1917;
+      line-height: 1.2;
+    }
+    .brand-sub {
+      font-size: 12px;
+      color: #78716C;
+    }
+    .user-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .user-pill {
+      background: #F5F5F4;
+      padding: 6px 14px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #16A34A;
+    }
+    .logout-btn {
+      font-size: 13px;
+      font-weight: 700;
+      color: #57534E;
+      padding: 7px 12px;
+      border-radius: 10px;
+      transition: all 0.15s ease;
+    }
+    .logout-btn:hover {
+      background: #FEE2E2;
+      color: #DC2626;
+    }
+
+    /* Auth Screen */
+    .auth-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+    .auth-card {
+      background: #FFFFFF;
+      border: 1px solid #E7E5E4;
+      border-radius: 24px;
+      box-shadow: 0 16px 36px rgba(28, 25, 23, 0.07);
+      max-width: 440px;
+      width: 100%;
+      padding: 32px 28px;
+    }
+    .auth-hero-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 20px;
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 12px;
+    }
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #DCFCE7;
+      color: #166534;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .auth-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1C1917;
+      text-align: center;
+    }
+    .auth-subtitle {
+      font-size: 14px;
+      color: #57534E;
+      text-align: center;
+      margin-top: 6px;
+      margin-bottom: 22px;
+    }
+
+    /* Mode Switcher */
+    .mode-switcher {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #F5F5F4;
+      padding: 4px;
+      border-radius: 16px;
+      margin-bottom: 22px;
+    }
+    .mode-btn {
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #57534E;
+      transition: all 0.15s ease;
+    }
+    .mode-btn.active {
+      background: #FFFFFF;
+      color: #1C1917;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    /* Forms & Inputs */
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #57534E;
+      margin-bottom: 6px;
+    }
+    .text-input, .select-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1.5px solid #D6D3D1;
+      font-size: 15px;
+      background: #FFFFFF;
+      color: #1C1917;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    .text-input:focus, .select-input:focus {
+      border-color: #15803D;
+      box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.12);
+    }
+    .error-box {
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      color: #B91C1C;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 14px 22px;
+      background: #15803D;
+      color: #FFFFFF;
+      font-size: 16px;
+      font-weight: 800;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(21, 128, 61, 0.22);
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .btn-primary:hover {
+      background: #166534;
+    }
+    .btn-primary:active {
+      transform: scale(0.99);
+    }
+    .demo-divider {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid #E7E5E4;
+    }
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .demo-btn {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1.5px solid #D6D3D1;
+      background: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      color: #44403C;
+      transition: all 0.15s ease;
+    }
+    .demo-btn:hover {
+      border-color: #15803D;
+      background: #F0FDF4;
+    }
+
+    /* Main Workspace */
+    .workspace {
+      max-width: 1024px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+      flex: 1;
+    }
+    .card {
+      background: #FFFFFF;
+      border: 1px solid #E7E5E4;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(28, 25, 23, 0.04);
+      margin-bottom: 20px;
+    }
+    .welcome-banner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .budget-badge-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      padding: 10px 18px;
+      border-radius: 16px;
+    }
+
+    /* 3-Step Navigation */
+    .step-nav {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .step-tab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 10px;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 800;
+      border: 2px solid #E7E5E4;
+      background: #FFFFFF;
+      color: #57534E;
+      transition: all 0.15s ease;
+    }
+    .step-tab.active {
+      border-color: #15803D;
+      background: #15803D;
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(21, 128, 61, 0.2);
+    }
+    .step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+    .step-tab.active .step-num {
+      background: rgba(255,255,255,0.25);
+    }
+
+    /* Pills & Grids */
+    .pill-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pill-btn {
+      padding: 9px 14px;
+      border-radius: 12px;
+      border: 1.5px solid #E7E5E4;
+      background: #FAF8F5;
+      color: #292524;
+      font-size: 13px;
+      font-weight: 700;
+      transition: all 0.15s ease;
+    }
+    .pill-btn:hover {
+      background: #F5F5F4;
     }
     .pill-active {
-      background-color: #15803D !important;
+      background: #15803D !important;
       color: #FFFFFF !important;
       border-color: #15803D !important;
-      box-shadow: 0 4px 12px rgba(21, 128, 61, 0.2);
+      box-shadow: 0 3px 10px rgba(21, 128, 61, 0.2);
+    }
+    .pill-danger-active {
+      background: #DC2626 !important;
+      color: #FFFFFF !important;
+      border-color: #DC2626 !important;
+    }
+    .pill-staple-active {
+      background: #292524 !important;
+      color: #FFFFFF !important;
+      border-color: #292524 !important;
+    }
+    .pill-staple-off {
+      background: #F5F5F4;
+      color: #A8A29E;
+      text-decoration: line-through;
+    }
+
+    .equip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .equip-card {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1.5px solid #E7E5E4;
+      background: #FAF8F5;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1C1917;
+      transition: all 0.15s ease;
+    }
+
+    .store-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .store-card {
+      padding: 18px;
+      border-radius: 18px;
+      border: 2px solid #E7E5E4;
+      background: #FFFFFF;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .store-card-active {
       border-color: #15803D !important;
-      background-color: #F0FDF4 !important;
+      background: #F0FDF4 !important;
       box-shadow: 0 6px 16px rgba(21, 128, 61, 0.12);
     }
-    input[type="range"] {
-      accent-color: #15803D;
+
+    .plan-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
     }
-    button {
-      touch-action: manipulation;
+    @media (min-width: 860px) {
+      .plan-layout {
+        grid-template-columns: 5fr 7fr;
+      }
+    }
+
+    .grocery-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1.5px solid #E7E5E4;
+      background: #FFFFFF;
+      margin-bottom: 8px;
       cursor: pointer;
+    }
+    .grocery-item.checked {
+      opacity: 0.55;
+      text-decoration: line-through;
+      background: #FAF8F5;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 14px;
+      background: #E7E5E4;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #16A34A;
+      transition: width 0.4s ease;
+    }
+
+    .counter-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    .counter-box {
+      padding: 16px;
+      border-radius: 16px;
+      border: 1.5px solid #E7E5E4;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .counter-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #F5F5F4;
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .footer-bar {
+      margin-top: auto;
+      border-top: 1px solid #E7E5E4;
+      background: #FFFFFF;
+      padding: 16px;
+      text-align: center;
+      font-size: 12px;
+      color: #78716C;
     }
     @media print {
       .no-print { display: none !important; }
-      body { background: white; }
+      body { background: #FFFFFF; }
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body>
 
   <!-- TOP NAVIGATION BAR -->
-  <header class="bg-white border-b border-stone-200 sticky top-0 z-30 no-print">
-    <div class="max-w-5xl mx-auto px-4 py-3.5 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-green-700 flex items-center justify-center text-white text-xl shadow-sm">
-          🛒
-        </div>
+  <header class="top-header no-print">
+    <div class="header-inner">
+      <div class="brand-row">
+        <div class="brand-icon">🛒</div>
         <div>
-          <h1 class="font-extrabold text-lg sm:text-xl text-stone-900 leading-tight">SmartCart Kitchen</h1>
-          <p class="text-xs text-stone-500">Weekly Grocery Budget & Recipe Planner</p>
+          <h1 class="brand-title">SmartCart Kitchen</h1>
+          <p class="brand-sub">Weekly Grocery Budget & Recipe Planner</p>
         </div>
       </div>
 
-      <!-- User Account Status -->
-      <div id="userHeaderBar" class="hidden flex items-center gap-2 sm:gap-3">
-        <div class="bg-stone-100 px-3 py-1.5 rounded-full flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-green-600"></span>
-          <span id="headerUsername" class="text-sm font-semibold text-stone-800">User</span>
-          <span id="syncBadge" class="text-[11px] text-stone-500 hidden sm:inline">• Saved</span>
+      <!-- User Account Status (Hidden Until Logged In) -->
+      <div id="userHeaderBar" class="user-bar hidden">
+        <div class="user-pill">
+          <span class="status-dot"></span>
+          <span id="headerUsername">User</span>
+          <span id="syncBadge" style="color:#78716C; font-weight:500;">• Saved</span>
         </div>
-        <button type="button" onclick="window.handleLogout()" class="text-xs sm:text-sm font-semibold text-stone-600 hover:text-red-600 px-3 py-1.5 rounded-xl hover:bg-stone-100 transition">
+        <button type="button" onclick="window.handleLogout()" class="logout-btn">
           Log Out
         </button>
       </div>
@@ -69,79 +541,71 @@
   <!-- ========================================== -->
   <!-- VIEW 1: FRIENDLY LOGIN / SIGN-UP SCREEN    -->
   <!-- ========================================== -->
-  <main id="authScreen" class="flex-1 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl shadow-xl border border-stone-200/80 max-w-md w-full p-6 sm:p-8">
-      <div class="text-center mb-6">
-        <div class="w-16 h-16 rounded-3xl bg-green-50 border border-green-200 flex items-center justify-center text-3xl mx-auto mb-3">
-          🥗
+  <main id="authScreen" class="auth-wrapper">
+    <div class="auth-card">
+      <div style="text-align:center;">
+        <div class="auth-hero-icon">🥗</div>
+        <div class="live-badge">
+          <span class="status-dot"></span>
+          <span id="cloudStatusText">v2.2 Live • Ready</span>
         </div>
-        <div class="inline-flex items-center gap-1.5 bg-green-100 text-green-800 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full mb-2">
-          <span class="w-2 h-2 rounded-full bg-green-600"></span>
-          <span id="cloudStatusText">v2.1 Live • Ready</span>
-        </div>
-        <h2 class="text-2xl font-extrabold text-stone-900">Welcome to Your Kitchen</h2>
-        <p class="text-sm text-stone-600 mt-1">
+        <h2 class="auth-title">Welcome to Your Kitchen</h2>
+        <p class="auth-subtitle">
           Sign in to load your kitchen tools, fridge inventory, favorite store, and weekly budget.
         </p>
       </div>
 
       <!-- Sign In / Create Account Toggle -->
-      <div class="grid grid-cols-2 bg-stone-100 p-1 rounded-2xl mb-6">
-        <button type="button" id="tabLoginBtn" onclick="window.switchAuthMode('login')" class="py-2.5 rounded-xl font-bold text-sm bg-white text-stone-900 shadow-sm transition">
+      <div class="mode-switcher">
+        <button type="button" id="tabLoginBtn" onclick="window.switchAuthMode('login')" class="mode-btn active">
           Sign In
         </button>
-        <button type="button" id="tabSignupBtn" onclick="window.switchAuthMode('signup')" class="py-2.5 rounded-xl font-bold text-sm text-stone-600 transition">
+        <button type="button" id="tabSignupBtn" onclick="window.switchAuthMode('signup')" class="mode-btn">
           Create New Profile
         </button>
       </div>
 
-      <form id="authForm" onsubmit="window.handleAuthSubmit(event)" class="space-y-4">
-        <div id="displayNameGroup" class="hidden">
-          <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Your First Name</label>
-          <input id="authDisplayName" type="text" placeholder="e.g., Sarah or Nate"
-            class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-green-700 focus:ring-2 focus:ring-green-700/20 outline-none text-base" />
+      <form id="authForm" onsubmit="window.handleAuthSubmit(event)">
+        <div id="displayNameGroup" class="form-group hidden">
+          <label class="form-label">Your First Name</label>
+          <input id="authDisplayName" type="text" placeholder="e.g., Sarah or Nate" class="text-input" />
         </div>
 
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Username</label>
-          <input id="authUsername" type="text" required placeholder="e.g., nate or sarah_reston" autocomplete="username"
-            class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-green-700 focus:ring-2 focus:ring-green-700/20 outline-none text-base" />
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input id="authUsername" type="text" required placeholder="e.g., nate or sarah_reston" autocomplete="username" class="text-input" />
         </div>
 
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Password</label>
-          <input id="authPassword" type="password" required minlength="6" placeholder="At least 6 characters" autocomplete="current-password"
-            class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-green-700 focus:ring-2 focus:ring-green-700/20 outline-none text-base" />
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input id="authPassword" type="password" required minlength="6" placeholder="At least 6 characters" autocomplete="current-password" class="text-input" />
         </div>
 
-        <div id="regionPresetGroup" class="hidden">
-          <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Your Area</label>
-          <select id="authRegionPreset" class="w-full px-4 py-3 rounded-xl border border-stone-300 bg-white text-base font-medium">
+        <div id="regionPresetGroup" class="form-group hidden">
+          <label class="form-label">Your Area</label>
+          <select id="authRegionPreset" class="select-input">
             <option value="reston">Reston, VA (20191) — Harris Teeter, TJ's, Safeway</option>
             <option value="pnw">Beaverton / Portland, OR — Fred Meyer, TJ's, Safeway</option>
           </select>
         </div>
 
-        <div id="authErrorBox" class="hidden bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl p-3 font-medium"></div>
+        <div id="authErrorBox" class="error-box hidden"></div>
 
-        <button id="authSubmitBtn" type="submit"
-          class="w-full py-3.5 bg-green-700 hover:bg-green-800 active:scale-[0.99] text-white font-bold rounded-2xl shadow-md hover:shadow-lg transition text-base">
+        <button id="authSubmitBtn" type="submit" class="btn-primary">
           Sign In to My Kitchen →
         </button>
       </form>
 
       <!-- Instant Demo Access for Testing -->
-      <div class="mt-6 pt-5 border-t border-stone-200">
-        <p class="text-xs font-bold uppercase tracking-wider text-stone-400 text-center mb-3">
+      <div class="demo-divider">
+        <p style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; color:#A8A29E; text-align:center;">
           Or Try a Pre-Loaded Profile Immediately
         </p>
-        <div class="grid grid-cols-2 gap-2.5">
-          <button type="button" onclick="window.loginQuickDemo('reston_demo', 'Reston Friend', 'reston')"
-            class="py-2.5 px-3 rounded-xl border border-stone-300 hover:border-green-700 hover:bg-green-50 text-xs font-bold text-stone-700 transition">
+        <div class="demo-grid">
+          <button type="button" onclick="window.loginQuickDemo('reston_demo', 'Reston Friend', 'reston')" class="demo-btn">
             🏡 Reston, VA Demo
           </button>
-          <button type="button" onclick="window.loginQuickDemo('pnw_demo', 'Oregon Home', 'pnw')"
-            class="py-2.5 px-3 rounded-xl border border-stone-300 hover:border-green-700 hover:bg-green-50 text-xs font-bold text-stone-700 transition">
+          <button type="button" onclick="window.loginQuickDemo('pnw_demo', 'Oregon Home', 'pnw')" class="demo-btn">
             🌲 Oregon Demo
           </button>
         </div>
@@ -152,270 +616,261 @@
   <!-- ========================================== -->
   <!-- VIEW 2: MAIN APPLICATION WORKSPACE         -->
   <!-- ========================================== -->
-  <div id="appWorkspace" class="hidden flex-1 max-w-5xl w-full mx-auto px-4 py-6">
+  <div id="appWorkspace" class="workspace hidden">
 
     <!-- Friendly Welcome Banner -->
-    <div class="bg-white rounded-3xl p-5 sm:p-6 border border-stone-200/90 shadow-sm mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 no-print">
+    <div class="card welcome-banner no-print">
       <div>
-        <h2 id="welcomeHeadline" class="text-xl sm:text-2xl font-extrabold text-stone-900">Hello! Let's plan this week's meals.</h2>
-        <p class="text-sm text-stone-600 mt-0.5">
+        <h2 id="welcomeHeadline" style="font-size:22px; font-weight:800;">Hello! Let's plan this week's meals.</h2>
+        <p style="font-size:14px; color:#57534E; margin-top:2px;">
           Everything you tap below automatically saves to your personal profile.
         </p>
       </div>
-      <div class="flex items-center gap-3 bg-green-50 border border-green-200 px-4 py-2.5 rounded-2xl">
-        <span class="text-2xl">💰</span>
+      <div class="budget-badge-box">
+        <span style="font-size:24px;">💰</span>
         <div>
-          <div class="text-[11px] font-bold uppercase tracking-wider text-green-800">Weekly Budget</div>
-          <div id="bannerBudgetDisplay" class="text-lg font-extrabold text-green-900">$125</div>
+          <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#166534;">Weekly Budget</div>
+          <div id="bannerBudgetDisplay" style="font-size:20px; font-weight:800; color:#14532D;">$125</div>
         </div>
       </div>
     </div>
 
     <!-- 3-Step Guided Navigation Bar -->
-    <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-6 no-print">
-      <button type="button" id="stepBtn1" onclick="window.goToStep(1)"
-        class="step-tab flex flex-col sm:flex-row items-center justify-center gap-2 py-3.5 px-3 rounded-2xl font-bold text-xs sm:text-sm border-2 border-green-700 bg-green-700 text-white shadow-sm transition">
-        <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs font-extrabold">1</span>
+    <div class="step-nav no-print">
+      <button type="button" id="stepBtn1" onclick="window.goToStep(1)" class="step-tab active">
+        <span class="step-num">1</span>
         <span>My Kitchen & Fridge</span>
       </button>
-      <button type="button" id="stepBtn2" onclick="window.goToStep(2)"
-        class="step-tab flex flex-col sm:flex-row items-center justify-center gap-2 py-3.5 px-3 rounded-2xl font-bold text-xs sm:text-sm border-2 border-stone-200 bg-white text-stone-700 hover:border-stone-300 transition">
-        <span class="w-6 h-6 rounded-full bg-stone-100 flex items-center justify-center text-xs font-extrabold">2</span>
+      <button type="button" id="stepBtn2" onclick="window.goToStep(2)" class="step-tab">
+        <span class="step-num">2</span>
         <span>Store & Budget</span>
       </button>
-      <button type="button" id="stepBtn3" onclick="window.goToStep(3)"
-        class="step-tab flex flex-col sm:flex-row items-center justify-center gap-2 py-3.5 px-3 rounded-2xl font-bold text-xs sm:text-sm border-2 border-stone-200 bg-white text-stone-700 hover:border-stone-300 transition">
-        <span class="w-6 h-6 rounded-full bg-stone-100 flex items-center justify-center text-xs font-extrabold">3</span>
+      <button type="button" id="stepBtn3" onclick="window.goToStep(3)" class="step-tab">
+        <span class="step-num">3</span>
         <span>Meals & Grocery List</span>
       </button>
     </div>
 
     <!-- STEP 1: MY KITCHEN, PANTRY & ALLERGIES -->
-    <section id="stepPanel1" class="space-y-6">
-      <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-sm">
-        <span class="inline-block text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2.5 py-1 rounded-full mb-2">
+    <section id="stepPanel1">
+      <div class="card">
+        <span style="display:inline-block; font-size:11px; font-weight:800; text-transform:uppercase; background:#FEF3C7; color:#92400E; padding:4px 10px; border-radius:999px; margin-bottom:8px;">
           Save Money First
         </span>
-        <h3 class="text-lg sm:text-xl font-extrabold text-stone-900">1. What ingredients do you already have on hand?</h3>
-        <p class="text-sm text-stone-600 mt-0.5 mb-4">
+        <h3 style="font-size:19px; font-weight:800; margin-bottom:4px;">1. What ingredients do you already have on hand?</h3>
+        <p style="font-size:14px; color:#57534E; margin-bottom:16px;">
           Tap or type anything sitting in your fridge, freezer, or garden. Your recipes will use these first so you don't buy duplicates!
         </p>
 
-        <div class="mb-4">
-          <div class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-2">Quick-Tap Common Items in Your Fridge / Pantry:</div>
-          <div id="quickFridgePills" class="flex flex-wrap gap-2"></div>
+        <div style="margin-bottom:16px;">
+          <div class="form-label">Quick-Tap Common Items in Your Fridge / Pantry:</div>
+          <div id="quickFridgePills" class="pill-wrap"></div>
         </div>
 
-        <div class="flex gap-2 mt-4">
+        <div style="display:flex; gap:8px; margin-top:14px;">
           <input id="customFridgeInput" type="text" placeholder="Type anything else you have (e.g., 2 chicken breasts, spinach)..."
             onkeydown="if(event.key==='Enter'){event.preventDefault();window.addCustomFridgeItem();}"
-            class="flex-1 px-4 py-3 rounded-xl border border-stone-300 focus:border-green-700 outline-none text-sm sm:text-base" />
+            class="text-input" />
           <button type="button" onclick="window.addCustomFridgeItem()"
-            class="px-5 py-3 bg-stone-900 hover:bg-stone-800 text-white font-bold rounded-xl text-sm shrink-0 transition">
+            style="padding:0 20px; background:#1C1917; color:#FFF; font-weight:800; border-radius:12px; font-size:14px; white-space:nowrap;">
             + Add Item
           </button>
         </div>
 
-        <div class="mt-4 pt-4 border-t border-stone-100">
-          <div class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-2">Currently in Your Kitchen to Use Up:</div>
-          <div id="activeFridgeList" class="flex flex-wrap gap-2"></div>
+        <div style="margin-top:18px; padding-top:16px; border-top:1px solid #E7E5E4;">
+          <div class="form-label">Currently in Your Kitchen to Use Up:</div>
+          <div id="activeFridgeList" class="pill-wrap"></div>
         </div>
       </div>
 
-      <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-sm">
-        <h3 class="text-lg sm:text-xl font-extrabold text-stone-900">2. Which cooking tools do you have?</h3>
-        <p class="text-sm text-stone-600 mt-0.5 mb-4">
+      <div class="card">
+        <h3 style="font-size:19px; font-weight:800; margin-bottom:4px;">2. Which cooking tools do you have?</h3>
+        <p style="font-size:14px; color:#57534E; margin-bottom:16px;">
           Tap the appliances and pans you have in your kitchen. We will only give you recipes you can actually cook.
         </p>
-        <div id="equipmentGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5"></div>
+        <div id="equipmentGrid" class="equip-grid"></div>
       </div>
 
-      <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-sm">
-        <h3 class="text-lg sm:text-xl font-extrabold text-stone-900">3. Any allergies or food preferences?</h3>
-        <p class="text-sm text-stone-600 mt-0.5 mb-4">
+      <div class="card">
+        <h3 style="font-size:19px; font-weight:800; margin-bottom:4px;">3. Any allergies or food preferences?</h3>
+        <p style="font-size:14px; color:#57534E; margin-bottom:16px;">
           Select any allergies to strictly avoid, plus the style of meals you enjoy.
         </p>
-        <div class="mb-5">
-          <div class="text-xs font-bold uppercase tracking-wider text-red-700 mb-2">🚫 Allergies & Dislikes (Strictly Excluded)</div>
-          <div id="allergyGrid" class="flex flex-wrap gap-2"></div>
+        <div style="margin-bottom:18px;">
+          <div class="form-label" style="color:#B91C1C;">🚫 Allergies & Dislikes (Strictly Excluded)</div>
+          <div id="allergyGrid" class="pill-wrap"></div>
         </div>
         <div>
-          <div class="text-xs font-bold uppercase tracking-wider text-green-800 mb-2">😋 Meal Styles You Like</div>
-          <div id="preferenceGrid" class="flex flex-wrap gap-2"></div>
+          <div class="form-label" style="color:#166534;">😋 Meal Styles You Like</div>
+          <div id="preferenceGrid" class="pill-wrap"></div>
         </div>
       </div>
 
-      <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-sm">
-        <h3 class="text-lg font-extrabold text-stone-900">4. Basic Pantry Staples</h3>
-        <p class="text-sm text-stone-600 mb-3">Uncheck anything you are completely out of so we add it to your grocery list.</p>
-        <div id="staplesGrid" class="flex flex-wrap gap-2"></div>
+      <div class="card">
+        <h3 style="font-size:18px; font-weight:800; margin-bottom:4px;">4. Basic Pantry Staples</h3>
+        <p style="font-size:14px; color:#57534E; margin-bottom:14px;">Uncheck anything you are completely out of so we add it to your grocery list.</p>
+        <div id="staplesGrid" class="pill-wrap"></div>
       </div>
 
-      <div class="flex justify-end">
-        <button type="button" onclick="window.goToStep(2)"
-          class="w-full sm:w-auto px-8 py-4 bg-green-700 hover:bg-green-800 text-white font-extrabold rounded-2xl shadow-md text-base transition">
+      <div style="display:flex; justify-content:flex-end;">
+        <button type="button" onclick="window.goToStep(2)" class="btn-primary" style="max-width:340px;">
           Next: Choose Store & Weekly Budget →
         </button>
       </div>
     </section>
 
     <!-- STEP 2: STORE & WEEKLY BUDGET -->
-    <section id="stepPanel2" class="hidden space-y-6">
-      <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-sm">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+    <section id="stepPanel2" class="hidden">
+      <div class="card">
+        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px;">
           <div>
-            <h3 class="text-lg sm:text-xl font-extrabold text-stone-900">1. Where are you grocery shopping this week?</h3>
-            <p class="text-sm text-stone-600">Select your store to load local package prices and weekly specials.</p>
+            <h3 style="font-size:19px; font-weight:800;">1. Where are you grocery shopping this week?</h3>
+            <p style="font-size:14px; color:#57534E;">Select your store to load local package prices and weekly specials.</p>
           </div>
-          <div class="inline-flex bg-stone-100 p-1 rounded-xl self-start">
-            <button type="button" id="regionBtnReston" onclick="window.filterStoresByRegion('reston')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition">
+          <div style="display:inline-flex; background:#F5F5F4; padding:4px; border-radius:12px;">
+            <button type="button" id="regionBtnReston" onclick="window.filterStoresByRegion('reston')" class="mode-btn active" style="font-size:12px; padding:7px 12px;">
               📍 Reston, VA (20191)
             </button>
-            <button type="button" id="regionBtnPnw" onclick="window.filterStoresByRegion('pnw')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition">
+            <button type="button" id="regionBtnPnw" onclick="window.filterStoresByRegion('pnw')" class="mode-btn" style="font-size:12px; padding:7px 12px;">
               🌲 Beaverton / OR
             </button>
           </div>
         </div>
-        <div id="storeSelectionGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5"></div>
+        <div id="storeSelectionGrid" class="store-grid"></div>
       </div>
 
-      <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-sm">
-        <h3 class="text-lg sm:text-xl font-extrabold text-stone-900 mb-1">2. Set Your Weekly Grocery Budget</h3>
-        <p class="text-sm text-stone-600 mb-6">
+      <div class="card">
+        <h3 style="font-size:19px; font-weight:800; margin-bottom:4px;">2. Set Your Weekly Grocery Budget</h3>
+        <p style="font-size:14px; color:#57534E; margin-bottom:18px;">
           Slide to set your maximum spend at the register.
         </p>
 
-        <div class="bg-stone-50 border border-stone-200 rounded-2xl p-5 mb-6">
-          <div class="flex items-baseline justify-between mb-3">
-            <span class="text-sm font-bold text-stone-600">Maximum Weekly Spend:</span>
-            <span id="budgetSliderLabel" class="text-3xl sm:text-4xl font-extrabold text-green-800">$125</span>
+        <div style="background:#FAF8F5; border:1px solid #E7E5E4; border-radius:18px; padding:20px; margin-bottom:20px;">
+          <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;">
+            <span style="font-size:14px; font-weight:700; color:#57534E;">Maximum Weekly Spend:</span>
+            <span id="budgetSliderLabel" style="font-size:32px; font-weight:800; color:#15803D;">$125</span>
           </div>
           <input id="budgetRangeInput" type="range" min="45" max="300" step="5" value="125"
             oninput="window.updateBudgetValue(this.value)"
-            class="w-full h-3 bg-stone-200 rounded-lg cursor-pointer" />
-          <div class="flex justify-between text-xs font-semibold text-stone-400 mt-2">
+            style="width:100%; height:10px; cursor:pointer; accent-color:#15803D;" />
+          <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; color:#78716C; margin-top:8px;">
             <span>$45 / wk</span>
             <span>$125 / wk</span>
             <span>$300 / wk</span>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="p-4 rounded-2xl border border-stone-200 flex items-center justify-between">
+        <div class="counter-row">
+          <div class="counter-box">
             <div>
-              <div class="font-bold text-stone-900">How many dinners this week?</div>
-              <div class="text-xs text-stone-500">Number of recipes to plan</div>
+              <div style="font-weight:800;">How many dinners this week?</div>
+              <div style="font-size:12px; color:#78716C;">Number of recipes to plan</div>
             </div>
-            <div class="flex items-center gap-3">
-              <button type="button" onclick="window.adjustCount('mealsCount', -1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">-</button>
-              <span id="mealsCountDisplay" class="font-extrabold text-lg w-6 text-center">5</span>
-              <button type="button" onclick="window.adjustCount('mealsCount', 1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">+</button>
+            <div style="display:flex; align-items:center; gap:12px;">
+              <button type="button" onclick="window.adjustCount('mealsCount', -1)" class="counter-btn">-</button>
+              <span id="mealsCountDisplay" style="font-weight:800; font-size:18px; min-width:22px; text-align:center;">5</span>
+              <button type="button" onclick="window.adjustCount('mealsCount', 1)" class="counter-btn">+</button>
             </div>
           </div>
 
-          <div class="p-4 rounded-2xl border border-stone-200 flex items-center justify-between">
+          <div class="counter-box">
             <div>
-              <div class="font-bold text-stone-900">Servings per meal?</div>
-              <div class="text-xs text-stone-500">Portions cooked each night</div>
+              <div style="font-weight:800;">Servings per meal?</div>
+              <div style="font-size:12px; color:#78716C;">Portions cooked each night</div>
             </div>
-            <div class="flex items-center gap-3">
-              <button type="button" onclick="window.adjustCount('servingsCount', -1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">-</button>
-              <span id="servingsCountDisplay" class="font-extrabold text-lg w-6 text-center">2</span>
-              <button type="button" onclick="window.adjustCount('servingsCount', 1)" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 font-bold text-lg">+</button>
+            <div style="display:flex; align-items:center; gap:12px;">
+              <button type="button" onclick="window.adjustCount('servingsCount', -1)" class="counter-btn">-</button>
+              <span id="servingsCountDisplay" style="font-weight:800; font-size:18px; min-width:22px; text-align:center;">2</span>
+              <button type="button" onclick="window.adjustCount('servingsCount', 1)" class="counter-btn">+</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
-        <button type="button" onclick="window.goToStep(1)" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl border border-stone-300 font-bold text-stone-700 hover:bg-stone-100 transition">
+      <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px;">
+        <button type="button" onclick="window.goToStep(1)" class="demo-btn" style="padding:14px 20px; font-size:14px;">
           ← Back to My Kitchen
         </button>
-        <button type="button" onclick="window.generateWeeklyMealPlan()"
-          class="w-full sm:w-auto px-8 py-4 bg-green-700 hover:bg-green-800 text-white font-extrabold rounded-2xl shadow-lg text-base sm:text-lg transition flex items-center justify-center gap-2">
-          <span>✨ Build My Grocery List & Recipes</span>
+        <button type="button" onclick="window.generateWeeklyMealPlan()" class="btn-primary" style="max-width:360px;">
+          ✨ Build My Grocery List & Recipes
         </button>
       </div>
     </section>
 
     <!-- STEP 3: MEAL PLAN & GROCERY LIST -->
-    <section id="stepPanel3" class="hidden space-y-6">
-      <div id="planLoadingCard" class="hidden bg-white rounded-3xl p-10 border border-stone-200 text-center space-y-3">
-        <div class="text-4xl animate-bounce">🛒</div>
-        <h3 class="text-xl font-extrabold text-stone-900">Building Your Custom Meal Plan & Checking Store Prices...</h3>
-        <p class="text-sm text-stone-600 max-w-md mx-auto">
+    <section id="stepPanel3" class="hidden">
+      <div id="planLoadingCard" class="card hidden" style="text-align:center; padding:44px 20px;">
+        <div style="font-size:42px; margin-bottom:10px;">🛒</div>
+        <h3 style="font-size:20px; font-weight:800; margin-bottom:6px;">Building Your Custom Meal Plan & Checking Store Prices...</h3>
+        <p style="font-size:14px; color:#57534E;">
           Matching your kitchen tools, using up your fridge items first, and keeping your cart under budget.
         </p>
       </div>
 
-      <div id="planResultsContainer" class="space-y-6">
-        <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-sm">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+      <div id="planResultsContainer">
+        <div class="card">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px; margin-bottom:16px;">
             <div>
-              <div id="planStoreBadge" class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-green-800 bg-green-100 px-3 py-1 rounded-full mb-2">
-                📍 Store Selected
-              </div>
-              <h3 class="text-xl sm:text-2xl font-extrabold text-stone-900">Your Weekly Grocery Cart & Meal Plan</h3>
-              <p class="text-sm text-stone-600">All recipes fit your kitchen equipment and stay within your budget.</p>
+              <div id="planStoreBadge" class="live-badge">📍 Store Selected</div>
+              <h3 style="font-size:22px; font-weight:800;">Your Weekly Grocery Cart & Meal Plan</h3>
+              <p style="font-size:14px; color:#57534E;">All recipes fit your kitchen equipment and stay within your budget.</p>
             </div>
 
-            <div class="flex flex-wrap gap-2 no-print">
+            <div class="no-print" style="display:flex; flex-wrap:wrap; gap:8px;">
               <button type="button" onclick="window.verifyLiveStorePrices()" id="verifyLivePricesBtn"
-                class="px-4 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-bold text-xs sm:text-sm transition">
+                style="padding:10px 16px; border-radius:12px; background:#FEF3C7; border:1px solid #FCD34D; color:#92400E; font-weight:800; font-size:13px;">
                 🔄 Check Live Store Sale Prices
               </button>
               <button type="button" onclick="window.print()"
-                class="px-4 py-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold text-xs sm:text-sm transition">
+                style="padding:10px 16px; border-radius:12px; background:#F5F5F4; color:#292524; font-weight:800; font-size:13px;">
                 🖨️ Print / Save PDF
               </button>
             </div>
           </div>
 
-          <div class="bg-stone-50 rounded-2xl p-4 border border-stone-200">
-            <div class="flex flex-wrap items-baseline justify-between gap-2 mb-2">
+          <div style="background:#FAF8F5; border:1px solid #E7E5E4; border-radius:16px; padding:16px;">
+            <div style="display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:8px;">
               <div>
-                <span class="text-xs font-bold uppercase tracking-wider text-stone-500">Estimated Register Total:</span>
-                <span id="cartTotalDisplay" class="text-2xl sm:text-3xl font-extrabold text-green-800 ml-2">$0.00</span>
-                <span id="cartBudgetLimitDisplay" class="text-sm text-stone-500 font-semibold">of $125.00 budget</span>
+                <span style="font-size:12px; font-weight:800; text-transform:uppercase; color:#78716C;">Estimated Register Total:</span>
+                <span id="cartTotalDisplay" style="font-size:28px; font-weight:800; color:#15803D; margin-left:8px;">$0.00</span>
+                <span id="cartBudgetLimitDisplay" style="font-size:14px; color:#78716C; font-weight:600;">of $125.00 budget</span>
               </div>
-              <div id="savingsPill" class="text-xs font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full">
-                Under Budget!
-              </div>
+              <div id="savingsPill" class="live-badge">Under Budget!</div>
             </div>
-            <div class="w-full h-3.5 bg-stone-200 rounded-full overflow-hidden">
-              <div id="budgetProgressBar" class="h-full bg-green-600 transition-all duration-500" style="width: 60%"></div>
+            <div class="progress-track">
+              <div id="budgetProgressBar" class="progress-fill" style="width: 60%"></div>
             </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div class="lg:col-span-5 bg-white rounded-3xl p-5 sm:p-6 border border-stone-200 shadow-sm h-fit">
-            <div class="flex items-center justify-between mb-4">
+        <div class="plan-layout">
+          <!-- Left Column: Grocery List -->
+          <div class="card" style="height:fit-content;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
               <div>
-                <h4 class="text-lg font-extrabold text-stone-900">📋 Grocery List to Buy</h4>
-                <p class="text-xs text-stone-500">Tap items as you put them in your cart</p>
+                <h4 style="font-size:18px; font-weight:800;">📋 Grocery List to Buy</h4>
+                <p style="font-size:12px; color:#78716C;">Tap items as you put them in your cart</p>
               </div>
-              <span id="groceryCountBadge" class="text-xs font-bold bg-stone-100 text-stone-700 px-2.5 py-1 rounded-full">0 items</span>
+              <span id="groceryCountBadge" style="font-size:12px; font-weight:800; background:#F5F5F4; padding:4px 10px; border-radius:999px;">0 items</span>
             </div>
 
-            <div id="shoppingListContainer" class="space-y-4"></div>
+            <div id="shoppingListContainer"></div>
 
-            <div class="mt-6 pt-4 border-t border-stone-200">
-              <div class="text-xs font-bold uppercase tracking-wider text-green-800 mb-2">
-                ✅ Using From Your Kitchen ($0 Extra Cost)
-              </div>
-              <div id="usingFromKitchenList" class="flex flex-wrap gap-1.5"></div>
+            <div style="margin-top:20px; padding-top:16px; border-top:1px solid #E7E5E4;">
+              <div class="form-label" style="color:#166534;">✅ Using From Your Kitchen ($0 Extra Cost)</div>
+              <div id="usingFromKitchenList" class="pill-wrap"></div>
             </div>
           </div>
 
-          <div class="lg:col-span-7 space-y-4">
-            <div class="flex items-center justify-between">
-              <h4 class="text-lg font-extrabold text-stone-900">🍳 Your Recipes for the Week</h4>
-              <button type="button" onclick="window.generateWeeklyMealPlan()" class="text-xs font-bold text-green-700 hover:underline no-print">
+          <!-- Right Column: Recipes -->
+          <div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+              <h4 style="font-size:18px; font-weight:800;">🍳 Your Recipes for the Week</h4>
+              <button type="button" onclick="window.generateWeeklyMealPlan()" class="no-print" style="font-size:13px; font-weight:800; color:#15803D;">
                 ↻ Shuffle New Recipes
               </button>
             </div>
-            <div id="recipesContainer" class="space-y-4"></div>
+            <div id="recipesContainer"></div>
           </div>
         </div>
       </div>
@@ -423,14 +878,12 @@
   </div>
 
   <!-- FOOTER -->
-  <footer class="mt-auto border-t border-stone-200 bg-white py-4 px-4 no-print">
-    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-stone-500">
-      <div>SmartCart Kitchen v2.1 — Reston, VA (20191) & Beaverton, OR</div>
-    </div>
+  <footer class="footer-bar no-print">
+    SmartCart Kitchen v2.2 — Reston, VA (20191) & Beaverton, OR
   </footer>
 
   <!-- ========================================================================= -->
-  <!-- STANDARD SCRIPT (RUNS IMMEDIATELY SO BUTTONS ALWAYS RESPOND ON MOBILE)    -->
+  <!-- APPLICATION LOGIC                                                         -->
   <!-- ========================================================================= -->
   <script>
     const DEFAULT_FIREBASE_CONFIG = {
@@ -442,7 +895,7 @@
       appId: "1:794850230910:web:932506759e1f0726b7ce2f"
     };
 
-    const DEFAULT_WORKER_URL = "[https://smartcart-proxy.nategraves29.workers.dev/](https://smartcart-proxy.nategraves29.workers.dev/)";
+    const DEFAULT_WORKER_URL = "https://smartcart-proxy.nategraves29.workers.dev/";
 
     const STORES = [
       { id: "ht_reston_spectrum", region: "reston", chain: "harristeeter", name: "Harris Teeter — Spectrum Center", address: "11806 Spectrum Ctr, Reston, VA 20190", badge: "VIC Card & Live Kroger API", provider: "kroger", locationId: "09700081", zip: "20191", multiplier: 1.02 },
@@ -607,7 +1060,6 @@
 
     window.profileState = window.createDefaultProfile("reston", "Friend");
 
-    // Instant Tab Switcher (Works immediately even before Firebase finishes loading)
     window.switchAuthMode = function (mode) {
       window.authMode = mode;
       const loginBtn = document.getElementById("tabLoginBtn");
@@ -619,14 +1071,14 @@
       if (errorBox) errorBox.classList.add("hidden");
 
       if (mode === "signup") {
-        signupBtn.className = "py-2.5 rounded-xl font-bold text-sm bg-white text-stone-900 shadow-sm transition";
-        loginBtn.className = "py-2.5 rounded-xl font-bold text-sm text-stone-600 transition";
+        signupBtn.className = "mode-btn active";
+        loginBtn.className = "mode-btn";
         nameGroup.classList.remove("hidden");
         regionGroup.classList.remove("hidden");
         submitBtn.textContent = "Create My Personal Profile →";
       } else {
-        loginBtn.className = "py-2.5 rounded-xl font-bold text-sm bg-white text-stone-900 shadow-sm transition";
-        signupBtn.className = "py-2.5 rounded-xl font-bold text-sm text-stone-600 transition";
+        loginBtn.className = "mode-btn active";
+        signupBtn.className = "mode-btn";
         nameGroup.classList.add("hidden");
         regionGroup.classList.add("hidden");
         submitBtn.textContent = "Sign In to My Kitchen →";
@@ -667,7 +1119,6 @@
             await window.fbApi.signInWithEmailAndPassword(window.fbApi.auth, email, password);
           }
         } else {
-          // Local storage fallback if Firebase is blocked or offline
           const accounts = JSON.parse(localStorage.getItem("smartcart_local_accounts") || "{}");
           if (window.authMode === "signup") {
             accounts[cleanUsername] = { password, displayName, region: regionPreset };
@@ -695,7 +1146,7 @@
         } else if (msg.includes("auth/operation-not-allowed")) {
           msg = "Email/Password sign-in is turned off in Firebase: Go to Firebase Console -> Authentication -> Sign-in method -> Enable Email/Password.";
         } else if (msg.includes("requests-from-referer") || msg.includes("API_KEY_HTTP_REFERRER_BLOCKED")) {
-          msg = "API Key Website Restriction blocked this URL: Make sure [https://nategraves29.github.io/](https://nategraves29.github.io/)* (with the asterisk) is saved in Google Cloud Credentials.";
+          msg = "API Key Website Restriction blocked this URL: Make sure https://nategraves29.github.io/* (with the asterisk) is saved in Google Cloud Credentials.";
         }
         errorBox.textContent = msg;
         errorBox.classList.remove("hidden");
@@ -791,10 +1242,10 @@
         const btn = document.getElementById(`stepBtn${n}`);
         if (n === stepNumber) {
           panel.classList.remove("hidden");
-          btn.className = "step-tab flex flex-col sm:flex-row items-center justify-center gap-2 py-3.5 px-3 rounded-2xl font-bold text-xs sm:text-sm border-2 border-green-700 bg-green-700 text-white shadow-sm transition";
+          btn.className = "step-tab active";
         } else {
           panel.classList.add("hidden");
-          btn.className = "step-tab flex flex-col sm:flex-row items-center justify-center gap-2 py-3.5 px-3 rounded-2xl font-bold text-xs sm:text-sm border-2 border-stone-200 bg-white text-stone-700 hover:border-stone-300 transition";
+          btn.className = "step-tab";
         }
       });
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -819,19 +1270,19 @@
       quickContainer.innerHTML = QUICK_FRIDGE_SUGGESTIONS.map((item) => {
         const active = window.profileState.fridgeItems.includes(item);
         return `<button type="button" onclick="window.toggleArrayItem('fridgeItems', '${item.replace(/'/g, "\\'")}')"
-          class="px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-semibold transition ${active ? 'pill-active' : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'}">
+          class="pill-btn ${active ? 'pill-active' : ''}">
           ${item} ${active ? '✓' : '+'}
         </button>`;
       }).join("");
 
       const activeList = document.getElementById("activeFridgeList");
       if (window.profileState.fridgeItems.length === 0) {
-        activeList.innerHTML = `<span class="text-xs text-stone-400 italic">No fridge items selected yet — tap any item above or type one in!</span>`;
+        activeList.innerHTML = `<span style="font-size:13px; color:#A8A29E; font-style:italic;">No fridge items selected yet — tap any item above or type one in!</span>`;
       } else {
         activeList.innerHTML = window.profileState.fridgeItems.map((item) => `
-          <span class="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-300 text-amber-900 px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold">
+          <span style="display:inline-flex; align-items:center; gap:6px; background:#FEF3C7; border:1px solid #FCD34D; color:#92400E; padding:6px 12px; border-radius:999px; font-size:13px; font-weight:700;">
             ${item}
-            <button type="button" onclick="window.toggleArrayItem('fridgeItems', '${item.replace(/'/g, "\\'")}')" class="text-amber-700 hover:text-red-600 font-extrabold">✕</button>
+            <button type="button" onclick="window.toggleArrayItem('fridgeItems', '${item.replace(/'/g, "\\'")}')" style="color:#92400E; font-weight:800; margin-left:4px;">✕</button>
           </span>
         `).join("");
       }
@@ -854,9 +1305,9 @@
       grid.innerHTML = EQUIPMENT_OPTIONS.map((eq) => {
         const active = window.profileState.equipment.includes(eq.id);
         return `<button type="button" onclick="window.toggleArrayItem('equipment', '${eq.id}')"
-          class="p-3.5 rounded-2xl border text-left transition flex items-center gap-3 ${active ? 'pill-active' : 'bg-stone-50 border-stone-200 text-stone-800 hover:bg-stone-100'}">
-          <span class="text-2xl">${eq.icon}</span>
-          <span class="text-xs sm:text-sm font-bold leading-snug">${eq.label}</span>
+          class="equip-card ${active ? 'pill-active' : ''}">
+          <span style="font-size:22px;">${eq.icon}</span>
+          <span>${eq.label}</span>
         </button>`;
       }).join("");
     };
@@ -865,7 +1316,7 @@
       document.getElementById("allergyGrid").innerHTML = ALLERGY_OPTIONS.map((al) => {
         const active = window.profileState.allergies.includes(al);
         return `<button type="button" onclick="window.toggleArrayItem('allergies', '${al}')"
-          class="px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-bold transition ${active ? 'bg-red-600 text-white border-red-600 shadow-sm' : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'}">
+          class="pill-btn ${active ? 'pill-danger-active' : ''}">
           ${al} ${active ? '✕' : ''}
         </button>`;
       }).join("");
@@ -873,7 +1324,7 @@
       document.getElementById("preferenceGrid").innerHTML = PREFERENCE_OPTIONS.map((pr) => {
         const active = window.profileState.preferences.includes(pr);
         return `<button type="button" onclick="window.toggleArrayItem('preferences', '${pr}')"
-          class="px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-bold transition ${active ? 'pill-active' : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'}">
+          class="pill-btn ${active ? 'pill-active' : ''}">
           ${pr}
         </button>`;
       }).join("");
@@ -883,7 +1334,7 @@
       document.getElementById("staplesGrid").innerHTML = STAPLE_OPTIONS.map((st) => {
         const active = window.profileState.staples.includes(st);
         return `<button type="button" onclick="window.toggleArrayItem('staples', '${st}')"
-          class="px-3 py-1.5 rounded-xl border text-xs font-bold transition ${active ? 'bg-stone-800 text-white border-stone-800' : 'bg-stone-100 border-stone-200 text-stone-400 line-through'}">
+          class="pill-btn ${active ? 'pill-staple-active' : 'pill-staple-off'}">
           ${active ? '✓ ' : ''}${st}
         </button>`;
       }).join("");
@@ -905,11 +1356,11 @@
       const btnPnw = document.getElementById("regionBtnPnw");
 
       if (region === "reston") {
-        btnReston.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-stone-900 shadow-sm";
-        btnPnw.className = "px-3 py-1.5 rounded-lg text-xs font-bold text-stone-500";
+        btnReston.className = "mode-btn active";
+        btnPnw.className = "mode-btn";
       } else {
-        btnPnw.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-stone-900 shadow-sm";
-        btnReston.className = "px-3 py-1.5 rounded-lg text-xs font-bold text-stone-500";
+        btnPnw.className = "mode-btn active";
+        btnReston.className = "mode-btn";
       }
 
       const filtered = STORES.filter((s) => s.region === region);
@@ -921,15 +1372,15 @@
       grid.innerHTML = filtered.map((store) => {
         const active = store.id === window.profileState.selectedStoreId;
         return `<div onclick="window.selectStore('${store.id}')"
-          class="cursor-pointer p-4 rounded-2xl border-2 transition flex flex-col justify-between ${active ? 'store-card-active' : 'border-stone-200 bg-white hover:border-stone-300'}">
+          class="store-card ${active ? 'store-card-active' : ''}">
           <div>
-            <div class="flex items-center justify-between gap-2 mb-1">
-              <span class="font-extrabold text-base text-stone-900">${store.name}</span>
-              ${active ? '<span class="text-xs font-extrabold bg-green-700 text-white px-2.5 py-0.5 rounded-full">Selected ✓</span>' : ''}
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:4px;">
+              <span style="font-weight:800; font-size:16px;">${store.name}</span>
+              ${active ? '<span style="font-size:11px; font-weight:800; background:#15803D; color:#FFF; padding:3px 10px; border-radius:999px;">Selected ✓</span>' : ''}
             </div>
-            <p class="text-xs text-stone-500 mb-3">${store.address}</p>
+            <p style="font-size:12px; color:#78716C; margin-bottom:12px;">${store.address}</p>
           </div>
-          <div class="text-[11px] font-bold text-green-800 bg-green-100/80 px-2.5 py-1 rounded-lg w-fit">
+          <div class="live-badge" style="width:fit-content; margin-bottom:0;">
             🏷️ ${store.badge}
           </div>
         </div>`;
@@ -1099,12 +1550,10 @@
       const diff = +(window.profileState.weeklyBudget - plan.totalCost).toFixed(2);
       const pill = document.getElementById("savingsPill");
       if (diff >= 0) {
-        bar.className = "h-full bg-green-600 transition-all duration-500";
-        pill.className = "text-xs font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full";
+        bar.style.background = "#16A34A";
         pill.textContent = `🎉 $${diff.toFixed(2)} Under Your Budget!`;
       } else {
-        bar.className = "h-full bg-amber-500 transition-all duration-500";
-        pill.className = "text-xs font-bold text-amber-900 bg-amber-100 px-3 py-1 rounded-full";
+        bar.style.background = "#F59E0B";
         pill.textContent = `⚠️ $${Math.abs(diff).toFixed(2)} Over Budget`;
       }
 
@@ -1119,17 +1568,17 @@
 
       const listContainer = document.getElementById("shoppingListContainer");
       listContainer.innerHTML = Object.keys(byAisle).map((aisle) => `
-        <div>
-          <div class="text-xs font-extrabold uppercase tracking-wider text-stone-400 mb-2">${aisle}</div>
-          <div class="space-y-2">
+        <div style="margin-bottom:14px;">
+          <div class="form-label">${aisle}</div>
+          <div>
             ${byAisle[aisle].map((item) => `
               <label onclick="window.toggleGroceryCheck(${item.index})"
-                class="flex items-center justify-between gap-3 p-3 rounded-2xl border cursor-pointer transition ${item.checked ? 'bg-stone-50 border-stone-200 opacity-60 line-through' : 'bg-white border-stone-200 hover:border-green-600'}">
-                <div class="flex items-center gap-3">
-                  <input type="checkbox" ${item.checked ? 'checked' : ''} class="w-5 h-5 rounded text-green-700 pointer-events-none" />
+                class="grocery-item ${item.checked ? 'checked' : ''}">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <input type="checkbox" ${item.checked ? 'checked' : ''} style="width:18px; height:18px; accent-color:#15803D; pointer-events:none;" />
                   <div>
-                    <div class="text-sm font-bold text-stone-900">${item.name}</div>
-                    <div class="text-[11px] font-semibold text-green-700">${item.sourceBadge \vert{}\vert{} ''}</div>                   </div>                 </div>                 <div class="text-sm font-extrabold text-stone-900">$${Number(item.price).toFixed(2)}</div>
+                    <div style="font-size:14px; font-weight:700;">${item.name}</div>
+                    <div style="font-size:11px; font-weight:700; color:#15803D;">${item.sourceBadge \vert{}\vert{} ''}</div>                   </div>                 </div>                 <div style="font-size:14px; font-weight:800;">$${Number(item.price).toFixed(2)}</div>
               </label>
             `).join("")}
           </div>
@@ -1139,23 +1588,21 @@
       const usedKitchenEl = document.getElementById("usingFromKitchenList");
       const usedList = plan.usedFromKitchen && plan.usedFromKitchen.length ? plan.usedFromKitchen : window.profileState.fridgeItems;
       usedKitchenEl.innerHTML = usedList.map((u) => `
-        <span class="text-xs font-bold bg-green-50 border border-green-200 text-green-900 px-2.5 py-1 rounded-lg">${u}</span>
+        <span class="live-badge" style="margin-bottom:0;">${u}</span>
       `).join("");
 
       const recipesEl = document.getElementById("recipesContainer");
       recipesEl.innerHTML = plan.recipes.map((r, i) => `
-        <div class="bg-white rounded-3xl p-5 sm:p-6 border border-stone-200 shadow-sm">
-          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-            <span class="text-xs font-extrabold uppercase tracking-wider text-green-800 bg-green-100 px-2.5 py-1 rounded-full">
-              Dinner #${i + 1} • ${r.time}
-            </span>
-            <span class="text-xs font-bold text-stone-500 bg-stone-100 px-2.5 py-1 rounded-full">
+        <div class="card">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;">
+            <span class="live-badge" style="margin-bottom:0;">Dinner #${i + 1} • ${r.time}</span>
+            <span style="font-size:12px; font-weight:700; color:#57534E; background:#F5F5F4; padding:4px 10px; border-radius:999px;">
               Uses: ${r.equipmentNeeded}
             </span>
           </div>
-          <h5 class="text-lg font-extrabold text-stone-900 mb-3">${r.title}</h5>
-          <ol class="space-y-2 text-sm text-stone-700 list-decimal list-inside">
-            ${r.steps.map((s) => `<li class="leading-relaxed">${s}</li>`).join("")}
+          <h5 style="font-size:18px; font-weight:800; margin-bottom:12px;">${r.title}</h5>
+          <ol style="padding-left:20px; font-size:14px; color:#44403C;">
+            ${r.steps.map((s) => `<li style="margin-bottom:6px;">${s}</li>`).join("")}
           </ol>
         </div>
       `).join("");
@@ -1216,9 +1663,9 @@
     };
   </script>
 
-  <!-- FIREBASE MODULE LOADER (NON-BLOCKING) -->
+  <!-- FIREBASE MODULE LOADER -->
   <script type="module">
-    import { initializeApp } from "[https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js](https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js)";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import {
       getAuth,
       createUserWithEmailAndPassword,
@@ -1226,13 +1673,13 @@
       onAuthStateChanged,
       signOut,
       updateProfile
-    } from "[https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js](https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js)";
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
     import {
       getFirestore,
       doc,
       setDoc,
       getDoc
-    } from "[https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js](https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js)";
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     try {
       const app = initializeApp(DEFAULT_FIREBASE_CONFIG);
@@ -1252,7 +1699,7 @@
       };
 
       const statusEl = document.getElementById("cloudStatusText");
-      if (statusEl) statusEl.textContent = "v2.1 Live • Cloud Connected";
+      if (statusEl) statusEl.textContent = "v2.2 Live • Cloud Connected";
 
       onAuthStateChanged(auth, async (user) => {
         if (user) {
