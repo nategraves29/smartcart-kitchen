@@ -63,11 +63,11 @@
     .step-num { width: 24px; height: 24px; border-radius: 50%; background: rgba(0,0,0,0.08); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
     .step-tab.active .step-num { background: rgba(255,255,255,0.25); }
     .pill-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
-    .pill-btn { padding: 9px 14px; border-radius: 12px; border: 1.5px solid #E7E5E4; background: #FAF8F5; color: #292524; font-size: 13px; font-weight: 700; }
+    .pill-btn { padding: 9px 14px; border-radius: 12px; border: 1.5px solid #E7E5E4; background: #FAF8F5; color: #292524; font-size: 13px; font-weight: 700; transition: all 0.1s ease; }
     .pill-active { background: #15803D !important; color: #FFFFFF !important; border-color: #15803D !important; }
     .pill-danger-active { background: #DC2626 !important; color: #FFFFFF !important; border-color: #DC2626 !important; }
-    .pill-staple-active { background: #292524 !important; color: #FFFFFF !important; border-color: #292524 !important; }
-    .pill-staple-off { background: #F5F5F4; color: #A8A29E; text-decoration: line-through; }
+    .pill-low { background: #FEF08A !important; color: #854D0E !important; border-color: #EAB308 !important; }
+    .pill-out { background: #F5F5F4 !important; color: #A8A29E !important; text-decoration: line-through; border-color: #E7E5E4 !important; }
     .equip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
     .equip-card { padding: 14px; border-radius: 16px; border: 1.5px solid #E7E5E4; background: #FAF8F5; display: flex; align-items: center; gap: 10px; text-align: left; font-size: 13px; font-weight: 700; color: #1C1917; }
     .store-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
@@ -81,13 +81,48 @@
     .progress-fill { height: 100%; background: #16A34A; transition: width 0.4s ease; }
     .counter-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
     .counter-box { padding: 16px; border-radius: 16px; border: 1.5px solid #E7E5E4; display: flex; align-items: center; justify-content: space-between; }
-    .counter-btn { width: 36px; height: 36px; border-radius: 10px; background: #F5F5F4; font-size: 18px; font-weight: 800; }
+    .counter-btn { width: 36px; height: 36px; border-radius: 10px; background: #F5F5F4; font-size: 18px; font-weight: 800; display:flex; align-items:center; justify-content:center;}
+    .scale-btn { padding:4px 10px; background:transparent; font-size:14px; font-weight:900; color:#57534E;}
+    .scale-btn:hover { background:#E7E5E4; }
     .craving-box { background: #F0FDF4; border: 1.5px solid #BBF7D0; border-radius: 18px; padding: 18px; margin-top: 18px; }
     .footer-bar { margin-top: auto; border-top: 1px solid #E7E5E4; background: #FFFFFF; padding: 16px; text-align: center; font-size: 12px; color: #78716C; }
     @media print { .no-print { display: none !important; } body { background: #FFFFFF; } }
   </style>
 </head>
 <body>
+
+  <!-- DATALISTS FOR AUTOCOMPLETE -->
+  <datalist id="fridge-suggestions">
+    <option value="Eggs"></option><option value="Milk"></option><option value="Butter"></option>
+    <option value="Chicken Breast"></option><option value="Ground Beef"></option><option value="Bacon"></option>
+    <option value="Onions"></option><option value="Garlic"></option><option value="Potatoes"></option>
+    <option value="Tomatoes"></option><option value="Spinach"></option><option value="Carrots"></option>
+    <option value="Bell Peppers"></option><option value="Cheddar Cheese"></option><option value="Parmesan"></option>
+    <option value="Heavy Cream"></option><option value="Lemon"></option><option value="Lime"></option>
+  </datalist>
+
+  <datalist id="harvest-suggestions">
+    <option value="Heirloom Tomatoes"></option><option value="Sugar Snap Peas"></option>
+    <option value="Cucumbers"></option><option value="Zucchini / Squash"></option>
+    <option value="Eggplant"></option><option value="Radishes"></option>
+    <option value="Purple Beans"></option><option value="Fresh Herbs"></option>
+  </datalist>
+
+  <datalist id="spice-suggestions">
+    <option value="Smoked Paprika"></option><option value="Cumin"></option><option value="Chili Powder"></option>
+    <option value="Garlic Powder"></option><option value="Onion Powder"></option><option value="Oregano"></option>
+    <option value="Basil"></option><option value="Thyme"></option><option value="Cinnamon"></option>
+    <option value="Cayenne Pepper"></option><option value="Red Pepper Flakes"></option><option value="Garam Masala"></option>
+    <option value="Curry Powder"></option><option value="Coriander"></option><option value="Rosemary"></option>
+  </datalist>
+
+  <datalist id="staple-suggestions">
+    <option value="Olive Oil"></option><option value="Vegetable Oil"></option><option value="Sesame Oil"></option>
+    <option value="Soy Sauce"></option><option value="Balsamic Vinegar"></option><option value="Apple Cider Vinegar"></option>
+    <option value="Rice Vinegar"></option><option value="Chicken Broth"></option><option value="Beef Broth"></option>
+    <option value="All-Purpose Flour"></option><option value="Sugar"></option><option value="Brown Sugar"></option>
+    <option value="Honey"></option><option value="Cornstarch"></option><option value="Hot Sauce"></option>
+  </datalist>
 
   <header class="top-header no-print">
     <div class="header-inner">
@@ -116,7 +151,7 @@
         <div class="auth-hero-icon">🥗</div>
         <div class="live-badge">
           <span class="status-dot"></span>
-          <span id="cloudStatusText">v2.7 Live • Ready</span>
+          <span id="cloudStatusText">v3.1 Live • Ready</span>
         </div>
         <h2 class="auth-title">Welcome to Your Kitchen</h2>
         <p class="auth-subtitle">Sign in to load your kitchen tools, fridge inventory, favorite store, and weekly budget.</p>
@@ -198,36 +233,57 @@
 
     <!-- STEP 1 -->
     <section id="stepPanel1">
+      
+      <!-- FRIDGE & HARVEST -->
       <div class="card">
         <span style="display:inline-block; font-size:11px; font-weight:800; text-transform:uppercase; background:#FEF3C7; color:#92400E; padding:4px 10px; border-radius:999px; margin-bottom:8px;">Save Money First</span>
-        <h3 style="font-size:19px; font-weight:800; margin-bottom:4px;">1. What ingredients do you already have on hand?</h3>
-        <p style="font-size:14px; color:#57534E; margin-bottom:16px;">Tap or type anything sitting in your fridge, freezer, or garden. Your recipes will use these first so you don't buy duplicates!</p>
-        <div style="margin-bottom:16px;">
-          <div class="form-label">Quick-Tap Common Items in Your Fridge / Pantry:</div>
-          <div id="quickFridgePills" class="pill-wrap"></div>
-        </div>
-        <div style="display:flex; gap:8px; margin-top:14px;">
-          <input id="customFridgeInput" type="text" aria-label="Add custom fridge item" placeholder="Type anything else you have (e.g., 2 chicken breasts, heirloom tomatoes, squash)..."
-            onkeydown="if(event.key==='Enter'){event.preventDefault();window.addCustomFridgeItem();}" class="text-input" />
-          <button type="button" onclick="window.addCustomFridgeItem()"
-            style="padding:0 20px; background:#1C1917; color:#FFF; font-weight:800; border-radius:12px; font-size:14px; white-space:nowrap;">+ Add Item</button>
-        </div>
-        <div style="margin-top:18px; padding-top:16px; border-top:1px solid #E7E5E4;">
-          <div class="form-label">Currently in Your Kitchen to Use Up:</div>
+        <h3 style="font-size:19px; font-weight:800; margin-bottom:4px;">1. What ingredients do you already have?</h3>
+        <p style="font-size:14px; color:#57534E; margin-bottom:16px;">The AI Chef prioritizes these items first so you don't buy duplicates.</p>
+        
+        <!-- Standard Fridge -->
+        <div style="margin-bottom:8px;">
+          <div class="form-label">Currently in Fridge/Pantry:</div>
           <div id="activeFridgeList" class="pill-wrap"></div>
+        </div>
+        <div style="display:flex; gap:8px; margin-bottom:20px;">
+          <input id="customFridgeInput" type="text" list="fridge-suggestions" aria-label="Add custom fridge item" placeholder="Add fridge item (e.g., 2 chicken breasts)..."
+            onkeydown="if(event.key==='Enter'){event.preventDefault();window.addCustomItem('fridgeItems', 'customFridgeInput');}" class="text-input" />
+          <button type="button" onclick="window.addCustomItem('fridgeItems', 'customFridgeInput')"
+            style="padding:0 20px; background:#1C1917; color:#FFF; font-weight:800; border-radius:12px; font-size:14px; white-space:nowrap;">+ Fridge</button>
+        </div>
+
+        <!-- Harvest Mode -->
+        <div style="padding-top:16px; border-top:1px solid #E7E5E4;">
+          <div class="form-label" style="color:#15803D; margin-bottom:8px;">🌿 Freshly Picked (Harvest Mode)</div>
+          <p style="font-size:12px; color:#57534E; margin-bottom:10px;">Got a garden haul? Add it here. The AI will feature it prominently and calculate your Harvest Savings.</p>
+          <div id="activeHarvestList" class="pill-wrap" style="margin-bottom:8px;"></div>
+          <div style="display:flex; gap:8px;">
+            <input id="customHarvestInput" type="text" list="harvest-suggestions" aria-label="Add harvest item" placeholder="Add harvest (e.g., Heirloom Tomatoes, Sugar Snaps)..."
+              onkeydown="if(event.key==='Enter'){event.preventDefault();window.addCustomItem('harvestItems', 'customHarvestInput');}" class="text-input" style="border-color:#BBF7D0; background:#F0FDF4;" />
+            <button type="button" onclick="window.addCustomItem('harvestItems', 'customHarvestInput')"
+              style="padding:0 20px; background:#15803D; color:#FFF; font-weight:800; border-radius:12px; font-size:14px; white-space:nowrap;">+ Harvest</button>
+          </div>
+        </div>
+
+        <!-- Batch & Preserve -->
+        <div style="padding-top:16px; margin-top:20px; border-top:1px solid #E7E5E4;">
+          <div class="form-label" style="color:#B45309; margin-bottom:8px;">🍯 Batch &amp; Preserve Idea</div>
+          <p style="font-size:12px; color:#57534E; margin-bottom:10px;">Too much of one ingredient? Tell the chef to generate a dedicated recipe to ferment, pickle, or sauce it.</p>
+          <input id="preserveInput" type="text" aria-label="Preservation request"
+              oninput="window.updatePreservePrompt(this.value)"
+              placeholder="e.g., I have 5 lbs of cucumbers, or a massive amount of hot peppers..."
+              class="text-input" />
         </div>
       </div>
 
       <div class="card">
         <h3 style="font-size:19px; font-weight:800; margin-bottom:4px;">2. Which cooking tools do you have?</h3>
-        <p style="font-size:14px; color:#57534E; margin-bottom:16px;">Tap the appliances and pans you have in your kitchen. We will only give you recipes you can actually cook.</p>
-        <div id="equipmentGrid" class="equip-grid"></div>
+        <div id="equipmentGrid" class="equip-grid" style="margin-top:14px;"></div>
       </div>
 
       <div class="card">
         <h3 style="font-size:19px; font-weight:800; margin-bottom:4px;">3. Allergies, Preferences &amp; What You're Feeling</h3>
-        <p style="font-size:14px; color:#57534E; margin-bottom:16px;">Select any allergies to strictly avoid, tap meal styles you enjoy, and tell the chef what you're craving this week.</p>
-        <div style="margin-bottom:18px;">
+        <div style="margin-bottom:18px; margin-top:14px;">
           <div class="form-label" style="color:#B91C1C;">🚫 Allergies &amp; Dislikes (Strictly Excluded)</div>
           <div id="allergyGrid" class="pill-wrap"></div>
         </div>
@@ -236,36 +292,55 @@
           <div id="preferenceGrid" class="pill-wrap"></div>
         </div>
 
-        <!-- NEW: WHAT ARE YOU FEELING / CRAVING BOX -->
         <div class="craving-box">
           <label for="cravingInputStep1" class="form-label" style="color:#14532D; font-size:12px;">💭 What are you feeling this week? (Cravings &amp; Dish Ideas)</label>
-          <p style="font-size:13px; color:#166534; margin-bottom:10px;">
-            Tell the chef what sounds good or how you want to use your on-hand ingredients—we'll build recipes around your idea and budget!
-          </p>
           <textarea id="cravingInputStep1" rows="2"
             oninput="window.updateCravingPrompt(this.value)"
-            placeholder="e.g., Crispy chicken thighs on the pellet smoker, a cozy spicy noodle stir-fry using my onions and eggs, or a hearty pasta dinner..."
+            placeholder="e.g., Crispy chicken thighs on the pellet smoker, a cozy spicy noodle stir-fry, or a hearty pasta dinner..."
             class="textarea-input"></textarea>
         </div>
       </div>
 
-      <!-- UPGRADED: CUSTOMIZABLE PANTRY STAPLES -->
+      <!-- 3-STATE PANTRY STAPLES, SPICES & FAVORITES -->
       <div class="card">
-        <h3 style="font-size:18px; font-weight:800; margin-bottom:4px;">4. Basic Pantry Staples &amp; Spice Rack</h3>
+        <h3 style="font-size:18px; font-weight:800; margin-bottom:4px;">4. Pantry Staples, Spices &amp; Favorites</h3>
         <p style="font-size:14px; color:#57534E; margin-bottom:14px;">
-          Tap any staple to uncheck it if you're out, or add your own go-to pantry staples, sauces, and rubs below.
+          Tap any item to cycle its status: <br/>
+          <span style="display:inline-block; margin-top:6px; font-size:12px; font-weight:700;"><span style="color:#15803D;">✓ Have it</span> &nbsp;|&nbsp; <span style="color:#D97706;">⚠️ Running Low</span> &nbsp;|&nbsp; <span style="color:#A8A29E; text-decoration:line-through;">Out of Stock</span></span>
         </p>
+        
+        <div class="form-label" style="color:#92400E; margin-top:16px; margin-bottom:8px;">General Pantry Staples (Oils, Broths, Sauces)</div>
         <div id="staplesGrid" class="pill-wrap" style="margin-bottom:14px;"></div>
-
-        <div style="display:flex; gap:8px; padding-top:12px; border-top:1px solid #E7E5E4;">
-          <input id="customStapleInput" type="text" aria-label="Add custom pantry staple"
-            placeholder="Add your own staple (e.g., Sesame Oil, Fish Sauce, Smoked Paprika, Cornstarch, BBQ Rub)..."
-            onkeydown="if(event.key==='Enter'){event.preventDefault();window.addCustomStapleItem();}"
+        <div style="display:flex; gap:8px; margin-bottom:24px;">
+          <input id="customStapleInput" type="text" list="staple-suggestions" aria-label="Add custom pantry staple"
+            placeholder="Add staple (e.g., Sesame Oil, Fish Sauce)..."
+            onkeydown="if(event.key==='Enter'){event.preventDefault();window.addCustomStatusItem('staples', 'customStapleInput');}"
             class="text-input" />
-          <button type="button" onclick="window.addCustomStapleItem()"
+          <button type="button" onclick="window.addCustomStatusItem('staples', 'customStapleInput')"
             style="padding:0 20px; background:#292524; color:#FFF; font-weight:800; border-radius:12px; font-size:14px; white-space:nowrap;">
             + Add Staple
           </button>
+        </div>
+
+        <div style="padding-top:16px; border-top:1px solid #E7E5E4;">
+          <div class="form-label" style="color:#B45309; margin-bottom:8px;">My Spice Rack (Dry Seasonings &amp; Rubs)</div>
+          <div id="spiceGrid" class="pill-wrap" style="margin-bottom:14px;"></div>
+          <div style="display:flex; gap:8px;">
+            <input id="customSpiceInput" type="text" list="spice-suggestions" aria-label="Add custom spice"
+              placeholder="Add spice (e.g., Garam Masala, BBQ Rub)..."
+              onkeydown="if(event.key==='Enter'){event.preventDefault();window.addCustomStatusItem('spices', 'customSpiceInput');}"
+              class="text-input" />
+            <button type="button" onclick="window.addCustomStatusItem('spices', 'customSpiceInput')"
+              style="padding:0 20px; background:#D97706; color:#FFF; font-weight:800; border-radius:12px; font-size:14px; white-space:nowrap;">
+              + Add Spice
+            </button>
+          </div>
+        </div>
+
+        <div style="padding-top:18px; border-top:1px solid #E7E5E4; margin-top:20px;">
+          <div class="form-label" style="color:#BE123C; margin-bottom:4px;">❤️ My Favorite Meals Vault</div>
+          <p style="font-size:13px; color:#57534E; margin-bottom:12px;">Meals you favorite (❤️) will appear here. The AI Chef prioritizes fitting them into your future weeks!</p>
+          <div id="favoritesVaultGrid" class="pill-wrap"></div>
         </div>
       </div>
 
@@ -292,8 +367,7 @@
 
       <div class="card">
         <h3 style="font-size:19px; font-weight:800; margin-bottom:4px;">2. Set Your Weekly Grocery Budget</h3>
-        <p style="font-size:14px; color:#57534E; margin-bottom:18px;">Slide to set your maximum spend at the register.</p>
-        <div style="background:#FAF8F5; border:1px solid #E7E5E4; border-radius:18px; padding:20px; margin-bottom:20px;">
+        <div style="background:#FAF8F5; border:1px solid #E7E5E4; border-radius:18px; padding:20px; margin-bottom:20px; margin-top:14px;">
           <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;">
             <label for="budgetRangeInput" style="font-size:14px; font-weight:700; color:#57534E;">Maximum Weekly Spend:</label>
             <span id="budgetSliderLabel" style="font-size:32px; font-weight:800; color:#15803D;">&#36;125</span>
@@ -330,11 +404,21 @@
             </div>
           </div>
         </div>
+
+        <div style="margin-top:20px; padding-top:16px; border-top:1px solid #E7E5E4;">
+          <label style="display:flex; align-items:center; gap:12px; cursor:pointer;">
+            <input type="checkbox" id="weekendProjectToggle" style="width:20px; height:20px; accent-color:#15803D;" onchange="window.updateWeekendToggle(this.checked)" />
+            <div>
+              <div style="font-weight:800; font-size:15px;">Include 1 Weekend Project Meal (Low &amp; Slow)</div>
+              <div style="font-size:12px; color:#57534E;">Chef will plan fast weeknight meals, plus one 2+ hour smoke, braise, or roast.</div>
+            </div>
+          </label>
+        </div>
       </div>
 
       <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px;">
         <button type="button" onclick="window.goToStep(1)" class="demo-btn" style="padding:14px 20px; font-size:14px;">← Back to My Kitchen</button>
-        <button type="button" onclick="window.generateWeeklyMealPlan()" class="btn-primary" style="max-width:360px;">✨ Build My Grocery List &amp; Recipes</button>
+        <button type="button" onclick="window.generateWeeklyMealPlan(false, false)" class="btn-primary" style="max-width:360px;">✨ Build My Grocery List &amp; Recipes</button>
       </div>
     </section>
 
@@ -355,6 +439,10 @@
               <p id="solverSourceNotice" style="font-size:14px; color:#57534E;">All recipes include exact measurements, fit your kitchen tools, and stay within budget.</p>
             </div>
             <div class="no-print" style="display:flex; flex-wrap:wrap; gap:8px;">
+              <button type="button" onclick="window.shareGroceryListSMS()"
+                style="padding:10px 16px; border-radius:12px; background:#DBEAFE; border:1px solid #BFDBFE; color:#1E40AF; font-weight:800; font-size:13px;">
+                📱 Text Grocery List
+              </button>
               <button type="button" onclick="window.verifyLiveStorePrices()" id="verifyLivePricesBtn"
                 style="padding:10px 16px; border-radius:12px; background:#FEF3C7; border:1px solid #FCD34D; color:#92400E; font-weight:800; font-size:13px;">
                 🔄 Check Live Store Sale Prices
@@ -378,19 +466,19 @@
             <div class="progress-track">
               <div id="budgetProgressBar" class="progress-fill" style="width: 60%"></div>
             </div>
+            <div id="harvestSavingsBanner"></div>
           </div>
 
-          <!-- QUICK CRAVING BAR ON STEP 3 -->
           <div class="no-print" style="margin-top:16px; background:#F0FDF4; border:1px solid #BBF7D0; border-radius:14px; padding:12px 14px; display:flex; flex-wrap:wrap; align-items:center; gap:10px;">
             <label for="cravingInputStep3" style="font-size:12px; font-weight:800; color:#14532D; white-space:nowrap;">💭 What are you feeling?</label>
             <input id="cravingInputStep3" type="text"
               oninput="window.updateCravingPrompt(this.value)"
-              onkeydown="if(event.key==='Enter'){event.preventDefault();window.generateWeeklyMealPlan();}"
-              placeholder="Type a craving or dish idea (e.g., smoky grilled chicken, enchiladas, garlic noodles) &amp; hit Generate..."
+              onkeydown="if(event.key==='Enter'){event.preventDefault();window.generateWeeklyMealPlan(false, false);}"
+              placeholder="Type a craving (e.g., smoky chicken) &amp; hit Generate..."
               class="text-input" style="flex:1; min-width:220px; padding:9px 12px; font-size:13px;" />
-            <button type="button" onclick="window.generateWeeklyMealPlan()"
+            <button type="button" onclick="window.generateWeeklyMealPlan(false, false)"
               style="padding:10px 16px; background:#15803D; color:#FFF; font-weight:800; font-size:13px; border-radius:10px; white-space:nowrap;">
-              ✨ Generate Matching Plan
+              ✨ Generate Plan
             </button>
           </div>
         </div>
@@ -412,11 +500,16 @@
           </div>
 
           <div>
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
-              <h4 style="font-size:18px; font-weight:800;">🍳 Your Chef Recipes for the Week</h4>
-              <button type="button" onclick="window.generateWeeklyMealPlan()" class="no-print" style="font-size:13px; font-weight:800; color:#15803D; background:#DCFCE7; padding:6px 12px; border-radius:999px;">
-                ↻ Generate New Recipes
-              </button>
+            <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom:12px; gap:8px;">
+              <h4 style="font-size:18px; font-weight:800;">🍳 Your Chef Recipes</h4>
+              <div style="display:flex; gap:8px;">
+                <button type="button" onclick="window.generateWeeklyMealPlan(false, true)" class="no-print" style="font-size:12px; font-weight:800; color:#92400E; background:#FEF3C7; padding:6px 12px; border-radius:999px;">
+                  ♻️ Clear the Fridge
+                </button>
+                <button type="button" onclick="window.generateWeeklyMealPlan(false, false)" class="no-print" style="font-size:12px; font-weight:800; color:#15803D; background:#DCFCE7; padding:6px 12px; border-radius:999px;">
+                  ↻ Generate New Recipes
+                </button>
+              </div>
             </div>
             <div id="recipesContainer"></div>
           </div>
@@ -426,12 +519,11 @@
   </div>
 
   <footer class="footer-bar no-print">
-    SmartCart Kitchen v2.7 — Reston, VA (20191) &amp; Beaverton, OR
+    SmartCart Kitchen v3.1 — Reston, VA (20191) &amp; Beaverton, OR
   </footer>
 
   <script>
     window.CURRENCY_SIGN = "\x24";
-
     window.DEFAULT_FIREBASE_CONFIG = {
       apiKey: "AIzaSyAl5hOXY8_lAuQeIZS-T4uq5ZBTDayn40o",
       authDomain: "grocery-planner-v1.firebaseapp.com",
@@ -440,12 +532,9 @@
       messagingSenderId: "794850230910",
       appId: "1:794850230910:web:932506759e1f0726b7ce2f"
     };
-
     window.DEFAULT_WORKER_URL = "https://smartcart-proxy.nategraves29.workers.dev/";
 
-    function pickVal(a, b) {
-      return (a !== undefined && a !== null && a !== "") ? a : b;
-    }
+    function pickVal(a, b) { return (a !== undefined && a !== null && a !== "") ? a : b; }
 
     function parsePriceNum(val, fallback) {
       if (typeof val === "number" && !isNaN(val)) return val;
@@ -454,280 +543,82 @@
       return isNaN(num) ? pickVal(fallback, 3.99) : num;
     }
 
-    // Converts decimal quantities (.25, 0.5, .75, 1.25, 1.5, 1.75, 2.5, etc.) into clean kitchen fractions
     function formatCulinaryFractions(text) {
       if (!text || typeof text !== "string") return "";
-      var decMap = {
-        "25": "1/4",
-        "33": "1/3",
-        "5": "1/2",
-        "50": "1/2",
-        "66": "2/3",
-        "67": "2/3",
-        "75": "3/4"
-      };
+      var decMap = { "25": "1/4", "33": "1/3", "5": "1/2", "50": "1/2", "66": "2/3", "67": "2/3", "75": "3/4" };
       return text.replace(/(^|\s|\()(\d*)\.(25|33|50|5|66|67|75)\b/g, function (match, prefix, whole, dec) {
         var frac = decMap[dec] ? decMap[dec] : ("." + dec);
-        if (whole && whole !== "0") {
-          return prefix + whole + " " + frac;
-        }
+        if (whole && whole !== "0") return prefix + whole + " " + frac;
         return prefix + frac;
       });
     }
 
+    function multiplyIngredient(str, ratio) {
+      if(ratio === 1) return str;
+      var regex = /^(\d+\s+\d+\/\d+|\d+\/\d+|\d*\.\d+|\d+)(.*)/;
+      var match = str.trim().match(regex);
+      if(!match) return str;
+      var numStr = match[1], rest = match[2], val = 0;
+      if(numStr.indexOf("/") !== -1) {
+        var parts = numStr.split(" ");
+        if(parts.length === 2) {
+          var frac = parts[1].split("/");
+          val = parseFloat(parts[0]) + (parseFloat(frac[0]) / parseFloat(frac[1]));
+        } else {
+          var frac = parts[0].split("/");
+          val = parseFloat(frac[0]) / parseFloat(frac[1]);
+        }
+      } else { val = parseFloat(numStr); }
+      var newVal = val * ratio, whole = Math.floor(newVal), dec = newVal - whole, fracStr = "";
+      if(dec > 0.1) {
+        if(dec < 0.2) fracStr = ""; 
+        else if(dec <= 0.3) fracStr = "1/4";
+        else if(dec <= 0.4) fracStr = "1/3";
+        else if(dec <= 0.6) fracStr = "1/2";
+        else if(dec <= 0.7) fracStr = "2/3";
+        else if(dec <= 0.85) fracStr = "3/4";
+        else { whole += 1; fracStr = ""; }
+      }
+      var out = "";
+      if(whole > 0) out += whole;
+      if(whole > 0 && fracStr) out += " ";
+      if(fracStr) out += fracStr;
+      if(out === "") out = "0";
+      return out + rest;
+    }
+
     var STORES = [
-      { id: "ht_reston_spectrum", region: "reston", chain: "harristeeter", name: "Harris Teeter — Spectrum Center", address: "11806 Spectrum Ctr, Reston, VA 20190", badge: "VIC Card & Live Kroger API", provider: "kroger", locationId: "09700081", zip: "20191", multiplier: 1.02 },
-      { id: "ht_reston_woodland", region: "reston", chain: "harristeeter", name: "Harris Teeter — Woodland Park", address: "12960 Highland Crossing Dr, Herndon, VA", badge: "VIC Card & Live Kroger API", provider: "kroger", locationId: "09700085", zip: "20191", multiplier: 1.02 },
-      { id: "tj_reston", region: "reston", chain: "traderjoes", name: "Trader Joe's — Reston", address: "11958 Killingsworth Ave, Reston, VA 20194", badge: "Store #646 Everyday Low Prices", provider: "traderjoes", storeCode: "646", zip: "20191", multiplier: 0.90 },
-      { id: "safeway_reston_hunters", region: "reston", chain: "safeway", name: "Safeway — Hunters Woods / South Lakes", address: "2304 Hunters Woods Plaza, Reston, VA 20191", badge: "Weekly Ad & Member Deals (20191)", provider: "safeway", zip: "20191", multiplier: 1.05 },
-      { id: "fm_beaverton", region: "pnw", chain: "fredmeyer", name: "Fred Meyer — Beaverton Town Square", address: "11425 SW Beaverton Hillsdale Hwy, Beaverton, OR", badge: "Yellow Tag & Live Kroger API", provider: "kroger", locationId: "70100045", zip: "97005", multiplier: 1.00 },
-      { id: "fm_walker", region: "pnw", chain: "fredmeyer", name: "Fred Meyer — Walker Road", address: "15995 SW Walker Rd, Beaverton, OR", badge: "Yellow Tag & Live Kroger API", provider: "kroger", locationId: "70100660", zip: "97006", multiplier: 1.00 },
-      { id: "tj_beaverton", region: "pnw", chain: "traderjoes", name: "Trader Joe's — Beaverton", address: "11753 SW Beaverton Hillsdale Hwy, Beaverton, OR", badge: "Store #143 Everyday Value", provider: "traderjoes", storeCode: "143", zip: "97005", multiplier: 0.90 },
-      { id: "safeway_beaverton", region: "pnw", chain: "safeway", name: "Safeway — Beaverton (SW Teal / Murray)", address: "Beaverton, OR 97005", badge: "Weekly Ad Deals (97005)", provider: "safeway", zip: "97005", multiplier: 1.04 }
+      { id: "ht_reston_spectrum", region: "reston", chain: "harristeeter", name: "Harris Teeter — Spectrum Center", address: "11806 Spectrum Ctr, Reston, VA", badge: "VIC Card & Live Kroger API", provider: "kroger", locationId: "09700081", zip: "20191", multiplier: 1.02 },
+      { id: "tj_reston", region: "reston", chain: "traderjoes", name: "Trader Joe's — Reston", address: "11958 Killingsworth Ave, Reston, VA", badge: "Store #646 Everyday Low Prices", provider: "traderjoes", storeCode: "646", zip: "20191", multiplier: 0.90 },
+      { id: "safeway_reston_hunters", region: "reston", chain: "safeway", name: "Safeway — Hunters Woods", address: "2304 Hunters Woods Plaza, Reston, VA", badge: "Weekly Ad Deals (20191)", provider: "safeway", zip: "20191", multiplier: 1.05 },
+      { id: "fm_beaverton", region: "pnw", chain: "fredmeyer", name: "Fred Meyer — Beaverton Town Square", address: "11425 SW Beaverton Hillsdale Hwy", badge: "Yellow Tag & Live Kroger API", provider: "kroger", locationId: "70100045", zip: "97005", multiplier: 1.00 },
+      { id: "tj_beaverton", region: "pnw", chain: "traderjoes", name: "Trader Joe's — Beaverton", address: "11753 SW Beaverton Hillsdale Hwy", badge: "Store #143 Everyday Value", provider: "traderjoes", storeCode: "143", zip: "97005", multiplier: 0.90 },
+      { id: "safeway_beaverton", region: "pnw", chain: "safeway", name: "Safeway — Beaverton (SW Teal/Murray)", address: "Beaverton, OR", badge: "Weekly Ad Deals (97005)", provider: "safeway", zip: "97005", multiplier: 1.04 }
     ];
 
     var EQUIPMENT_OPTIONS = [
       { id: "skillet", label: "Skillet / Frying Pan", icon: "🍳" },
       { id: "sheet_pan", label: "Oven & Sheet Pan", icon: "♨️" },
       { id: "pot", label: "Large Soup Pot", icon: "🍲" },
-      { id: "slow_cooker", label: "Slow Cooker / Crockpot", icon: "🥘" },
-      { id: "instant_pot", label: "Instant Pot / Pressure", icon: "⚡" },
+      { id: "slow_cooker", label: "Slow Cooker", icon: "🥘" },
+      { id: "instant_pot", label: "Instant Pot", icon: "⚡" },
       { id: "air_fryer", label: "Air Fryer", icon: "🍟" },
-      { id: "grill", label: "Grill / Pellet Smoker", icon: "🔥" },
-      { id: "rice_cooker", label: "Rice Cooker", icon: "🍚" },
-      { id: "blender", label: "Blender / Processor", icon: "🌪️" },
-      { id: "microwave", label: "Microwave", icon: "📟" }
+      { id: "grill", label: "Grill / Pellet Smoker", icon: "🔥" }
     ];
 
-    var QUICK_FRIDGE_SUGGESTIONS = [
-      "Eggs", "Rice", "Pasta", "Yellow Onions", "Potatoes",
-      "Tomatoes", "Chicken Breast", "Ground Beef", "Cheddar Cheese",
-      "Spinach / Greens", "Carrots", "Bell Peppers", "Canned Beans",
-      "Tortillas", "Crushed Tomatoes"
-    ];
-
-    var ALLERGY_OPTIONS = [
-      "Peanuts / Tree Nuts", "Shellfish", "Dairy / Lactose",
-      "Gluten / Wheat", "Eggs", "Soy", "Fish", "Mushrooms"
-    ];
-
-    var PREFERENCE_OPTIONS = [
-      "Quick (Under 30 Mins)", "High Protein", "Kid & Family Friendly",
-      "Cozy One-Pan Meals", "Bold & Spicy Flavors", "Extra Veggies",
-      "Great for Leftovers"
-    ];
-
-    var STAPLE_OPTIONS = [
-      "Olive / Cooking Oil", "Butter", "Kosher Salt & Black Pepper", "Garlic / Garlic Powder",
-      "Onion Powder", "Soy Sauce", "All-Purpose Flour", "Sugar / Honey",
-      "Apple Cider / Rice Vinegar", "Chili Powder & Smoked Paprika", "Ground Cumin",
-      "Italian Seasoning", "Chicken / Veggie Broth", "Hot Sauce", "Cornstarch"
-    ];
+    var QUICK_FRIDGE_SUGGESTIONS = [ "Eggs", "Rice", "Pasta", "Yellow Onions", "Potatoes", "Tomatoes", "Chicken Breast", "Ground Beef", "Cheddar Cheese", "Spinach / Greens", "Carrots" ];
+    var ALLERGY_OPTIONS = [ "Peanuts / Tree Nuts", "Shellfish", "Dairy / Lactose", "Gluten / Wheat", "Eggs", "Soy", "Fish", "Mushrooms" ];
+    var PREFERENCE_OPTIONS = [ "Quick (Under 30 Mins)", "High Protein", "Kid & Family Friendly", "Cozy One-Pan Meals", "Bold & Spicy Flavors", "Extra Veggies", "Great for Leftovers" ];
+    var STAPLE_OPTIONS = [ "Olive Oil / Cooking Oil", "Butter", "Kosher Salt & Black Pepper", "Soy Sauce", "All-Purpose Flour", "Sugar / Honey", "Apple Cider / Rice Vinegar", "Chicken / Veggie Broth", "Hot Sauce", "Cornstarch" ];
+    var SPICE_RACK_OPTIONS = [ "Garlic Powder", "Onion Powder", "Smoked Paprika", "Chili Powder", "Ground Cumin", "Italian Seasoning", "Dried Oregano", "Crushed Red Pepper", "Ground Cinnamon" ];
 
     var CURATED_RECIPES = [
       {
-        title: "Crispy Sheet-Pan Garlic Herb Chicken Thighs & Baby Gold Potatoes",
-        prepTime: "10 mins",
-        cookTime: "28 mins",
-        equipmentNeeded: "Oven & Sheet Pan",
-        equipmentId: "sheet_pan",
-        allergens: [],
-        chefTip: "Patting the chicken thighs completely dry with paper towels before rubbing with oil and spices is the secret to blistered, crispy edges.",
-        ingredients: [
-          "1 1/2 lbs boneless skinless chicken thighs, trimmed",
-          "1 1/2 lbs baby gold potatoes, halved lengthwise",
-          "1 lb fresh broccoli crowns, cut into bite-sized florets",
-          "2 1/2 tbsp extra-virgin olive oil, divided",
-          "1 1/2 tsp dried Italian herb seasoning",
-          "1 tsp smoked paprika",
-          "1 tsp garlic powder (or 4 cloves fresh garlic, minced)",
-          "1 1/4 tsp kosher salt, divided",
-          "1/2 tsp freshly cracked black pepper"
-        ],
-        steps: [
-          "Position an oven rack in the center and preheat to 425F. Line a large rimmed baking sheet with foil or parchment paper.",
-          "In a large bowl, toss the halved baby potatoes with 1 tbsp olive oil, 1/2 tsp Italian seasoning, 1/2 tsp garlic powder, 1/2 tsp kosher salt, and 1/4 tsp black pepper. Arrange cut-side down on one side of the sheet pan.",
-          "Pat the chicken thighs dry with paper towels. Rub with 1 tbsp olive oil, 1 tsp Italian seasoning, 1 tsp smoked paprika, 1/2 tsp garlic powder, 1/2 tsp kosher salt, and 1/4 tsp black pepper. Place beside the potatoes.",
-          "Roast on the center rack for 15 minutes. Remove the pan briefly and toss the broccoli florets with the remaining 1/2 tbsp olive oil and 1/4 tsp salt; scatter around the chicken.",
-          "Return to the oven for 12 to 13 minutes until the chicken reaches 175F internally and the potatoes are fork-tender with crispy golden edges."
-        ],
-        storeItems: [
-          { name: "Boneless Skinless Chicken Thighs (1 1/2 lb)", aisle: "Meat & Seafood", basePrice: 6.49, key: "chicken" },
-          { name: "Baby Gold Potatoes (1 1/2 lb bag)", aisle: "Produce", basePrice: 3.49, key: "potatoes" },
-          { name: "Fresh Broccoli Crowns (1 lb)", aisle: "Produce", basePrice: 2.29, key: "broccoli" }
-        ]
-      },
-      {
-        title: "One-Skillet Charred Pepper Beef & Black Bean Taco Rice",
-        prepTime: "10 mins",
-        cookTime: "22 mins",
-        equipmentNeeded: "Skillet / Frying Pan",
-        equipmentId: "skillet",
-        allergens: ["Dairy / Lactose"],
-        chefTip: "Toasting the uncooked rice in the rendered beef drippings and spices for 60 seconds before pouring in the broth keeps every grain separate.",
-        ingredients: [
-          "1 lb lean ground beef (85/15)",
-          "1 medium yellow onion, finely diced (about 1 cup)",
-          "2 bell peppers (1 red, 1 green), cored and diced into 1/2-inch pieces",
-          "1 cup long-grain white or jasmine rice, uncooked",
-          "1 can (15 oz) black beans, rinsed and drained",
-          "1 cup chunky restaurant-style salsa",
-          "1 3/4 cups low-sodium chicken or beef broth",
-          "1 tbsp chili powder",
-          "1 1/2 tsp ground cumin",
-          "1 tsp smoked paprika",
-          "1 tsp garlic powder",
-          "1 tsp kosher salt & 1/2 tsp black pepper",
-          "1 cup (4 oz) sharp cheddar cheese, shredded"
-        ],
-        steps: [
-          "Heat a 12-inch deep skillet over medium-high heat. Add the ground beef and diced yellow onion, breaking the meat apart with a wooden spoon, and cook for 6 to 7 minutes until browned.",
-          "Add the diced bell peppers, 1 tbsp chili powder, 1 1/2 tsp cumin, 1 tsp smoked paprika, 1 tsp garlic powder, 1 tsp salt, and 1/2 tsp black pepper. Saute for 2 minutes until fragrant.",
-          "Pour in the 1 cup uncooked rice and stir constantly for 1 minute to coat the grains in the seasoned oil.",
-          "Stir in the drained black beans, 1 cup salsa, and 1 3/4 cups broth. Bring to a boil, then immediately reduce burner heat to low and cover tightly with a lid.",
-          "Simmer undisturbed for 15 minutes until the rice is tender. Turn off the heat, scatter the 1 cup shredded cheddar across the top, cover for 2 minutes until melted, and serve."
-        ],
-        storeItems: [
-          { name: "Lean Ground Beef 85/15 (1 lb)", aisle: "Meat & Seafood", basePrice: 5.99, key: "ground beef" },
-          { name: "Canned Black Beans (15 oz)", aisle: "Pantry", basePrice: 1.29, key: "beans" },
-          { name: "Chunky Restaurant Salsa (16 oz jar)", aisle: "Pantry", basePrice: 2.99, key: "tomatoes" },
-          { name: "Sharp Cheddar Cheese Shredded (8 oz)", aisle: "Dairy & Eggs", basePrice: 2.79, key: "cheddar cheese" },
-          { name: "Green & Red Bell Peppers (2 ct)", aisle: "Produce", basePrice: 2.50, key: "bell peppers" }
-        ]
-      },
-      {
-        title: "Creamy Tuscan Garlic Spinach & Browned Italian Sausage Rigatoni",
-        prepTime: "10 mins",
-        cookTime: "20 mins",
-        equipmentNeeded: "Skillet / Frying Pan",
-        equipmentId: "skillet",
-        allergens: ["Gluten / Wheat", "Dairy / Lactose"],
-        chefTip: "Save 1/2 cup of starchy pasta boiling water before draining—splashing it into the tomato-garlic sauce makes it cling to the rigatoni.",
-        ingredients: [
-          "1 lb mild or hot Italian dinner sausage, casings removed",
-          "3/4 lb (12 oz) rigatoni or penne pasta (about 3 1/2 cups dry)",
-          "1 tbsp olive oil",
-          "1 small yellow onion, finely chopped",
-          "4 cloves garlic, minced (or 1 1/2 tsp garlic powder)",
-          "1 can (28 oz) crushed San Marzano-style tomatoes",
-          "1 1/2 tsp dried Italian seasoning",
-          "1 tsp kosher salt & 1/2 tsp black pepper",
-          "1 tsp granulated sugar (to balance tomato acidity)",
-          "4 oz fresh baby spinach (about 4 packed cups)",
-          "3 tbsp butter"
-        ],
-        steps: [
-          "Bring a large pot of salted water to a rolling boil. Add the 3/4 lb pasta and cook 1 minute shy of package directions. Reserve 1/2 cup pasta water, then drain.",
-          "Warm 1 tbsp olive oil in a large skillet over medium-high heat. Add the Italian sausage and press flat; sear undisturbed for 3 minutes to develop a brown crust, then crumble and cook 4 minutes more.",
-          "Add the chopped onion and saute for 3 minutes until translucent. Add the minced garlic and 1 1/2 tsp Italian seasoning; stir for 45 seconds.",
-          "Pour in the 28 oz crushed tomatoes, 1 tsp sugar, 1 tsp salt, and 1/2 tsp black pepper. Reduce heat to medium-low and simmer gently for 8 minutes.",
-          "Swirl in 3 tbsp butter and fold in the drained pasta and 4 cups fresh baby spinach, adding splashes of reserved pasta water as needed, tossing for 2 minutes until the spinach wilts."
-        ],
-        storeItems: [
-          { name: "Mild Italian Dinner Sausage (1 lb)", aisle: "Meat & Seafood", basePrice: 4.99, key: "sausage" },
-          { name: "Penne or Rigatoni Pasta (16 oz box)", aisle: "Pantry", basePrice: 1.49, key: "pasta" },
-          { name: "Fresh Baby Spinach (8 oz bag)", aisle: "Produce", basePrice: 2.49, key: "spinach" },
-          { name: "Crushed Tomatoes (28 oz can)", aisle: "Pantry", basePrice: 1.89, key: "crushed tomatoes" }
-        ]
-      },
-      {
-        title: "Sticky Honey-Soy Ginger Glazed Salmon & Caramelized Carrots",
-        prepTime: "10 mins",
-        cookTime: "22 mins",
-        equipmentNeeded: "Oven & Sheet Pan",
-        equipmentId: "sheet_pan",
-        allergens: ["Fish", "Soy"],
-        chefTip: "Roasting the carrots for 12 minutes before putting the salmon on the sheet pan ensures the carrots caramelize without overcooking the fish.",
-        ingredients: [
-          "3/4 lb salmon fillets (2 fillets, 6 oz each), skin-on",
-          "1 lb whole carrots, peeled and sliced on a diagonal into 1/2-inch coins",
-          "1 cup dry jasmine rice (cooked with 1 3/4 cups water)",
-          "1 1/2 tbsp olive oil",
-          "3 tbsp low-sodium soy sauce",
-          "2 tbsp honey",
-          "1 tsp rice vinegar or apple cider vinegar",
-          "3 cloves garlic, finely minced",
-          "1/2 tsp kosher salt & 1/2 tsp black pepper"
-        ],
-        steps: [
-          "Preheat oven to 400F. Rinse 1 cup jasmine rice in cold water until clear, then simmer in a covered pot or rice cooker with 1 3/4 cups water and a pinch of salt for 15 minutes.",
-          "Toss the sliced carrots on a rimmed sheet pan with 1 1/2 tbsp olive oil, 1/2 tsp kosher salt, and 1/4 tsp black pepper. Roast for 12 minutes.",
-          "Meanwhile, whisk together 3 tbsp soy sauce, 2 tbsp honey, 1 tsp vinegar, and 3 cloves minced garlic in a small bowl.",
-          "Push the par-roasted carrots to the outer edges of the pan. Place the salmon fillets skin-side down in the center and spoon half of the honey-garlic glaze over the fish.",
-          "Roast for 10 to 12 minutes until the salmon flakes easily with a fork (135F internal). Brush with the remaining glaze and serve over warm jasmine rice."
-        ],
-        storeItems: [
-          { name: "Atlantic or Coho Salmon Portions (3/4 lb)", aisle: "Meat & Seafood", basePrice: 8.99, key: "salmon" },
-          { name: "Whole Carrots (2 lb bag)", aisle: "Produce", basePrice: 1.99, key: "carrots" },
-          { name: "Jasmine Rice (2 lb bag)", aisle: "Pantry", basePrice: 3.29, key: "rice" }
-        ]
-      },
-      {
-        title: "Wok-Style Golden Garlic Egg & Crisp Vegetable Fried Rice",
-        prepTime: "10 mins",
-        cookTime: "15 mins",
-        equipmentNeeded: "Skillet / Frying Pan",
-        equipmentId: "skillet",
-        allergens: ["Eggs", "Soy"],
-        chefTip: "Spread freshly cooked rice on a flat plate in the freezer for 10 minutes before stir-frying—the dry surface prevents steaming and gives you toasted grains.",
-        ingredients: [
-          "3 cups cooked jasmine or long-grain rice, chilled",
-          "4 large eggs, lightly beaten with a pinch of salt",
-          "1 1/2 cups frozen peas and diced carrots, thawed",
-          "1 medium yellow onion, finely diced",
-          "1 bunch green onions, thinly sliced (whites and greens separated)",
-          "2 1/2 tbsp cooking oil, divided",
-          "3 cloves garlic, finely minced",
-          "2 1/2 tbsp soy sauce",
-          "1 tsp sugar & 1/2 tsp freshly ground black pepper"
-        ],
-        steps: [
-          "Heat 1 tbsp oil in a large wide skillet over medium-high heat. Pour in the 4 beaten eggs and scramble gently for 60 to 90 seconds into soft curds; transfer to a plate.",
-          "Add the remaining 1 1/2 tbsp oil to the hot skillet. Add the diced yellow onion and white parts of the green onions; stir-fry for 3 minutes until edges are golden.",
-          "Toss in the minced garlic and thawed peas and carrots; stir-fry for 2 minutes until bright and hot.",
-          "Add the 3 cups chilled rice to the skillet, pressing it flat against the hot pan for 30 seconds at a time between tosses so the grains toast.",
-          "Drizzle the 2 1/2 tbsp soy sauce, 1 tsp sugar, and 1/2 tsp black pepper around the perimeter of the hot pan, then fold in the scrambled eggs and green onion tops."
-        ],
-        storeItems: [
-          { name: "Large Grade A Eggs (12 ct)", aisle: "Dairy & Eggs", basePrice: 3.29, key: "eggs" },
-          { name: "Frozen Peas & Carrots (12 oz bag)", aisle: "Frozen", basePrice: 1.79, key: "carrots" },
-          { name: "Yellow Onions (3 lb bag)", aisle: "Produce", basePrice: 2.99, key: "onions" },
-          { name: "Fresh Green Onions (1 bunch)", aisle: "Produce", basePrice: 0.99, key: "green onions" }
-        ]
-      },
-      {
-        title: "Smoky Chipotle Chicken Fajita Skillet with Charred Onions & Peppers",
-        prepTime: "12 mins",
-        cookTime: "18 mins",
-        equipmentNeeded: "Skillet / Frying Pan",
-        equipmentId: "skillet",
-        allergens: ["Gluten / Wheat"],
-        chefTip: "Slice your chicken breast against the grain into uniform 1/2-inch strips and sear in a hot pan without crowding so the strips char.",
-        ingredients: [
-          "1 1/4 lbs boneless skinless chicken breast, sliced into 1/2-inch strips",
-          "2 bell peppers, sliced into thin strips",
-          "1 large yellow onion, halved and thinly sliced into half-moons",
-          "8 fajita-size flour or corn tortillas, warmed",
-          "2 tbsp cooking oil, divided",
-          "2 tsp chili powder",
-          "1 1/2 tsp ground cumin",
-          "1 tsp smoked paprika",
-          "1 tsp garlic powder",
-          "1 1/4 tsp kosher salt & 1/2 tsp black pepper",
-          "1 tbsp vinegar or fresh lime juice"
-        ],
-        steps: [
-          "In a small bowl, mix the spice rub: 2 tsp chili powder, 1 1/2 tsp ground cumin, 1 tsp smoked paprika, 1 tsp garlic powder, 1 1/4 tsp salt, and 1/2 tsp black pepper.",
-          "Toss the sliced chicken strips with 1 tbsp oil and two-thirds of the spice blend until evenly coated.",
-          "Heat a heavy skillet over high heat. Add 1 tbsp oil, the sliced bell peppers, sliced onion, and the remaining spice blend; sear for 5 to 6 minutes until blistered on the edges. Transfer veggies to a plate.",
-          "Add the seasoned chicken strips to the same hot skillet in a single layer. Sear undisturbed for 3 minutes, then toss and cook 2 to 3 minutes more until cooked through (165F).",
-          "Return the charred peppers and onions to the skillet, splash with 1 tbsp vinegar or lime juice, toss together for 30 seconds, and serve in warm tortillas."
-        ],
-        storeItems: [
-          { name: "Boneless Skinless Chicken Breast (1 1/4 lb)", aisle: "Meat & Seafood", basePrice: 6.99, key: "chicken breast" },
-          { name: "Green & Red Bell Peppers (2 ct)", aisle: "Produce", basePrice: 2.50, key: "bell peppers" },
-          { name: "Soft Taco Flour Tortillas (10 ct)", aisle: "Pantry", basePrice: 2.49, key: "tortillas" }
-        ]
+        title: "Crispy Sheet-Pan Garlic Herb Chicken Thighs & Baby Gold Potatoes", prepTime: "10 mins", cookTime: "28 mins", equipmentNeeded: "Oven & Sheet Pan", equipmentId: "sheet_pan", allergens: [],
+        chefTip: "Patting the chicken completely dry before rubbing with oil and spices is the secret to blistered, crispy edges.",
+        ingredients: [ "1 1/2 lbs boneless skinless chicken thighs", "1 1/2 lbs baby gold potatoes, halved", "1 lb fresh broccoli crowns", "2 1/2 tbsp extra-virgin olive oil", "1 1/2 tsp dried Italian seasoning", "1 tsp smoked paprika", "1 1/4 tsp kosher salt", "1/2 tsp black pepper" ],
+        steps: [ "Preheat to 425F. Toss potatoes with 1 tbsp oil, 1/2 tsp Italian seasoning, 1/2 tsp salt, and 1/4 tsp pepper.", "Pat chicken dry. Rub with 1 tbsp oil, 1 tsp Italian seasoning, 1 tsp smoked paprika, 1/2 tsp salt, 1/4 tsp pepper.", "Roast 15 mins. Toss broccoli with remaining oil/salt, add to pan.", "Roast 12-13 mins until chicken is 175F and potatoes are tender." ],
+        storeItems: [ { name: "Chicken Thighs (1 1/2 lb)", aisle: "Meat & Seafood", basePrice: 6.49 }, { name: "Baby Gold Potatoes (1 1/2 lb)", aisle: "Produce", basePrice: 3.49 } ]
       }
     ];
 
@@ -738,23 +629,23 @@
     window.createDefaultProfile = function (region, displayName) {
       var r = pickVal(region, "reston");
       var d = pickVal(displayName, "Friend");
-      return {
-        displayName: d,
-        region: r,
+      var state = {
+        displayName: d, region: r,
         selectedStoreId: r === "reston" ? "ht_reston_spectrum" : "fm_beaverton",
-        weeklyBudget: 125,
-        mealsCount: 5,
-        servingsCount: 2,
+        weeklyBudget: 125, mealsCount: 5, servingsCount: 2,
         fridgeItems: ["Eggs", "Yellow Onions", "Rice"],
+        harvestItems: [], preserveItem: "",
         equipment: ["skillet", "sheet_pan", "pot", "microwave"],
-        allergies: [],
-        preferences: ["Quick (Under 30 Mins)", "High Protein"],
-        staples: STAPLE_OPTIONS.slice(),
-        allStaples: STAPLE_OPTIONS.slice(),
-        cravingPrompt: "",
-        currentPlan: null,
+        allergies: [], preferences: ["Quick (Under 30 Mins)", "High Protein"],
+        allStaples: STAPLE_OPTIONS.slice(), allSpices: SPICE_RACK_OPTIONS.slice(),
+        itemStatus: {}, favoriteRecipes: [], bannedItems: [],
+        weekendProject: false, cravingPrompt: "", currentPlan: null,
         updatedAt: new Date().toISOString()
       };
+      // Default built-ins to active
+      STAPLE_OPTIONS.forEach(function(i){ state.itemStatus[i] = 'active'; });
+      SPICE_RACK_OPTIONS.forEach(function(i){ state.itemStatus[i] = 'active'; });
+      return state;
     };
 
     window.profileState = window.createDefaultProfile("reston", "Friend");
@@ -768,18 +659,13 @@
       var submitBtn = document.getElementById("authSubmitBtn");
       var errorBox = document.getElementById("authErrorBox");
       if (errorBox) errorBox.classList.add("hidden");
-
       if (mode === "signup") {
-        signupBtn.className = "mode-btn active";
-        loginBtn.className = "mode-btn";
-        nameGroup.classList.remove("hidden");
-        regionGroup.classList.remove("hidden");
+        signupBtn.className = "mode-btn active"; loginBtn.className = "mode-btn";
+        nameGroup.classList.remove("hidden"); regionGroup.classList.remove("hidden");
         submitBtn.textContent = "Create My Personal Profile →";
       } else {
-        loginBtn.className = "mode-btn active";
-        signupBtn.className = "mode-btn";
-        nameGroup.classList.add("hidden");
-        regionGroup.classList.add("hidden");
+        loginBtn.className = "mode-btn active"; signupBtn.className = "mode-btn";
+        nameGroup.classList.add("hidden"); regionGroup.classList.add("hidden");
         submitBtn.textContent = "Sign In to My Kitchen →";
       }
     };
@@ -787,24 +673,19 @@
     function usernameToEmail(usernameInput) {
       var cleaned = usernameInput.trim().toLowerCase().replace(/[^a-z0-9._-]/g, "");
       if (usernameInput.indexOf("@") !== -1) return usernameInput.trim();
-      var base = pickVal(cleaned, "user");
-      return base + "@kitchenplanner.app";
+      return pickVal(cleaned, "user") + "@kitchenplanner.app";
     }
 
     window.handleAuthSubmit = async function (event) {
       event.preventDefault();
       var rawUsername = document.getElementById("authUsername").value.trim();
       var password = document.getElementById("authPassword").value;
-      var rawDisplay = document.getElementById("authDisplayName").value.trim();
-      var displayName = pickVal(rawDisplay, rawUsername);
+      var displayName = pickVal(document.getElementById("authDisplayName").value.trim(), rawUsername);
       var regionPreset = pickVal(document.getElementById("authRegionPreset").value, "reston");
       var errorBox = document.getElementById("authErrorBox");
       var submitBtn = document.getElementById("authSubmitBtn");
 
-      errorBox.classList.add("hidden");
-      submitBtn.textContent = "Loading Your Kitchen...";
-      submitBtn.disabled = true;
-
+      errorBox.classList.add("hidden"); submitBtn.textContent = "Loading Your Kitchen..."; submitBtn.disabled = true;
       var cleanUsername = rawUsername.toLowerCase().replace(/\s+/g, "_");
 
       try {
@@ -815,50 +696,34 @@
             await window.fbApi.updateProfile(cred.user, { displayName: displayName });
             window.profileState = window.createDefaultProfile(regionPreset, displayName);
             window.currentUser = { uid: cred.user.uid, username: cleanUsername, displayName: displayName, isLocal: false };
-            window.saveUserProfile();
-            window.enterWorkspace();
+            window.saveUserProfile(); window.enterWorkspace();
           } else {
             await window.fbApi.signInWithEmailAndPassword(window.fbApi.auth, email, password);
           }
         } else {
-          var savedRaw = pickVal(localStorage.getItem("smartcart_local_accounts"), "{}");
-          var accounts = JSON.parse(savedRaw);
+          var accounts = JSON.parse(pickVal(localStorage.getItem("smartcart_local_accounts"), "{}"));
           if (window.authMode === "signup") {
             accounts[cleanUsername] = { password: password, displayName: displayName, region: regionPreset };
             localStorage.setItem("smartcart_local_accounts", JSON.stringify(accounts));
             window.profileState = window.createDefaultProfile(regionPreset, displayName);
             window.currentUser = { uid: "local_" + cleanUsername, username: cleanUsername, displayName: displayName, isLocal: true };
             localStorage.setItem("smartcart_active_local_user", JSON.stringify(window.currentUser));
-            window.saveUserProfile();
-            window.enterWorkspace();
+            window.saveUserProfile(); window.enterWorkspace();
           } else {
             var acct = accounts[cleanUsername];
-            if (!acct) {
-              throw new Error("Account not found. Tap 'Create New Profile' above to create your account!");
-            }
-            if (acct.password !== password) {
-              throw new Error("Incorrect password. Please try again.");
-            }
+            if (!acct) throw new Error("Account not found. Tap 'Create New Profile' above.");
+            if (acct.password !== password) throw new Error("Incorrect password. Please try again.");
             window.currentUser = { uid: "local_" + cleanUsername, username: cleanUsername, displayName: pickVal(acct.displayName, cleanUsername), isLocal: true };
             localStorage.setItem("smartcart_active_local_user", JSON.stringify(window.currentUser));
-            await window.loadUserProfile();
-            window.enterWorkspace();
+            await window.loadUserProfile(); window.enterWorkspace();
           }
         }
       } catch (err) {
         var msg = err.message ? err.message.replace("Firebase: ", "") : "Unable to sign in.";
-        if (msg.indexOf("auth/unauthorized-domain") !== -1) {
-          msg = "Domain not authorized in Firebase yet: Go to Firebase Console -> Authentication -> Settings -> Authorized domains -> Add nategraves29.github.io";
-        } else if (msg.indexOf("auth/operation-not-allowed") !== -1) {
-          msg = "Email/Password sign-in is turned off in Firebase: Go to Firebase Console -> Authentication -> Sign-in method -> Enable Email/Password.";
-        } else if (msg.indexOf("requests-from-referer") !== -1) {
-          msg = "API Key Website Restriction blocked this URL: Make sure https://nategraves29.github.io/* (with the asterisk) is saved in Google Cloud Credentials.";
-        }
-        errorBox.textContent = msg;
-        errorBox.classList.remove("hidden");
+        if (msg.indexOf("auth/unauthorized-domain") !== -1) msg = "Domain not authorized in Firebase yet. Add nategraves29.github.io to Authorized domains.";
+        errorBox.textContent = msg; errorBox.classList.remove("hidden");
       } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = window.authMode === "signup" ? "Create My Personal Profile →" : "Sign In to My Kitchen →";
+        submitBtn.disabled = false; submitBtn.textContent = window.authMode === "signup" ? "Create My Personal Profile →" : "Sign In to My Kitchen →";
       }
     };
 
@@ -870,63 +735,36 @@
     };
 
     window.handleLogout = async function () {
-      if (window.fbApi && window.fbApi.auth && window.currentUser && !window.currentUser.isLocal) {
-        await window.fbApi.signOut(window.fbApi.auth);
-      }
-      localStorage.removeItem("smartcart_active_local_user");
-      window.currentUser = null;
-      document.getElementById("appWorkspace").classList.add("hidden");
-      document.getElementById("userHeaderBar").classList.add("hidden");
-      document.getElementById("authScreen").classList.remove("hidden");
+      if (window.fbApi && window.fbApi.auth && window.currentUser && !window.currentUser.isLocal) { await window.fbApi.signOut(window.fbApi.auth); }
+      localStorage.removeItem("smartcart_active_local_user"); window.currentUser = null;
+      document.getElementById("appWorkspace").classList.add("hidden"); document.getElementById("userHeaderBar").classList.add("hidden"); document.getElementById("authScreen").classList.remove("hidden");
     };
 
-    function ensureAllStaplesMerged() {
-      var master = window.profileState.allStaples ? window.profileState.allStaples.slice() : STAPLE_OPTIONS.slice();
-      STAPLE_OPTIONS.forEach(function (st) {
-        if (master.indexOf(st) === -1) master.push(st);
-      });
-      var currentActive = window.profileState.staples ? window.profileState.staples : [];
-      currentActive.forEach(function (st) {
-        if (master.indexOf(st) === -1) master.push(st);
-      });
-      window.profileState.allStaples = master;
+    function ensureStatusMigrated() {
+      if(!window.profileState.itemStatus) window.profileState.itemStatus = {};
+      if(!window.profileState.allStaples) window.profileState.allStaples = STAPLE_OPTIONS.slice();
+      if(!window.profileState.allSpices) window.profileState.allSpices = SPICE_RACK_OPTIONS.slice();
     }
 
     window.loadUserProfile = async function (defaultRegion, defaultName) {
       if (!window.currentUser) return;
-      var r = pickVal(defaultRegion, "reston");
-      var d = pickVal(defaultName, "Friend");
-      var localKey = "smartcart_profile_" + window.currentUser.uid;
-
+      var r = pickVal(defaultRegion, "reston"), d = pickVal(defaultName, "Friend"), localKey = "smartcart_profile_" + window.currentUser.uid;
       var savedLocal = localStorage.getItem(localKey);
       if (savedLocal) {
-        try {
-          window.profileState = Object.assign(window.createDefaultProfile(r, d), JSON.parse(savedLocal));
-        } catch (e) {
-          window.profileState = window.createDefaultProfile(r, d);
-        }
-      } else {
-        window.profileState = window.createDefaultProfile(r, pickVal(window.currentUser.displayName, d));
-      }
+        try { window.profileState = Object.assign(window.createDefaultProfile(r, d), JSON.parse(savedLocal)); } catch (e) { window.profileState = window.createDefaultProfile(r, d); }
+      } else { window.profileState = window.createDefaultProfile(r, pickVal(window.currentUser.displayName, d)); }
 
       if (window.fbApi && window.fbApi.db && !window.currentUser.isLocal) {
         try {
-          var timeoutPromise = new Promise(function (_, reject) {
-            setTimeout(function () { reject(new Error("Firestore read timeout")); }, 2500);
-          });
-          var snap = await Promise.race([
-            window.fbApi.getDoc(window.fbApi.doc(window.fbApi.db, "users", window.currentUser.uid)),
-            timeoutPromise
-          ]);
+          var timeoutPromise = new Promise(function (_, reject) { setTimeout(function () { reject(new Error("Firestore timeout")); }, 2500); });
+          var snap = await Promise.race([ window.fbApi.getDoc(window.fbApi.doc(window.fbApi.db, "users", window.currentUser.uid)), timeoutPromise ]);
           if (snap && snap.exists()) {
             window.profileState = Object.assign(window.createDefaultProfile(r, d), snap.data());
             localStorage.setItem(localKey, JSON.stringify(window.profileState));
           }
-        } catch (e) {
-          console.warn("Using local profile cache:", e.message);
-        }
+        } catch (e) {}
       }
-      ensureAllStaplesMerged();
+      ensureStatusMigrated();
     };
 
     window.saveUserProfile = function () {
@@ -934,63 +772,39 @@
       window.profileState.updatedAt = new Date().toISOString();
       var localKey = "smartcart_profile_" + window.currentUser.uid;
       localStorage.setItem(localKey, JSON.stringify(window.profileState));
-
-      var badge = document.getElementById("syncBadge");
-      if (badge) badge.textContent = "• Saved";
-
+      var badge = document.getElementById("syncBadge"); if (badge) badge.textContent = "• Saved";
       if (window.fbApi && window.fbApi.db && !window.currentUser.isLocal) {
-        window.fbApi.setDoc(
-          window.fbApi.doc(window.fbApi.db, "users", window.currentUser.uid),
-          window.profileState,
-          { merge: true }
-        ).catch(function (e) {
-          console.warn("Background Firestore sync notice:", e.message);
-        });
+        window.fbApi.setDoc(window.fbApi.doc(window.fbApi.db, "users", window.currentUser.uid), window.profileState, { merge: true }).catch(function(){});
       }
       return Promise.resolve();
     };
 
     window.enterWorkspace = function () {
-      document.getElementById("authScreen").classList.add("hidden");
-      document.getElementById("appWorkspace").classList.remove("hidden");
-      document.getElementById("userHeaderBar").classList.remove("hidden");
-
+      document.getElementById("authScreen").classList.add("hidden"); document.getElementById("appWorkspace").classList.remove("hidden"); document.getElementById("userHeaderBar").classList.remove("hidden");
       var name = pickVal(window.profileState.displayName, pickVal(window.currentUser.displayName, window.currentUser.username));
-      document.getElementById("headerUsername").textContent = name;
-      document.getElementById("welcomeHeadline").textContent = name + "'s Kitchen & Grocery Planner";
-
+      document.getElementById("headerUsername").textContent = name; document.getElementById("welcomeHeadline").textContent = name + "'s Kitchen & Grocery Planner";
       window.renderAllSteps();
-      if (window.profileState.currentPlan && window.profileState.currentPlan.recipes) {
-        window.renderPlanResults(window.profileState.currentPlan);
-      } else {
-        window.generateWeeklyMealPlan(true);
-      }
+      if (window.profileState.currentPlan && window.profileState.currentPlan.recipes) { window.renderPlanResults(window.profileState.currentPlan); } else { window.generateWeeklyMealPlan(true, false); }
       window.goToStep(1);
     };
 
     window.goToStep = function (stepNumber) {
       [1, 2, 3].forEach(function (n) {
-        var panel = document.getElementById("stepPanel" + n);
-        var btn = document.getElementById("stepBtn" + n);
-        if (n === stepNumber) {
-          panel.classList.remove("hidden");
-          btn.className = "step-tab active";
-        } else {
-          panel.classList.add("hidden");
-          btn.className = "step-tab";
-        }
+        var panel = document.getElementById("stepPanel" + n), btn = document.getElementById("stepBtn" + n);
+        if (n === stepNumber) { panel.classList.remove("hidden"); btn.className = "step-tab active"; } 
+        else { panel.classList.add("hidden"); btn.className = "step-tab"; }
       });
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     window.updateCravingPrompt = function (val) {
       window.profileState.cravingPrompt = val;
-      var box1 = document.getElementById("cravingInputStep1");
-      var box3 = document.getElementById("cravingInputStep3");
-      if (box1 && box1.value !== val) box1.value = val;
-      if (box3 && box3.value !== val) box3.value = val;
+      var box1 = document.getElementById("cravingInputStep1"); var box3 = document.getElementById("cravingInputStep3");
+      if (box1 && box1.value !== val) box1.value = val; if (box3 && box3.value !== val) box3.value = val;
       window.saveUserProfile();
     };
+    window.updatePreservePrompt = function (val) { window.profileState.preserveItem = val; window.saveUserProfile(); };
+    window.updateWeekendToggle = function (val) { window.profileState.weekendProject = val; window.saveUserProfile(); };
 
     window.renderAllSteps = function () {
       document.getElementById("bannerBudgetDisplay").textContent = window.CURRENCY_SIGN + window.profileState.weeklyBudget;
@@ -998,18 +812,32 @@
       document.getElementById("budgetRangeInput").value = window.profileState.weeklyBudget;
       document.getElementById("mealsCountDisplay").textContent = window.profileState.mealsCount;
       document.getElementById("servingsCountDisplay").textContent = window.profileState.servingsCount;
-
+      
       var cravingVal = pickVal(window.profileState.cravingPrompt, "");
-      var box1 = document.getElementById("cravingInputStep1");
-      var box3 = document.getElementById("cravingInputStep3");
-      if (box1) box1.value = cravingVal;
-      if (box3) box3.value = cravingVal;
+      var box1 = document.getElementById("cravingInputStep1"), box3 = document.getElementById("cravingInputStep3");
+      if (box1) box1.value = cravingVal; if (box3) box3.value = cravingVal;
+      
+      var pBox = document.getElementById("preserveInput"); if (pBox) pBox.value = pickVal(window.profileState.preserveItem, "");
+      var wBox = document.getElementById("weekendProjectToggle"); if (wBox) wBox.checked = Boolean(window.profileState.weekendProject);
 
-      window.renderFridgeSection();
-      window.renderEquipmentGrid();
-      window.renderAllergiesAndPrefs();
-      window.renderStaplesGrid();
+      window.renderFridgeSection(); window.renderEquipmentGrid(); window.renderAllergiesAndPrefs(); window.renderStaplesGrid(); window.renderSpiceGrid(); window.renderFavoritesVault();
       window.filterStoresByRegion(pickVal(window.profileState.region, "reston"));
+    };
+
+    window.renderFavoritesVault = function() {
+      var favs = window.profileState.favoriteRecipes ? window.profileState.favoriteRecipes : [];
+      var container = document.getElementById("favoritesVaultGrid");
+      if (!container) return;
+      if (favs.length === 0) container.innerHTML = '<span style="font-size:13px; color:#A8A29E; font-style:italic;">No favorites saved yet. Click the 🤍 on any recipe to save it here!</span>';
+      else container.innerHTML = favs.map(function(f, i) { return '<span style="display:inline-flex; align-items:center; gap:6px; background:#FFE4E6; border:1px solid #FECDD3; color:#BE123C; padding:6px 12px; border-radius:999px; font-size:13px; font-weight:700;">' + f.title.replace(/'/g, "") + '<button type="button" onclick="window.removeFavoriteRecipe(' + i + ')" style="color:#BE123C; font-weight:800; margin-left:4px;">✕</button></span>'; }).join("");
+    };
+
+    window.removeFavoriteRecipe = function(index) {
+      if (window.profileState.favoriteRecipes) {
+        window.profileState.favoriteRecipes.splice(index, 1);
+        window.saveUserProfile(); window.renderFavoritesVault();
+        if (window.profileState.currentPlan) window.renderPlanResults(window.profileState.currentPlan);
+      }
     };
 
     window.renderFridgeSection = function () {
@@ -1020,180 +848,140 @@
       }).join("");
 
       var activeList = document.getElementById("activeFridgeList");
-      if (window.profileState.fridgeItems.length === 0) {
-        activeList.innerHTML = '<span style="font-size:13px; color:#A8A29E; font-style:italic;">No fridge items selected yet — tap any item above or type one in!</span>';
-      } else {
-        activeList.innerHTML = window.profileState.fridgeItems.map(function (item) {
-          var safeItem = item.replace(/'/g, "");
-          return '<span style="display:inline-flex; align-items:center; gap:6px; background:#FEF3C7; border:1px solid #FCD34D; color:#92400E; padding:6px 12px; border-radius:999px; font-size:13px; font-weight:700;">' +
-            item +
-            '<button type="button" onclick="window.toggleArrayItem(\'fridgeItems\', \'' + safeItem + '\')" style="color:#92400E; font-weight:800; margin-left:4px;">✕</button></span>';
-        }).join("");
-      }
+      if (!window.profileState.fridgeItems || window.profileState.fridgeItems.length === 0) activeList.innerHTML = '<span style="font-size:13px; color:#A8A29E; font-style:italic;">No fridge items selected yet — tap any item above or type one in!</span>';
+      else activeList.innerHTML = window.profileState.fridgeItems.map(function (item) { return '<span style="display:inline-flex; align-items:center; gap:6px; background:#FEF3C7; border:1px solid #FCD34D; color:#92400E; padding:6px 12px; border-radius:999px; font-size:13px; font-weight:700;">' + item + '<button type="button" onclick="window.toggleArrayItem(\'fridgeItems\', \'' + item.replace(/'/g, "\\'") + '\')" style="color:#92400E; font-weight:800; margin-left:4px;">✕</button></span>'; }).join("");
+
+      var harvestList = document.getElementById("activeHarvestList");
+      var hasHarvest = window.profileState.harvestItems && window.profileState.harvestItems.length > 0;
+      if (!hasHarvest) harvestList.innerHTML = '<span style="font-size:13px; color:#A8A29E; font-style:italic;">No freshly picked items.</span>';
+      else harvestList.innerHTML = window.profileState.harvestItems.map(function (item) { return '<span style="display:inline-flex; align-items:center; gap:6px; background:#DCFCE7; border:1px solid #BBF7D0; color:#166534; padding:6px 12px; border-radius:999px; font-size:13px; font-weight:700;">' + item + '<button type="button" onclick="window.toggleArrayItem(\'harvestItems\', \'' + item.replace(/'/g, "\\'") + '\')" style="color:#166534; font-weight:800; margin-left:4px;">✕</button></span>'; }).join("");
     };
 
-    window.addCustomFridgeItem = function () {
-      var input = document.getElementById("customFridgeInput");
-      var val = input.value.trim().replace(/'/g, "");
+    window.addCustomItem = function (stateKey, inputId) {
+      var input = document.getElementById(inputId), val = input.value.trim().replace(/'/g, "");
       if (!val) return;
-      if (window.profileState.fridgeItems.indexOf(val) === -1) {
-        window.profileState.fridgeItems.push(val);
-        window.saveUserProfile();
-        window.renderFridgeSection();
+      if (!window.profileState[stateKey]) window.profileState[stateKey] = [];
+      if (window.profileState[stateKey].indexOf(val) === -1) {
+        window.profileState[stateKey].push(val);
+        window.saveUserProfile(); window.renderFridgeSection();
       }
       input.value = "";
     };
 
     window.renderEquipmentGrid = function () {
-      var grid = document.getElementById("equipmentGrid");
-      grid.innerHTML = EQUIPMENT_OPTIONS.map(function (eq) {
+      document.getElementById("equipmentGrid").innerHTML = EQUIPMENT_OPTIONS.map(function (eq) {
         var active = window.profileState.equipment.indexOf(eq.id) !== -1;
-        return '<button type="button" onclick="window.toggleArrayItem(\'equipment\', \'' + eq.id + '\')" class="equip-card ' + (active ? 'pill-active' : '') + '">' +
-          '<span style="font-size:22px;">' + eq.icon + '</span><span>' + eq.label + '</span></button>';
+        return '<button type="button" onclick="window.toggleArrayItem(\'equipment\', \'' + eq.id + '\')" class="equip-card ' + (active ? 'pill-active' : '') + '"><span style="font-size:22px;">' + eq.icon + '</span><span>' + eq.label + '</span></button>';
       }).join("");
     };
 
     window.renderAllergiesAndPrefs = function () {
-      document.getElementById("allergyGrid").innerHTML = ALLERGY_OPTIONS.map(function (al) {
-        var active = window.profileState.allergies.indexOf(al) !== -1;
-        return '<button type="button" onclick="window.toggleArrayItem(\'allergies\', \'' + al + '\')" class="pill-btn ' + (active ? 'pill-danger-active' : '') + '">' + al + (active ? ' ✕' : '') + '</button>';
-      }).join("");
+      document.getElementById("allergyGrid").innerHTML = ALLERGY_OPTIONS.map(function (al) { var active = window.profileState.allergies.indexOf(al) !== -1; return '<button type="button" onclick="window.toggleArrayItem(\'allergies\', \'' + al + '\')" class="pill-btn ' + (active ? 'pill-danger-active' : '') + '">' + al + (active ? ' ✕' : '') + '</button>'; }).join("");
+      document.getElementById("preferenceGrid").innerHTML = PREFERENCE_OPTIONS.map(function (pr) { var active = window.profileState.preferences.indexOf(pr) !== -1; return '<button type="button" onclick="window.toggleArrayItem(\'preferences\', \'' + pr + '\')" class="pill-btn ' + (active ? 'pill-active' : '') + '">' + pr + '</button>'; }).join("");
+    };
 
-      document.getElementById("preferenceGrid").innerHTML = PREFERENCE_OPTIONS.map(function (pr) {
-        var active = window.profileState.preferences.indexOf(pr) !== -1;
-        return '<button type="button" onclick="window.toggleArrayItem(\'preferences\', \'' + pr + '\')" class="pill-btn ' + (active ? 'pill-active' : '') + '">' + pr + '</button>';
-      }).join("");
+    window.cycleItemState = function(item, type) {
+      if(!window.profileState.itemStatus) window.profileState.itemStatus = {};
+      var current = pickVal(window.profileState.itemStatus[item], 'active');
+      if (current === 'active') window.profileState.itemStatus[item] = 'low';
+      else if (current === 'low') window.profileState.itemStatus[item] = 'out';
+      else window.profileState.itemStatus[item] = 'active';
+      window.saveUserProfile();
+      if (type === 'staples') window.renderStaplesGrid();
+      if (type === 'spices') window.renderSpiceGrid();
     };
 
     window.renderStaplesGrid = function () {
-      ensureAllStaplesMerged();
-      var masterList = window.profileState.allStaples;
-      document.getElementById("staplesGrid").innerHTML = masterList.map(function (st) {
-        var safeSt = st.replace(/'/g, "");
-        var active = window.profileState.staples.indexOf(st) !== -1;
-        return '<button type="button" onclick="window.toggleArrayItem(\'staples\', \'' + safeSt + '\')" class="pill-btn ' + (active ? 'pill-staple-active' : 'pill-staple-off') + '">' + (active ? '✓ ' : '') + st + '</button>';
+      ensureStatusMigrated();
+      document.getElementById("staplesGrid").innerHTML = window.profileState.allStaples.map(function (st) {
+        var status = pickVal(window.profileState.itemStatus[st], 'active');
+        var btnClass = "pill-btn ", icon = "";
+        if (status === 'active') { btnClass += "pill-active"; icon = "✓ "; } else if (status === 'low') { btnClass += "pill-low"; icon = "⚠️ "; } else { btnClass += "pill-out"; }
+        return '<button type="button" onclick="window.cycleItemState(\'' + st.replace(/'/g, "\\'") + '\', \'staples\')" class="' + btnClass + '">' + icon + st + '</button>';
       }).join("");
     };
 
-    window.addCustomStapleItem = function () {
-      var input = document.getElementById("customStapleInput");
-      var val = input.value.trim().replace(/'/g, "");
+    window.renderSpiceGrid = function () {
+      ensureStatusMigrated();
+      document.getElementById("spiceGrid").innerHTML = window.profileState.allSpices.map(function (sp) {
+        var status = pickVal(window.profileState.itemStatus[sp], 'active');
+        var btnClass = "pill-btn ", icon = "";
+        if (status === 'active') { btnClass += "pill-active"; icon = "✓ "; } else if (status === 'low') { btnClass += "pill-low"; icon = "⚠️ "; } else { btnClass += "pill-out"; }
+        return '<button type="button" onclick="window.cycleItemState(\'' + sp.replace(/'/g, "\\'") + '\', \'spices\')" class="' + btnClass + '">' + icon + sp + '</button>';
+      }).join("");
+    };
+
+    window.addCustomStatusItem = function (type, inputId) {
+      var input = document.getElementById(inputId), val = input.value.trim().replace(/'/g, "");
       if (!val) return;
-      ensureAllStaplesMerged();
-      if (window.profileState.allStaples.indexOf(val) === -1) {
-        window.profileState.allStaples.push(val);
-      }
-      if (window.profileState.staples.indexOf(val) === -1) {
-        window.profileState.staples.push(val);
-      }
+      ensureStatusMigrated();
+      var arrKey = type === 'staples' ? 'allStaples' : 'allSpices';
+      if (window.profileState[arrKey].indexOf(val) === -1) { window.profileState[arrKey].push(val); }
+      window.profileState.itemStatus[val] = 'active';
       window.saveUserProfile();
-      window.renderStaplesGrid();
+      if (type === 'staples') window.renderStaplesGrid(); else window.renderSpiceGrid();
       input.value = "";
     };
 
     window.toggleArrayItem = function (key, item) {
       var arr = window.profileState[key] ? window.profileState[key] : [];
       var idx = arr.indexOf(item);
-      if (idx > -1) arr.splice(idx, 1);
-      else arr.push(item);
+      if (idx > -1) arr.splice(idx, 1); else arr.push(item);
       window.profileState[key] = arr;
-      window.saveUserProfile();
-      window.renderAllSteps();
+      window.saveUserProfile(); window.renderAllSteps();
     };
 
     window.filterStoresByRegion = function (region) {
       window.profileState.region = region;
-      var btnReston = document.getElementById("regionBtnReston");
-      var btnPnw = document.getElementById("regionBtnPnw");
-
-      if (region === "reston") {
-        btnReston.className = "mode-btn active";
-        btnPnw.className = "mode-btn";
-      } else {
-        btnPnw.className = "mode-btn active";
-        btnReston.className = "mode-btn";
-      }
+      document.getElementById("regionBtnReston").className = region === "reston" ? "mode-btn active" : "mode-btn";
+      document.getElementById("regionBtnPnw").className = region === "pnw" ? "mode-btn active" : "mode-btn";
 
       var filtered = STORES.filter(function (s) { return s.region === region; });
-      if (!filtered.some(function (s) { return s.id === window.profileState.selectedStoreId; })) {
-        window.profileState.selectedStoreId = filtered[0].id;
-      }
+      if (!filtered.some(function (s) { return s.id === window.profileState.selectedStoreId; })) window.profileState.selectedStoreId = filtered[0].id;
 
-      var grid = document.getElementById("storeSelectionGrid");
-      grid.innerHTML = filtered.map(function (store) {
+      document.getElementById("storeSelectionGrid").innerHTML = filtered.map(function (store) {
         var active = store.id === window.profileState.selectedStoreId;
         return '<div onclick="window.selectStore(\'' + store.id + '\')" class="store-card ' + (active ? 'store-card-active' : '') + '">' +
-          '<div><div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:4px;">' +
-          '<span style="font-weight:800; font-size:16px;">' + store.name + '</span>' +
-          (active ? '<span style="font-size:11px; font-weight:800; background:#15803D; color:#FFF; padding:3px 10px; border-radius:999px;">Selected ✓</span>' : '') +
-          '</div><p style="font-size:12px; color:#78716C; margin-bottom:12px;">' + store.address + '</p></div>' +
-          '<div class="live-badge" style="width:fit-content; margin-bottom:0;">🏷️ ' + store.badge + '</div></div>';
+          '<div><div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:4px;"><span style="font-weight:800; font-size:16px;">' + store.name + '</span>' + (active ? '<span style="font-size:11px; font-weight:800; background:#15803D; color:#FFF; padding:3px 10px; border-radius:999px;">Selected ✓</span>' : '') + '</div><p style="font-size:12px; color:#78716C; margin-bottom:12px;">' + store.address + '</p></div><div class="live-badge" style="width:fit-content; margin-bottom:0;">🏷️ ' + store.badge + '</div></div>';
       }).join("");
     };
 
-    window.selectStore = function (storeId) {
-      window.profileState.selectedStoreId = storeId;
+    window.selectStore = function (storeId) { window.profileState.selectedStoreId = storeId; window.saveUserProfile(); window.filterStoresByRegion(window.profileState.region); };
+    window.updateBudgetValue = function (val) { window.profileState.weeklyBudget = Number(val); document.getElementById("budgetSliderLabel").textContent = window.CURRENCY_SIGN + val; document.getElementById("bannerBudgetDisplay").textContent = window.CURRENCY_SIGN + val; window.saveUserProfile(); };
+    window.adjustCount = function (field, delta) { var curr = window.profileState[field] ? window.profileState[field] : 2; var next = Math.max(1, Math.min(10, curr + delta)); window.profileState[field] = next; document.getElementById(field + "Display").textContent = next; window.saveUserProfile(); };
+
+    window.priceShockSwap = function(itemName) {
+      if(!window.profileState.bannedItems) window.profileState.bannedItems = [];
+      window.profileState.bannedItems.push(itemName);
       window.saveUserProfile();
-      window.filterStoresByRegion(window.profileState.region);
+      window.generateWeeklyMealPlan(false, false);
     };
 
-    window.updateBudgetValue = function (val) {
-      window.profileState.weeklyBudget = Number(val);
-      document.getElementById("budgetSliderLabel").textContent = window.CURRENCY_SIGN + val;
-      document.getElementById("bannerBudgetDisplay").textContent = window.CURRENCY_SIGN + val;
-      window.saveUserProfile();
-    };
-
-    window.adjustCount = function (field, delta) {
-      var curr = window.profileState[field] ? window.profileState[field] : 2;
-      var next = Math.max(1, Math.min(10, curr + delta));
-      window.profileState[field] = next;
-      document.getElementById(field + "Display").textContent = next;
-      window.saveUserProfile();
-    };
-
-    window.generateWeeklyMealPlan = async function (silent) {
-      var loadingCard = document.getElementById("planLoadingCard");
-      var resultsContainer = document.getElementById("planResultsContainer");
-      var noticeEl = document.getElementById("solverSourceNotice");
-
-      if (!silent) {
-        window.goToStep(3);
-        loadingCard.classList.remove("hidden");
-        resultsContainer.classList.add("hidden");
-      }
+    window.generateWeeklyMealPlan = async function (silent, isRemixMode) {
+      var loadingCard = document.getElementById("planLoadingCard"), resultsContainer = document.getElementById("planResultsContainer"), noticeEl = document.getElementById("solverSourceNotice");
+      if (!silent) { window.goToStep(3); loadingCard.classList.remove("hidden"); resultsContainer.classList.add("hidden"); }
 
       var foundStore = STORES.find(function (s) { return s.id === window.profileState.selectedStoreId; });
       var store = foundStore ? foundStore : STORES[0];
-      var plan = null;
-      var usedAi = false;
+      var plan = null; var usedAi = false;
 
       try {
         if (!silent) {
           try {
-            plan = await window.generatePlanWithGemini(store, window.DEFAULT_WORKER_URL);
+            plan = await window.generatePlanWithGemini(store, window.DEFAULT_WORKER_URL, isRemixMode);
             usedAi = true;
-          } catch (e) {
-            console.warn("Gemini solver notice:", e.message);
-          }
+          } catch (e) { console.warn("Gemini solver notice:", e.message); }
         }
-
-        if (!plan) {
-          plan = window.buildSmartLocalPlan(store);
-        }
+        if (!plan) plan = window.buildSmartLocalPlan(store);
 
         window.profileState.currentPlan = plan;
         window.renderPlanResults(plan);
         if (noticeEl) {
-          noticeEl.textContent = usedAi
-            ? "✨ Custom-crafted by Gemini Chef AI around your cravings, kitchen inventory & budget."
-            : "All recipes include exact fractional measurements, fit your kitchen tools, and stay within budget.";
+          noticeEl.textContent = usedAi ? "✨ Custom-crafted by Gemini Chef AI around your cravings, kitchen inventory & budget." : "All recipes include exact fractional measurements, fit your kitchen tools, and stay within budget.";
         }
       } finally {
-        loadingCard.classList.add("hidden");
-        resultsContainer.classList.remove("hidden");
+        loadingCard.classList.add("hidden"); resultsContainer.classList.remove("hidden");
       }
-
       window.saveUserProfile();
     };
 
@@ -1215,15 +1003,12 @@
           if (fridgeLower.indexOf(ing.key.toLowerCase()) !== -1) matchScore += 2;
           if (cravingLower && cravingLower.indexOf(ing.key.toLowerCase()) !== -1) matchScore += 4;
         });
-        if (cravingLower && r.title.toLowerCase().indexOf(cravingLower) !== -1) {
-          matchScore += 5;
-        }
+        if (cravingLower && r.title.toLowerCase().indexOf(cravingLower) !== -1) matchScore += 5;
         return { recipe: r, score: matchScore + (Math.random() * 3) };
       }).sort(function (a, b) { return b.score - a.score; });
 
       var chosenRecipes = scored.slice(0, window.profileState.mealsCount).map(function (x) { return x.recipe; });
-      var shoppingMap = new Map();
-      var usedFromKitchen = [];
+      var shoppingMap = new Map(); var usedFromKitchen = [];
 
       chosenRecipes.forEach(function (recipe) {
         var sItems = recipe.storeItems ? recipe.storeItems : [];
@@ -1232,13 +1017,7 @@
             if (usedFromKitchen.indexOf(ing.name) === -1) usedFromKitchen.push(ing.name);
           } else if (!shoppingMap.has(ing.name)) {
             var adjustedPrice = +(ing.basePrice * store.multiplier * (window.profileState.servingsCount > 3 ? 1.5 : 1)).toFixed(2);
-            shoppingMap.set(ing.name, {
-              name: ing.name,
-              aisle: ing.aisle,
-              price: adjustedPrice,
-              checked: false,
-              sourceBadge: store.chain === "traderjoes" ? "TJ's Everyday Price" : "Est. Local Price"
-            });
+            shoppingMap.set(ing.name, { name: ing.name, aisle: ing.aisle, price: adjustedPrice, checked: false, sourceBadge: store.chain === "traderjoes" ? "TJ's Everyday Price" : "Est. Local Price" });
           }
         });
       });
@@ -1246,59 +1025,69 @@
       var shoppingList = Array.from(shoppingMap.values());
       var totalCost = +shoppingList.reduce(function (sum, item) { return sum + item.price; }, 0).toFixed(2);
 
-      return {
-        storeName: store.name,
-        storeId: store.id,
-        totalCost: totalCost,
-        budget: window.profileState.weeklyBudget,
-        shoppingList: shoppingList,
-        usedFromKitchen: usedFromKitchen,
-        recipes: chosenRecipes
-      };
+      return { storeName: store.name, storeId: store.id, totalCost: totalCost, budget: window.profileState.weeklyBudget, shoppingList: shoppingList, usedFromKitchen: usedFromKitchen, harvestSavings: 0, recipes: chosenRecipes };
     };
 
-    window.generatePlanWithGemini = async function (store, workerUrl) {
-      ensureAllStaplesMerged();
+    window.generatePlanWithGemini = async function (store, workerUrl, isRemixMode) {
+      ensureStatusMigrated();
       var allergyText = window.profileState.allergies.length > 0 ? window.profileState.allergies.join(", ") : "None";
       var cravingText = pickVal(window.profileState.cravingPrompt, "").trim();
-      var outOfStockStaples = window.profileState.allStaples.filter(function (st) {
-        return window.profileState.staples.indexOf(st) === -1;
+      var harvestArr = window.profileState.harvestItems ? window.profileState.harvestItems : [];
+      var preserveText = pickVal(window.profileState.preserveItem, "").trim();
+      var bannedArr = window.profileState.bannedItems ? window.profileState.bannedItems : [];
+
+      var activeStaples = [], lowStaples = [], outStaples = [];
+      window.profileState.allStaples.forEach(function(st) {
+         var status = pickVal(window.profileState.itemStatus[st], 'active');
+         if (status === 'active') activeStaples.push(st); else if (status === 'low') { activeStaples.push(st); lowStaples.push(st); } else outStaples.push(st);
+      });
+      var activeSpices = [], lowSpices = [], outSpices = [];
+      window.profileState.allSpices.forEach(function(sp) {
+         var status = pickVal(window.profileState.itemStatus[sp], 'active');
+         if (status === 'active') activeSpices.push(sp); else if (status === 'low') { activeSpices.push(sp); lowSpices.push(sp); } else outSpices.push(sp);
       });
 
-      var styleThemes = [
-        "Focus on restaurant-quality weeknight skillet, sheet-pan, and comfort classics with bold herb and spice layering.",
-        "Include a vibrant mix of Mediterranean, smoky Southwest, Asian-inspired stir-fry, and American bistro dinners.",
-        "Prioritize high-flavor, satisfying dinners with caramelized edges, pan sauces, and crisp-tender vegetables."
-      ];
-      var randomTheme = styleThemes[Math.floor(Math.random() * styleThemes.length)];
+      var favs = window.profileState.favoriteRecipes ? window.profileState.favoriteRecipes : [];
+      var favDirective = favs.length > 0 ? ("- FAVORITES VAULT: The user previously loved these recipes: " + JSON.stringify(favs.map(function(f){return f.title;})) + ". Try to include at least one of these exact recipes!\n") : "";
+      
+      var harvestDirective = harvestArr.length > 0 ? ("- FRESHLY HARVESTED (Make these the stars of the dishes, zero extra cost): " + harvestArr.join(", ") + ".\n") : "";
+      var preserveDirective = preserveText ? ("- BATCH & PRESERVE REQUEST: The user has an overabundance of " + preserveText + ". Please dedicate ONE recipe entirely to preserving it (e.g., pickle, hot sauce, jam, ferment) instead of a standard dinner.\n") : "";
+      var weekendDirective = window.profileState.weekendProject ? ("- WEEKEND PROJECT: One of the recipes MUST be a 'Weekend Project' (e.g., low-and-slow, smoker, braise, 2+ hours). The rest should be quick weeknight meals.\n") : "";
+      var bannedDirective = bannedArr.length > 0 ? ("- STRICTLY BANNED DUE TO HIGH PRICE: " + bannedArr.join(", ") + ". Substitute these with cheaper alternatives in your recipes and shopping list.\n") : "";
+      var remixDirective = isRemixMode ? "- ZERO WASTE REMIXER MODE: Explicitly use ALL fridge items to clear them out. Include one 'Frankenstein' leftover remixer meal (like a hash or fried rice).\n" : "";
 
-      var cravingDirective = cravingText
-        ? ("USER CRAVINGS & REQUESTED DISH IDEAS FOR THIS WEEK (HIGHEST PRIORITY): \"" + cravingText + "\". You MUST design the recipes to fulfill what the user is feeling while combining their on-hand fridge/pantry items and staying within their grocery budget!\n\n")
-        : ("Culinary Direction: " + randomTheme + "\n\n");
+      var cravingDirective = cravingText ? ("USER CRAVINGS (HIGHEST PRIORITY): \"" + cravingText + "\". You MUST design the recipes to fulfill what the user is feeling!\n\n") : "";
 
-      var prompt = "You are an executive chef and grocery budget planner. Create a weekly grocery plan and " +
-        window.profileState.mealsCount + " distinct, restaurant-quality dinner recipes (" +
-        window.profileState.servingsCount + " servings each) for a shopper at " + store.name + " (" + store.address + ").\n\n" +
+      var prompt = "You are a master executive chef and expert grocery budget planner. Design a customized weekly grocery plan and " +
+        window.profileState.mealsCount + " exceptional, flavor-packed dinner recipes (" +
+        window.profileState.servingsCount + " servings each) for a shopper shopping locally at " + store.name + " (" + store.address + "). " +
+        "Adapt your ingredient selection to what is fresh, seasonal, and available at this specific store.\n\n" +
         cravingDirective +
-        "CONSTRAINTS:\n" +
-        "- Maximum Weekly Grocery Budget: " + window.CURRENCY_SIGN + window.profileState.weeklyBudget + ".\n" +
+        "CURRENT DYNAMIC CONSTRAINTS (You MUST strictly adhere to these current user settings):\n" +
+        "- Maximum Weekly Grocery Budget: " + window.CURRENCY_SIGN + window.profileState.weeklyBudget + " (Do not exceed this total at the register).\n" +
         "- Kitchen Equipment Available: " + window.profileState.equipment.join(", ") + ".\n" +
         "- Allergies to Strictly Avoid: " + allergyText + ".\n" +
         "- Dining Preferences: " + window.profileState.preferences.join(", ") + ".\n" +
-        "- In-Stock Fridge/Pantry (Prioritize using these at zero extra cost): " + window.profileState.fridgeItems.join(", ") + ".\n" +
-        "- Basic Kitchen Staples on Hand (free to use): " + window.profileState.staples.join(", ") + ".\n" +
-        (outOfStockStaples.length > 0 ? ("- Staples User is OUT OF (add to shoppingList if needed): " + outOfStockStaples.join(", ") + ".\n\n") : "\n") +
+        "- In-Stock Fridge/Pantry (Prioritize using these first at zero extra cost): " + window.profileState.fridgeItems.join(", ") + ".\n" +
+        harvestDirective + preserveDirective + weekendDirective + bannedDirective + remixDirective +
+        "- Basic Cooking Mediums on Hand (Free to use): " + activeStaples.join(", ") + ".\n" +
+        "- My Spice Rack (ONLY use these dry seasonings, zero extra cost): " + activeSpices.join(", ") + ".\n" +
+        (outStaples.length > 0 ? ("- Staples User is OUT OF (add to shoppingList if needed): " + outStaples.join(", ") + ".\n") : "") +
+        (outSpices.length > 0 ? ("- Spices User is OUT OF (add to shoppingList if needed): " + outSpices.join(", ") + ".\n") : "") +
+        (lowStaples.length > 0 || lowSpices.length > 0 ? ("- Items RUNNING LOW (add to shoppingList to restock, but safe to use): " + lowStaples.concat(lowSpices).join(", ") + ".\n") : "") +
+        favDirective + "\n" +
         "RECIPE REQUIREMENTS:\n" +
-        "1. FRACTIONAL CULINARY MEASUREMENTS ONLY: NEVER use decimals like 0.75 lb, 1.5 lbs, 0.5 tsp, 1.25 tsp, or 2.5 tbsp. ALWAYS write standard kitchen fractions (e.g., '3/4 lb', '1 1/2 lbs', '1/2 tsp', '1 1/4 tsp', '2 1/2 tbsp', '1 3/4 cups').\n" +
-        "2. SPICES & SEASONINGS: Never say 'spices to taste'. Specify exact fractional or whole amounts for each individual spice and herb (e.g., '1 tbsp smoked paprika', '1 1/2 tsp ground cumin', '1 tsp dried oregano', '1 1/4 tsp kosher salt', '1/2 tsp freshly cracked black pepper', '4 cloves garlic, finely minced').\n" +
-        "3. IN-DEPTH CULINARY STEPS: Write 5 to 6 thorough, step-by-step instructions covering prep, seasoning, sauce building, cooking temperatures, burner heat levels (medium-high, low simmer), exact timings, and visual/texture cues.\n" +
-        "4. METRICS & TIPS: Include active Prep Time, Cook Time, and a Chef's Tip.\n\n" +
+        "1. FRACTIONAL CULINARY MEASUREMENTS ONLY: NEVER use decimals like 0.75 lb or 1.5 lbs. ALWAYS write standard kitchen fractions (e.g., '3/4 lb', '1 1/2 lbs', '1/2 tsp', '1 3/4 cups').\n" +
+        "2. SPICES & SEASONINGS: Never say 'spices to taste'. Specify exact fractional or whole amounts for every spice and herb (e.g., '1 1/2 tsp ground cumin', '4 cloves garlic, finely minced').\n" +
+        "3. ADAPTIVE RECIPE COMPLEXITY: Provide as few or as many ingredients and steps as necessary to make the dish truly great. For simple weeknight meals, keep steps concise. For complex or highly requested dishes, provide rich, in-depth instructions. Always include pan temperatures, burner heat levels (medium-high, low simmer), exact timings, and visual/texture doneness cues.\n" +
+        "4. METRICS & TIPS: Include active Prep Time, Cook Time, and a Chef's Tip to elevate the flavor profile.\n\n" +
         "Return ONLY valid JSON matching this exact structure:\n" +
         "{\n" +
         '  "shoppingList": [\n' +
         '    { "name": "Store Package Name & Size (use fractions like 1 1/2 lb)", "aisle": "Produce, Meat & Seafood, Dairy & Eggs, or Pantry", "price": 4.99, "checked": false, "sourceBadge": "Store Estimate" }\n' +
         '  ],\n' +
         '  "usedFromKitchen": ["Item 1", "Item 2"],\n' +
+        '  "harvestSavings": 12.50,\n' +
         '  "recipes": [\n' +
         '    {\n' +
         '      "title": "Dish Name",\n' +
@@ -1310,9 +1099,7 @@
         '        "1 1/2 lbs boneless chicken thighs, patted dry",\n' +
         '        "1 1/2 tbsp olive oil",\n' +
         '        "1 tbsp smoked paprika",\n' +
-        '        "1 tsp garlic powder",\n' +
-        '        "1 1/4 tsp kosher salt",\n' +
-        '        "1/2 tsp black pepper"\n' +
+        '        "1 1/4 tsp kosher salt"\n' +
         '      ],\n' +
         '      "steps": [\n' +
         '        "Detailed step 1...",\n' +
@@ -1322,67 +1109,73 @@
         '  ]\n' +
         "}";
 
-      var u = new URL(workerUrl);
-      u.searchParams.set("provider", "gemini");
-
-      var controller = new AbortController();
-      var timerId = setTimeout(function () { controller.abort(); }, 28000);
+      var u = new URL(workerUrl); u.searchParams.set("provider", "gemini");
+      var controller = new AbortController(); var timerId = setTimeout(function () { controller.abort(); }, 28000);
 
       var res = await fetch(u.toString(), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", headers: { "Content-Type": "application/json" },
         signal: controller.signal,
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { responseMimeType: "application/json" }
-        })
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json" } })
       });
       clearTimeout(timerId);
 
       var data = await res.json();
-      if (!data.candidates || !data.candidates[0] || !data.candidates[0].content || !data.candidates[0].content.parts) {
-        throw new Error(data.error ? JSON.stringify(data.error) : "Invalid Gemini response");
-      }
+      if (!data.candidates || !data.candidates[0] || !data.candidates[0].content || !data.candidates[0].content.parts) { throw new Error(data.error ? JSON.stringify(data.error) : "Invalid Gemini response"); }
 
-      var parts = data.candidates[0].content.parts;
-      var rawText = "";
-      for (var pIdx = parts.length - 1; pIdx >= 0; pIdx--) {
-        if (parts[pIdx].text && parts[pIdx].text.indexOf("{") !== -1) {
-          rawText = parts[pIdx].text;
-          break;
-        }
-      }
-      if (!rawText && parts[0] && parts[0].text) {
-        rawText = parts[0].text;
-      }
-
-      var startBrace = rawText.indexOf("{");
-      var endBrace = rawText.lastIndexOf("}");
-      if (startBrace !== -1 && endBrace !== -1) {
-        rawText = rawText.substring(startBrace, endBrace + 1);
-      }
+      var parts = data.candidates[0].content.parts; var rawText = "";
+      for (var pIdx = parts.length - 1; pIdx >= 0; pIdx--) { if (parts[pIdx].text && parts[pIdx].text.indexOf("{") !== -1) { rawText = parts[pIdx].text; break; } }
+      if (!rawText && parts[0] && parts[0].text) rawText = parts[0].text;
+      var startBrace = rawText.indexOf("{"), endBrace = rawText.lastIndexOf("}");
+      if (startBrace !== -1 && endBrace !== -1) rawText = rawText.substring(startBrace, endBrace + 1);
 
       var parsed = JSON.parse(rawText);
       var cleanShopping = (parsed.shoppingList ? parsed.shoppingList : []).map(function (item) {
-        return {
-          name: formatCulinaryFractions(pickVal(item.name, "Grocery Item")),
-          aisle: pickVal(item.aisle, "Pantry"),
-          price: parsePriceNum(item.price, 3.99),
-          checked: Boolean(item.checked),
-          sourceBadge: pickVal(item.sourceBadge, "Store Estimate")
-        };
+        return { name: formatCulinaryFractions(pickVal(item.name, "Grocery Item")), aisle: pickVal(item.aisle, "Pantry"), price: parsePriceNum(item.price, 3.99), checked: Boolean(item.checked), sourceBadge: pickVal(item.sourceBadge, "Store Estimate") };
       });
-
       var totalCost = +cleanShopping.reduce(function (s, i) { return s + i.price; }, 0).toFixed(2);
+      var savings = parsed.harvestSavings ? parseFloat(parsed.harvestSavings) : 0;
+      
       return {
-        storeName: store.name,
-        storeId: store.id,
-        totalCost: totalCost,
-        budget: window.profileState.weeklyBudget,
-        shoppingList: cleanShopping,
-        usedFromKitchen: parsed.usedFromKitchen ? parsed.usedFromKitchen : window.profileState.fridgeItems,
-        recipes: parsed.recipes ? parsed.recipes : CURATED_RECIPES.slice(0, window.profileState.mealsCount)
+        storeName: store.name, storeId: store.id, totalCost: totalCost, budget: window.profileState.weeklyBudget,
+        shoppingList: cleanShopping, usedFromKitchen: parsed.usedFromKitchen ? parsed.usedFromKitchen : window.profileState.fridgeItems,
+        harvestSavings: savings, recipes: parsed.recipes ? parsed.recipes : CURATED_RECIPES.slice(0, window.profileState.mealsCount)
       };
+    };
+
+    window.toggleFavoriteRecipe = function(idx) {
+      if (!window.profileState.currentPlan || !window.profileState.currentPlan.recipes) return;
+      var r = window.profileState.currentPlan.recipes[idx];
+      var favs = window.profileState.favoriteRecipes ? window.profileState.favoriteRecipes : [];
+      var exists = favs.findIndex(function(f) { return f.title === r.title; });
+      if (exists > -1) { favs.splice(exists, 1); } else {
+        favs.push({ title: r.title, prepTime: r.prepTime, cookTime: r.cookTime, equipmentNeeded: r.equipmentNeeded, chefTip: r.chefTip, ingredients: r.originalIngredients ? r.originalIngredients : r.ingredients, steps: r.steps });
+      }
+      window.profileState.favoriteRecipes = favs; window.saveUserProfile(); window.renderPlanResults(window.profileState.currentPlan); window.renderFavoritesVault();
+    };
+
+    window.scaleRecipe = function(recipeIndex, delta) {
+      var r = window.profileState.currentPlan.recipes[recipeIndex];
+      if(!r.originalServings) {
+        r.originalServings = window.profileState.servingsCount ? window.profileState.servingsCount : 2;
+        r.currentServings = r.originalServings; r.originalIngredients = r.ingredients.slice();
+      }
+      var newServings = Math.max(1, r.currentServings + delta);
+      if (newServings === r.currentServings) return;
+      r.currentServings = newServings; var ratio = newServings / r.originalServings;
+      r.ingredients = r.originalIngredients.map(function(ing) { return multiplyIngredient(typeof ing === "string" ? ing : ing.name, ratio); });
+      window.saveUserProfile(); window.renderPlanResults(window.profileState.currentPlan);
+    };
+
+    window.shareGroceryListSMS = function() {
+      if (!window.profileState.currentPlan) return;
+      var plan = window.profileState.currentPlan;
+      var text = "🛒 SmartCart Grocery List\n📍 " + plan.storeName + "\n💰 Est: " + window.CURRENCY_SIGN + plan.totalCost.toFixed(2) + "\n\n";
+      var toBuy = plan.shoppingList.filter(function(i) { return !i.checked; });
+      if (toBuy.length === 0) text += "All done! Cart is empty.";
+      else toBuy.forEach(function(i) { text += "☐ " + i.name + "\n"; });
+      var ua = navigator.userAgent.toLowerCase();
+      var separator = (ua.indexOf("iphone") > -1 || ua.indexOf("ipad") > -1) ? "&" : "?";
+      window.open("sms:" + separator + "body=" + encodeURIComponent(text), "_self");
     };
 
     window.renderPlanResults = function (plan) {
@@ -1393,17 +1186,17 @@
       document.getElementById("cartBudgetLimitDisplay").textContent = "of " + window.CURRENCY_SIGN + window.profileState.weeklyBudget.toFixed(2) + " budget";
 
       var pct = Math.min(100, Math.round((totalNum / window.profileState.weeklyBudget) * 100));
-      var bar = document.getElementById("budgetProgressBar");
-      bar.style.width = pct + "%";
+      document.getElementById("budgetProgressBar").style.width = pct + "%";
 
       var diff = +(window.profileState.weeklyBudget - totalNum).toFixed(2);
       var pill = document.getElementById("savingsPill");
-      if (diff >= 0) {
-        bar.style.background = "#16A34A";
-        pill.textContent = "🎉 " + window.CURRENCY_SIGN + diff.toFixed(2) + " Under Your Budget!";
-      } else {
-        bar.style.background = "#F59E0B";
-        pill.textContent = "⚠️ " + window.CURRENCY_SIGN + Math.abs(diff).toFixed(2) + " Over Budget";
+      if (diff >= 0) { document.getElementById("budgetProgressBar").style.background = "#16A34A"; pill.textContent = "🎉 " + window.CURRENCY_SIGN + diff.toFixed(2) + " Under Your Budget!"; } 
+      else { document.getElementById("budgetProgressBar").style.background = "#F59E0B"; pill.textContent = "⚠️ " + window.CURRENCY_SIGN + Math.abs(diff).toFixed(2) + " Over Budget"; }
+
+      var harvestBanner = document.getElementById("harvestSavingsBanner");
+      if (harvestBanner) {
+        if (plan.harvestSavings && plan.harvestSavings > 0) harvestBanner.innerHTML = '<div style="font-size:12px; font-weight:800; color:#166534; background:#DCFCE7; padding:4px 10px; border-radius:999px; margin-top:12px; display:inline-flex;">🌿 Garden Harvest Value: ' + window.CURRENCY_SIGN + plan.harvestSavings.toFixed(2) + '</div>';
+        else harvestBanner.innerHTML = "";
       }
 
       var sList = plan.shoppingList ? plan.shoppingList : [];
@@ -1416,90 +1209,79 @@
         byAisle[aisle].push(Object.assign({}, item, { index: idx }));
       });
 
-      var listContainer = document.getElementById("shoppingListContainer");
-      listContainer.innerHTML = Object.keys(byAisle).map(function (aisle) {
+      document.getElementById("shoppingListContainer").innerHTML = Object.keys(byAisle).map(function (aisle) {
         var rows = byAisle[aisle].map(function (item) {
-          var badgeText = pickVal(item.sourceBadge, "");
-          var itemPrice = parsePriceNum(item.price, 3.99);
-          return '<label onclick="window.toggleGroceryCheck(' + item.index + ')" class="grocery-item ' + (item.checked ? 'checked' : '') + '">' +
-            '<div style="display:flex; align-items:center; gap:10px;">' +
+          var badgeText = pickVal(item.sourceBadge, ""); var itemPrice = parsePriceNum(item.price, 3.99);
+          return '<div class="grocery-item ' + (item.checked ? 'checked' : '') + '">' +
+            '<label onclick="window.toggleGroceryCheck(' + item.index + ')" style="display:flex; align-items:center; gap:10px; flex:1; cursor:pointer;">' +
             '<input type="checkbox" ' + (item.checked ? 'checked' : '') + ' style="width:18px; height:18px; accent-color:#15803D; pointer-events:none;" />' +
             '<div><div style="font-size:14px; font-weight:700;">' + formatCulinaryFractions(item.name) + '</div>' +
-            '<div style="font-size:11px; font-weight:700; color:#15803D;">' + badgeText + '</div></div></div>' +
-            '<div style="font-size:14px; font-weight:800;">' + window.CURRENCY_SIGN + itemPrice.toFixed(2) + '</div></label>';
+            '<div style="font-size:11px; font-weight:700; color:#15803D;">' + badgeText + '</div></div></label>' +
+            '<div style="display:flex; align-items:center; gap:8px;">' +
+            '<div style="font-size:14px; font-weight:800;">' + window.CURRENCY_SIGN + itemPrice.toFixed(2) + '</div>' +
+            '<button type="button" title="Too expensive? Swap it!" onclick="window.priceShockSwap(\'' + item.name.replace(/'/g, "\\'") + '\')" style="font-size:15px; margin-left:4px; opacity:0.6;" onmouseover="this.style.opacity=\'1\'" onmouseout="this.style.opacity=\'0.6\'">🚨</button>' +
+            '</div></div>';
         }).join("");
         return '<div style="margin-bottom:14px;"><div class="form-label">' + aisle + '</div><div>' + rows + '</div></div>';
       }).join("");
 
       var usedKitchenEl = document.getElementById("usingFromKitchenList");
       var usedList = (plan.usedFromKitchen && plan.usedFromKitchen.length) ? plan.usedFromKitchen : window.profileState.fridgeItems;
-      usedKitchenEl.innerHTML = usedList.map(function (u) {
-        return '<span class="live-badge" style="margin-bottom:0;">' + u + '</span>';
-      }).join("");
+      usedKitchenEl.innerHTML = usedList.map(function (u) { return '<span class="live-badge" style="margin-bottom:0;">' + u + '</span>'; }).join("");
 
-      var recipesEl = document.getElementById("recipesContainer");
       var rList = plan.recipes ? plan.recipes : [];
-      recipesEl.innerHTML = rList.map(function (r, i) {
+      document.getElementById("recipesContainer").innerHTML = rList.map(function (r, i) {
         var rawIngs = r.ingredients ? r.ingredients : [];
         var ingList = rawIngs.map(function (ing) {
           var text = typeof ing === "string" ? ing : ing.name;
-          return '<li style="margin-bottom:6px; font-size:13px; color:#292524; display:flex; align-items:baseline; gap:8px;">' +
-            '<span style="color:#15803D; font-weight:800;">•</span>' +
-            '<span>' + formatCulinaryFractions(text) + '</span>' +
-          '</li>';
+          return '<li style="margin-bottom:6px; font-size:13px; color:#292524; display:flex; align-items:baseline; gap:8px;"><span style="color:#15803D; font-weight:800;">•</span><span>' + formatCulinaryFractions(text) + '</span></li>';
         }).join("");
 
         var stepsArr = r.steps ? r.steps : [];
         var stepItems = stepsArr.map(function (s, sIdx) {
-          return '<li style="margin-bottom:12px; line-height:1.6;">' +
-            '<span style="font-weight:800; color:#1C1917;">Step ' + (sIdx + 1) + ': </span>' +
-            '<span>' + formatCulinaryFractions(s) + '</span>' +
-          '</li>';
+          return '<li style="margin-bottom:12px; line-height:1.6;"><span style="font-weight:800; color:#1C1917;">Step ' + (sIdx + 1) + ': </span><span>' + formatCulinaryFractions(s) + '</span></li>';
         }).join("");
 
         var timeLabel = r.prepTime ? ("Prep: " + r.prepTime + (r.cookTime ? " • Cook: " + r.cookTime : "")) : (r.time ? r.time : "30 mins");
+        var tipHtml = r.chefTip ? ('<div style="margin-top:16px; background:#FEF3C7; border-left:4px solid #D97706; padding:12px 14px; border-radius:0 12px 12px 0;"><div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#92400E; margin-bottom:2px;">👨‍🍳 Chef\'s Pro Tip</div><div style="font-size:13px; color:#78350F; line-height:1.4;">' + formatCulinaryFractions(r.chefTip) + '</div></div>') : "";
 
-        var tipHtml = r.chefTip ? (
-          '<div style="margin-top:16px; background:#FEF3C7; border-left:4px solid #D97706; padding:12px 14px; border-radius:0 12px 12px 0;">' +
-            '<div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#92400E; margin-bottom:2px;">👨‍🍳 Chef\'s Pro Tip</div>' +
-            '<div style="font-size:13px; color:#78350F; line-height:1.4;">' + formatCulinaryFractions(r.chefTip) + '</div>' +
-          '</div>'
-        ) : "";
+        var isFav = (window.profileState.favoriteRecipes || []).some(function(f) { return f.title === r.title; });
+        var heartIcon = isFav ? "❤️" : "🤍";
+        var currentServings = r.currentServings ? r.currentServings : (window.profileState.servingsCount ? window.profileState.servingsCount : 2);
+        
+        var scaleHtml = '<div style="display:inline-flex; align-items:center; background:#F5F5F4; border-radius:999px; overflow:hidden; border:1px solid #E7E5E4; font-size:12px; font-weight:700; color:#57534E;">' +
+          '<button type="button" class="scale-btn" onclick="window.scaleRecipe(' + i + ', -1)" style="border-right:1px solid #E7E5E4;">-</button>' +
+          '<span style="padding:4px 10px; min-width:80px; text-align:center;">' + currentServings + ' Servings</span>' +
+          '<button type="button" class="scale-btn" onclick="window.scaleRecipe(' + i + ', 1)" style="border-left:1px solid #E7E5E4;">+</button></div>';
 
         return '<div class="card" style="margin-bottom:20px;">' +
-          '<div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px;">' +
-            '<span class="live-badge" style="margin-bottom:0;">Dinner #' + (i + 1) + ' • ' + timeLabel + '</span>' +
-            '<span style="font-size:12px; font-weight:700; color:#57534E; background:#F5F5F4; padding:4px 10px; border-radius:999px;">Uses: ' + pickVal(r.equipmentNeeded, "Kitchen") + '</span>' +
-          '</div>' +
+          '<div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:12px;">' +
+            '<div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">' +
+              '<button type="button" onclick="window.toggleFavoriteRecipe(' + i + ')" style="font-size:20px; transition:transform 0.1s;" onmousedown="this.style.transform=\'scale(0.9)\'" onmouseup="this.style.transform=\'scale(1)\'">' + heartIcon + '</button>' +
+              '<span class="live-badge" style="margin-bottom:0;">Dinner #' + (i + 1) + ' • ' + timeLabel + '</span>' +
+              '<span style="font-size:12px; font-weight:700; color:#57534E; background:#F5F5F4; padding:4px 10px; border-radius:999px;">Uses: ' + pickVal(r.equipmentNeeded, "Kitchen") + '</span>' +
+            '</div>' + scaleHtml + '</div>' +
           '<h5 style="font-size:20px; font-weight:800; color:#1C1917; margin-bottom:14px;">' + r.title + '</h5>' +
           '<div style="background:#FAF8F5; border:1px solid #E7E5E4; border-radius:16px; padding:14px 16px; margin-bottom:16px;">' +
             '<div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; color:#15803D; margin-bottom:8px;">Ingredients &amp; Exact Measurements</div>' +
             '<ul style="list-style:none; padding:0; margin:0;">' + ingList + '</ul>' +
-          '</div>' +
-          '<div>' +
+          '</div><div>' +
             '<div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; color:#57534E; margin-bottom:8px;">Step-by-Step Instructions</div>' +
             '<ol style="list-style:none; padding:0; font-size:14px; color:#44403C;">' + stepItems + '</ol>' +
-          '</div>' +
-          tipHtml +
-        '</div>';
+          '</div>' + tipHtml + '</div>';
       }).join("");
     };
 
     window.toggleGroceryCheck = function (idx) {
       if (!window.profileState.currentPlan) return;
       var item = window.profileState.currentPlan.shoppingList[idx];
-      if (item) {
-        item.checked = !item.checked;
-        window.saveUserProfile();
-        window.renderPlanResults(window.profileState.currentPlan);
-      }
+      if (item) { item.checked = !item.checked; window.saveUserProfile(); window.renderPlanResults(window.profileState.currentPlan); }
     };
 
     window.verifyLiveStorePrices = async function () {
       if (!window.profileState.currentPlan) return;
       var btn = document.getElementById("verifyLivePricesBtn");
-      btn.textContent = "⏳ Checking Local Store Deals...";
-      btn.disabled = true;
+      btn.textContent = "⏳ Checking Local Store Deals..."; btn.disabled = true;
 
       var foundStore = STORES.find(function (s) { return s.id === window.profileState.selectedStoreId; });
       var store = foundStore ? foundStore : STORES[0];
@@ -1509,14 +1291,12 @@
         var cleanQuery = item.name.split("(")[0].trim();
         try {
           var u = new URL(window.DEFAULT_WORKER_URL);
-          u.searchParams.set("provider", store.provider);
-          u.searchParams.set("term", cleanQuery);
+          u.searchParams.set("provider", store.provider); u.searchParams.set("term", cleanQuery);
           if (store.locationId) u.searchParams.set("locationId", store.locationId);
           if (store.storeCode) u.searchParams.set("storeCode", store.storeCode);
           if (store.zip) u.searchParams.set("zip", store.zip);
 
-          var res = await fetch(u.toString());
-          var data = await res.json();
+          var res = await fetch(u.toString()); var data = await res.json();
           if (store.provider === "kroger" && data.data && data.data[0] && data.data[0].items && data.data[0].items[0] && data.data[0].items[0].price) {
             var p = data.data[0].items[0].price;
             var bestPrice = p.promo ? p.promo : (p.regular ? p.regular : item.price);
@@ -1526,17 +1306,10 @@
         } catch (e) {}
       }
 
-      window.profileState.currentPlan.totalCost = +window.profileState.currentPlan.shoppingList
-        .reduce(function (sum, it) { return sum + parsePriceNum(it.price, 0); }, 0)
-        .toFixed(2);
-
-      window.saveUserProfile();
-      window.renderPlanResults(window.profileState.currentPlan);
+      window.profileState.currentPlan.totalCost = +window.profileState.currentPlan.shoppingList.reduce(function (sum, it) { return sum + parsePriceNum(it.price, 0); }, 0).toFixed(2);
+      window.saveUserProfile(); window.renderPlanResults(window.profileState.currentPlan);
       btn.textContent = "✅ Live Store Prices Updated!";
-      setTimeout(function () {
-        btn.textContent = "🔄 Check Live Store Sale Prices";
-        btn.disabled = false;
-      }, 2500);
+      setTimeout(function () { btn.textContent = "🔄 Check Live Store Sale Prices"; btn.disabled = false; }, 2500);
     };
   </script>
 
@@ -1544,57 +1317,37 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      onAuthStateChanged,
-      signOut,
-      updateProfile
+      getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
     import {
-      getFirestore,
-      doc,
-      setDoc,
-      getDoc
+      getFirestore, doc, setDoc, getDoc
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     try {
       const app = initializeApp(window.DEFAULT_FIREBASE_CONFIG);
-      const auth = getAuth(app);
-      const db = getFirestore(app);
+      const auth = getAuth(app); const db = getFirestore(app);
 
       window.fbApi = {
-        auth: auth,
-        db: db,
-        createUserWithEmailAndPassword: createUserWithEmailAndPassword,
-        signInWithEmailAndPassword: signInWithEmailAndPassword,
-        signOut: signOut,
-        updateProfile: updateProfile,
-        doc: doc,
-        setDoc: setDoc,
-        getDoc: getDoc
+        auth: auth, db: db, createUserWithEmailAndPassword: createUserWithEmailAndPassword,
+        signInWithEmailAndPassword: signInWithEmailAndPassword, signOut: signOut,
+        updateProfile: updateProfile, doc: doc, setDoc: setDoc, getDoc: getDoc
       };
 
       const statusEl = document.getElementById("cloudStatusText");
-      if (statusEl) statusEl.textContent = "v2.7 Live • Cloud Connected";
+      if (statusEl) statusEl.textContent = "v3.1 Live • Cloud Connected";
 
       onAuthStateChanged(auth, async function (user) {
         if (user) {
           const rawEmail = user.email ? user.email : "user@kitchenplanner.app";
           const cleanUsername = rawEmail.split("@")[0];
           window.currentUser = {
-            uid: user.uid,
-            username: cleanUsername,
-            displayName: user.displayName ? user.displayName : cleanUsername,
-            isLocal: false
+            uid: user.uid, username: cleanUsername,
+            displayName: user.displayName ? user.displayName : cleanUsername, isLocal: false
           };
-          await window.loadUserProfile();
-          window.enterWorkspace();
+          await window.loadUserProfile(); window.enterWorkspace();
         }
       });
-    } catch (err) {
-      console.warn("Firebase connection notice:", err.message);
-    }
+    } catch (err) { console.warn("Firebase connection notice:", err.message); }
   </script>
 </body>
 </html>
