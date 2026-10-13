@@ -115,7 +115,7 @@
         <div class="auth-hero-icon">🥗</div>
         <div class="live-badge">
           <span class="status-dot"></span>
-          <span id="cloudStatusText">v2.4 Live • Ready</span>
+          <span id="cloudStatusText">v2.5 Live • Ready</span>
         </div>
         <h2 class="auth-title">Welcome to Your Kitchen</h2>
         <p class="auth-subtitle">Sign in to load your kitchen tools, fridge inventory, favorite store, and weekly budget.</p>
@@ -314,9 +314,9 @@
     <!-- STEP 3 -->
     <section id="stepPanel3" class="hidden">
       <div id="planLoadingCard" class="card hidden" style="text-align:center; padding:44px 20px;">
-        <div style="font-size:42px; margin-bottom:10px;">🛒</div>
-        <h3 style="font-size:20px; font-weight:800; margin-bottom:6px;">Building Your Custom Meal Plan &amp; Checking Store Prices...</h3>
-        <p style="font-size:14px; color:#57534E;">Matching your kitchen tools, using up your fridge items first, and keeping your cart under budget.</p>
+        <div style="font-size:42px; margin-bottom:10px;">👨‍🍳</div>
+        <h3 style="font-size:20px; font-weight:800; margin-bottom:6px;">Crafting Chef Recipes &amp; Checking Store Prices...</h3>
+        <p style="font-size:14px; color:#57534E;">Calculating exact spice ratios, prep measurements, and keeping your cart under budget.</p>
       </div>
 
       <div id="planResultsContainer">
@@ -325,7 +325,7 @@
             <div>
               <div id="planStoreBadge" class="live-badge">📍 Store Selected</div>
               <h3 style="font-size:22px; font-weight:800;">Your Weekly Grocery Cart &amp; Meal Plan</h3>
-              <p style="font-size:14px; color:#57534E;">All recipes fit your kitchen equipment and stay within your budget.</p>
+              <p style="font-size:14px; color:#57534E;">All recipes include exact measurements, fits your kitchen tools, and stays within budget.</p>
             </div>
             <div class="no-print" style="display:flex; flex-wrap:wrap; gap:8px;">
               <button type="button" onclick="window.verifyLiveStorePrices()" id="verifyLivePricesBtn"
@@ -372,9 +372,9 @@
 
           <div>
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
-              <h4 style="font-size:18px; font-weight:800;">🍳 Your Recipes for the Week</h4>
-              <button type="button" onclick="window.generateWeeklyMealPlan()" class="no-print" style="font-size:13px; font-weight:800; color:#15803D;">
-                ↻ Shuffle New Recipes
+              <h4 style="font-size:18px; font-weight:800;">🍳 Your Chef Recipes for the Week</h4>
+              <button type="button" onclick="window.generateWeeklyMealPlan()" class="no-print" style="font-size:13px; font-weight:800; color:#15803D; background:#DCFCE7; padding:6px 12px; border-radius:999px;">
+                ↻ Generate New Recipes
               </button>
             </div>
             <div id="recipesContainer"></div>
@@ -385,7 +385,7 @@
   </div>
 
   <footer class="footer-bar no-print">
-    SmartCart Kitchen v2.4 — Reston, VA (20191) &amp; Beaverton, OR
+    SmartCart Kitchen v2.5 — Reston, VA (20191) &amp; Beaverton, OR
   </footer>
 
   <script>
@@ -456,34 +456,69 @@
 
     var CURATED_RECIPES = [
       {
-        title: "Crispy Sheet-Pan Garlic Herb Chicken & Baby Potatoes",
-        time: "30 mins",
+        title: "Crispy Sheet-Pan Garlic Herb Chicken Thighs & Baby Gold Potatoes",
+        prepTime: "10 mins",
+        cookTime: "28 mins",
         equipmentNeeded: "Oven & Sheet Pan",
         equipmentId: "sheet_pan",
         allergens: [],
-        steps: [
-          "Preheat oven to 425F. Halve the baby potatoes and toss on a sheet pan with olive oil, salt, pepper, and garlic.",
-          "Season chicken thighs or breasts with Italian seasoning and paprika; nestle onto the pan beside the potatoes.",
-          "Roast for 22-25 minutes, adding broccoli florets for the final 12 minutes until golden and tender."
-        ],
+        chefTip: "Patting the chicken thighs completely dry with paper towels before rubbing with oil and spices is the secret to blistered, crispy skin.",
         ingredients: [
+          "1.5 lbs boneless skinless chicken thighs, trimmed",
+          "1.5 lbs baby gold potatoes, halved lengthwise",
+          "1 lb fresh broccoli crowns, cut into bite-sized florets",
+          "2.5 tbsp extra-virgin olive oil, divided",
+          "1.5 tsp dried Italian herb seasoning",
+          "1 tsp smoked paprika",
+          "1 tsp garlic powder (or 4 cloves fresh garlic, minced)",
+          "1.25 tsp kosher salt, divided",
+          "1/2 tsp freshly cracked black pepper",
+          "1 tbsp salted butter, melted (optional finish)"
+        ],
+        steps: [
+          "Position an oven rack in the center and preheat to 425F. Line a large rimmed baking sheet with foil or parchment paper for easy cleanup.",
+          "In a large bowl, toss the halved baby potatoes with 1 tbsp olive oil, 1/2 tsp Italian seasoning, 1/2 tsp garlic powder, 1/2 tsp kosher salt, and 1/4 tsp black pepper. Arrange cut-side down on one side of the sheet pan.",
+          "Pat the chicken thighs dry with paper towels. Rub with 1 tbsp olive oil, 1 tsp Italian seasoning, 1 tsp smoked paprika, 1/2 tsp garlic powder, 1/2 tsp kosher salt, and 1/4 tsp black pepper. Nestle beside the potatoes.",
+          "Roast on the center rack for 15 minutes. Remove the pan briefly and toss the broccoli florets with the remaining 1/2 tbsp olive oil and 1/4 tsp salt; scatter the broccoli around the chicken.",
+          "Return to the oven for 12 to 13 minutes until the chicken reaches 175F internally, the potatoes are fork-tender with crispy golden edges, and the broccoli stems are tender-crisp."
+        ],
+        storeItems: [
           { name: "Boneless Skinless Chicken Thighs (1.5 lb)", aisle: "Meat & Seafood", basePrice: 6.49, key: "chicken" },
           { name: "Baby Gold Potatoes (1.5 lb bag)", aisle: "Produce", basePrice: 3.49, key: "potatoes" },
           { name: "Fresh Broccoli Crowns (1 lb)", aisle: "Produce", basePrice: 2.29, key: "broccoli" }
         ]
       },
       {
-        title: "One-Skillet Beef & Black Bean Taco Rice Bowls",
-        time: "25 mins",
+        title: "One-Skillet Charred Pepper Beef & Black Bean Taco Rice",
+        prepTime: "10 mins",
+        cookTime: "22 mins",
         equipmentNeeded: "Skillet / Frying Pan",
         equipmentId: "skillet",
         allergens: ["Dairy / Lactose"],
-        steps: [
-          "Brown the ground beef with diced yellow onion and bell pepper in a large skillet over medium-high heat.",
-          "Stir in black beans, salsa or crushed tomatoes, chili powder, and uncooked rice with broth; cover and simmer 15 minutes.",
-          "Top with shredded cheddar cheese and diced tomatoes before serving."
-        ],
+        chefTip: "Toasting the uncooked rice in the rendered beef drippings and spices for 60 seconds before pouring in the broth keeps every grain separate and deeply flavorful.",
         ingredients: [
+          "1 lb lean ground beef (85/15)",
+          "1 medium yellow onion, finely diced (about 1 cup)",
+          "2 bell peppers (1 red, 1 green), cored and diced into 1/2-inch pieces",
+          "1 cup long-grain white or jasmine rice, uncooked",
+          "1 can (15 oz) black beans, rinsed and drained",
+          "1 cup chunky restaurant-style salsa",
+          "1.75 cups low-sodium chicken or beef broth",
+          "1 tbsp chili powder",
+          "1.5 tsp ground cumin",
+          "1 tsp smoked paprika",
+          "1 tsp garlic powder",
+          "1 tsp kosher salt & 1/2 tsp black pepper",
+          "1 cup (4 oz) sharp cheddar cheese, freshly shredded"
+        ],
+        steps: [
+          "Heat a 12-inch deep skillet over medium-high heat. Add the ground beef and diced yellow onion, breaking the meat apart with a wooden spoon, and cook for 6 to 7 minutes until browned.",
+          "Add the diced bell peppers, 1 tbsp chili powder, 1.5 tsp cumin, 1 tsp smoked paprika, 1 tsp garlic powder, 1 tsp salt, and 1/2 tsp black pepper. Saute for 2 minutes until the spices bloom and smell fragrant.",
+          "Pour in the 1 cup uncooked rice and stir constantly for 1 minute to coat the grains in the seasoned oil.",
+          "Stir in the drained black beans, 1 cup salsa, and 1.75 cups broth. Bring to a lively boil, then immediately reduce burner heat to low and cover tightly with a lid.",
+          "Simmer undisturbed for 15 minutes until the rice is tender and liquid is absorbed. Turn off the heat, scatter the 1 cup shredded cheddar across the top, re-cover for 2 minutes until melted, and serve."
+        ],
+        storeItems: [
           { name: "Lean Ground Beef 85/15 (1 lb)", aisle: "Meat & Seafood", basePrice: 5.99, key: "ground beef" },
           { name: "Canned Black Beans (15 oz)", aisle: "Pantry", basePrice: 1.29, key: "beans" },
           { name: "Chunky Restaurant Salsa (16 oz jar)", aisle: "Pantry", basePrice: 2.99, key: "tomatoes" },
@@ -492,17 +527,35 @@
         ]
       },
       {
-        title: "Creamy Tuscan Garlic Spinach & Sausage Skillet Pasta",
-        time: "25 mins",
+        title: "Creamy Tuscan Garlic Spinach & browned Italian Sausage Rigatoni",
+        prepTime: "10 mins",
+        cookTime: "20 mins",
         equipmentNeeded: "Skillet / Frying Pan",
         equipmentId: "skillet",
         allergens: ["Gluten / Wheat", "Dairy / Lactose"],
-        steps: [
-          "Boil pasta in salted water until tender while browning sliced Italian sausage in your skillet.",
-          "Add garlic, crushed tomatoes, and a splash of cream or cream cheese to the skillet to create a velvety sauce.",
-          "Toss the pasta and fresh spinach into the sauce until the greens wilt."
-        ],
+        chefTip: "Save 1/2 cup of starchy pasta boiling water before draining—splashing it into the tomato-garlic sauce makes it cling like silk to the rigatoni.",
         ingredients: [
+          "1 lb mild or hot Italian dinner sausage, casings removed",
+          "12 oz rigatoni or penne pasta (about 3.5 cups dry)",
+          "1 tbsp olive oil",
+          "1 small yellow onion, finely chopped",
+          "4 cloves garlic, minced (or 1.5 tsp garlic powder)",
+          "1 can (28 oz) crushed San Marzano-style tomatoes",
+          "1.5 tsp dried Italian seasoning",
+          "1/2 tsp crushed red pepper flakes (optional)",
+          "1 tsp kosher salt & 1/2 tsp black pepper",
+          "1 tsp granulated sugar (to balance tomato acidity)",
+          "4 oz fresh baby spinach (about 4 packed cups)",
+          "3 tbsp butter (swirled in at the end for gloss)"
+        ],
+        steps: [
+          "Bring a large pot of salted water (1 tbsp salt per 4 quarts) to a rolling boil. Add the 12 oz pasta and cook 1 minute shy of package al dente directions. Reserve 1/2 cup pasta water, then drain.",
+          "While water heats, warm 1 tbsp olive oil in a large skillet over medium-high heat. Add the Italian sausage and press flat; let sear undisturbed for 3 minutes to develop a deep brown crust, then crumble and cook 4 minutes more.",
+          "Add the chopped onion to the rendered sausage drippings and saute for 3 minutes until translucent. Add the minced garlic, 1.5 tsp Italian seasoning, and 1/2 tsp red pepper flakes; stir for 45 seconds.",
+          "Pour in the 28 oz crushed tomatoes, 1 tsp sugar, 1 tsp salt, and 1/2 tsp black pepper. Reduce heat to medium-low and simmer gently for 8 minutes until thickened.",
+          "Swirl in 3 tbsp butter and fold in the drained pasta and 4 cups fresh baby spinach, adding splashes of reserved pasta water as needed, tossing for 2 minutes until the spinach wilts."
+        ],
+        storeItems: [
           { name: "Mild Italian Dinner Sausage (1 lb)", aisle: "Meat & Seafood", basePrice: 4.99, key: "sausage" },
           { name: "Penne or Rigatoni Pasta (16 oz box)", aisle: "Pantry", basePrice: 1.49, key: "pasta" },
           { name: "Fresh Baby Spinach (8 oz bag)", aisle: "Produce", basePrice: 2.49, key: "spinach" },
@@ -510,37 +563,169 @@
         ]
       },
       {
-        title: "Smoky Honey-Garlic Glazed Salmon & Roasted Carrots",
-        time: "25 mins",
+        title: "Sticky Honey-Soy Ginger Glazed Salmon & Caramelized Carrots",
+        prepTime: "10 mins",
+        cookTime: "22 mins",
         equipmentNeeded: "Oven & Sheet Pan",
         equipmentId: "sheet_pan",
         allergens: ["Fish", "Soy"],
-        steps: [
-          "Slice peeled carrots on a bias, toss with oil, salt, and pepper, and roast at 400F for 12 minutes.",
-          "Whisk soy sauce, honey, and minced garlic; brush over salmon fillets placed on the center of the sheet pan.",
-          "Roast another 10-12 minutes until the salmon flakes easily, serving over warm rice."
-        ],
+        chefTip: "Roasting the carrots for 12 minutes before putting the salmon on the sheet pan ensures the carrots caramelize without overcooking the delicate fish.",
         ingredients: [
+          "2 salmon fillets (6 oz each, 12 oz total), skin-on",
+          "1 lb whole carrots, peeled and sliced on a diagonal into 1/2-inch coins",
+          "1 cup dry jasmine rice (cooked alongside with 1.75 cups water)",
+          "1.5 tbsp olive oil",
+          "3 tbsp low-sodium soy sauce",
+          "2 tbsp honey",
+          "1 tsp rice vinegar or apple cider vinegar",
+          "3 cloves garlic, finely grated or minced",
+          "1/2 tsp kosher salt & 1/2 tsp black pepper"
+        ],
+        steps: [
+          "Preheat oven to 400F. Rinse 1 cup jasmine rice in cold water until clear, then simmer in a covered pot or rice cooker with 1.75 cups water and a pinch of salt for 15 minutes.",
+          "Toss the sliced carrots on a rimmed sheet pan with 1.5 tbsp olive oil, 1/2 tsp kosher salt, and 1/4 tsp black pepper. Roast for 12 minutes until beginning to soften.",
+          "Meanwhile, whisk together 3 tbsp soy sauce, 2 tbsp honey, 1 tsp vinegar, and 3 cloves minced garlic in a small bowl until smooth.",
+          "Push the par-roasted carrots to the outer edges of the pan. Place the salmon fillets skin-side down in the center and spoon half of the honey-garlic glaze generously over the fish.",
+          "Roast for 10 to 12 minutes until the salmon flakes easily with a fork (135F internal). Brush with the remaining glaze and serve over fluffy jasmine rice."
+        ],
+        storeItems: [
           { name: "Atlantic or Coho Salmon Portions (12 oz)", aisle: "Meat & Seafood", basePrice: 8.99, key: "salmon" },
           { name: "Whole Carrots (2 lb bag)", aisle: "Produce", basePrice: 1.99, key: "carrots" },
           { name: "Jasmine Rice (2 lb bag)", aisle: "Pantry", basePrice: 3.29, key: "rice" }
         ]
       },
       {
-        title: "Golden Crispy Veggie & Egg Fried Rice Skillet",
-        time: "20 mins",
+        title: "Wok-Style Golden Garlic Egg & Crisp Vegetable Fried Rice",
+        prepTime: "10 mins",
+        cookTime: "15 mins",
         equipmentNeeded: "Skillet / Frying Pan",
         equipmentId: "skillet",
         allergens: ["Eggs", "Soy"],
-        steps: [
-          "Saute diced carrots, onions, and peas in hot oil for 4 minutes until tender-crisp.",
-          "Push veggies to the side, scramble the eggs in the pan, then toss with cooked rice and soy sauce over high heat.",
-          "Finish with sliced green onions and serve hot."
-        ],
+        chefTip: "Spread freshly cooked rice on a flat plate in the freezer for 10 minutes before stir-frying—the dry surface prevents steaming and gives you restaurant-style toasted grains.",
         ingredients: [
+          "3 cups cooked jasmine or long-grain rice, chilled",
+          "4 large eggs, lightly beaten with a pinch of salt",
+          "1.5 cups frozen peas and diced carrots, thawed",
+          "1 medium yellow onion, finely diced",
+          "1 bunch green onions, thinly sliced (whites and greens separated)",
+          "2.5 tbsp cooking oil, divided",
+          "3 cloves garlic, finely minced",
+          "2.5 tbsp soy sauce",
+          "1 tsp sugar & 1/2 tsp freshly ground black pepper"
+        ],
+        steps: [
+          "Heat 1 tbsp oil in a large wide skillet over medium-high heat. Pour in the 4 beaten eggs and scramble gently for 60 to 90 seconds into soft curds; transfer eggs to a clean plate.",
+          "Add the remaining 1.5 tbsp oil to the hot skillet. Add the diced yellow onion and white parts of the green onions; stir-fry for 3 minutes until edges are golden.",
+          "Toss in the minced garlic and thawed peas and carrots; stir-fry for 2 minutes until bright and hot.",
+          "Add the 3 cups chilled rice to the skillet, pressing it flat against the hot pan for 30 seconds at a time between tosses so the grains toast and pop.",
+          "Drizzle the 2.5 tbsp soy sauce, 1 tsp sugar, and 1/2 tsp black pepper directly around the perimeter of the hot pan so it sizzles, then fold in the scrambled eggs and green onion tops."
+        ],
+        storeItems: [
           { name: "Large Grade A Eggs (12 ct)", aisle: "Dairy & Eggs", basePrice: 3.29, key: "eggs" },
           { name: "Frozen Peas & Carrots (12 oz bag)", aisle: "Frozen", basePrice: 1.79, key: "carrots" },
-          { name: "Yellow Onions (3 lb bag)", aisle: "Produce", basePrice: 2.99, key: "onions" }
+          { name: "Yellow Onions (3 lb bag)", aisle: "Produce", basePrice: 2.99, key: "onions" },
+          { name: "Fresh Green Onions (1 bunch)", aisle: "Produce", basePrice: 0.99, key: "green onions" }
+        ]
+      },
+      {
+        title: "Smoky Chipotle Chicken Fajita Skillet with Charred Onions & Peppers",
+        prepTime: "12 mins",
+        cookTime: "18 mins",
+        equipmentNeeded: "Skillet / Frying Pan",
+        equipmentId: "skillet",
+        allergens: ["Gluten / Wheat"],
+        chefTip: "Slice your chicken breast against the grain into uniform 1/2-inch strips and sear in a smoking-hot pan without crowding so the strips char before steaming.",
+        ingredients: [
+          "1.25 lbs boneless skinless chicken breast, sliced into 1/2-inch strips",
+          "2 bell peppers, sliced into thin strips",
+          "1 large yellow onion, halved and thinly sliced into half-moons",
+          "8 fajita-size flour or corn tortillas, warmed",
+          "2 tbsp cooking oil, divided",
+          "2 tsp chili powder",
+          "1.5 tsp ground cumin",
+          "1 tsp smoked paprika",
+          "1 tsp garlic powder",
+          "1/2 tsp dried oregano",
+          "1.25 tsp kosher salt & 1/2 tsp black pepper",
+          "1 tbsp vinegar or fresh lime juice"
+        ],
+        steps: [
+          "In a small bowl, mix the spice rub: 2 tsp chili powder, 1.5 tsp ground cumin, 1 tsp smoked paprika, 1 tsp garlic powder, 1/2 tsp oregano, 1.25 tsp salt, and 1/2 tsp black pepper.",
+          "Toss the sliced chicken strips with 1 tbsp oil and two-thirds of the spice blend until evenly coated.",
+          "Heat a heavy skillet over high heat until just smoking. Add 1 tbsp oil, the sliced bell peppers, sliced onion, and the remaining spice blend; sear for 5 to 6 minutes, tossing occasionally, until blistered on the edges. Transfer veggies to a plate.",
+          "Add the seasoned chicken strips to the same hot skillet in a single layer. Sear undisturbed for 3 minutes, then toss and cook 2 to 3 minutes more until cooked through (165F).",
+          "Return the charred peppers and onions to the skillet, splash with 1 tbsp vinegar or lime juice to deglaze the pan fond, toss together for 30 seconds, and serve in warm tortillas."
+        ],
+        storeItems: [
+          { name: "Boneless Skinless Chicken Breast (1.25 lb)", aisle: "Meat & Seafood", basePrice: 6.99, key: "chicken breast" },
+          { name: "Green & Red Bell Peppers (2 ct)", aisle: "Produce", basePrice: 2.50, key: "bell peppers" },
+          { name: "Soft Taco Flour Tortillas (10 ct)", aisle: "Pantry", basePrice: 2.49, key: "tortillas" }
+        ]
+      },
+      {
+        title: "Hearty Golden Potato, Carrot & Savory Herb Chicken Chowder",
+        prepTime: "15 mins",
+        cookTime: "25 mins",
+        equipmentNeeded: "Large Soup Pot",
+        equipmentId: "pot",
+        allergens: ["Dairy / Lactose", "Gluten / Wheat"],
+        chefTip: "Mashing just 1/2 cup of the simmered gold potatoes against the side of the pot thickens the broth naturally into a rich chowder.",
+        ingredients: [
+          "1 lb boneless chicken breast or thighs, cut into 3/4-inch bite-sized pieces",
+          "1.25 lbs baby gold potatoes, cut into 1/2-inch cubes",
+          "2 medium carrots, peeled and diced (about 1 cup)",
+          "1 medium yellow onion, finely diced",
+          "3 tbsp butter",
+          "3 tbsp all-purpose flour",
+          "4 cups low-sodium chicken broth",
+          "1.5 tsp Italian seasoning",
+          "1 tsp garlic powder",
+          "1.25 tsp kosher salt & 1/2 tsp black pepper",
+          "1 cup shredded sharp cheddar cheese"
+        ],
+        steps: [
+          "Melt 3 tbsp butter in a large soup pot or Dutch oven over medium heat. Add the diced onion and carrots and cook for 5 minutes until softened.",
+          "Add the cubed chicken, 1.5 tsp Italian seasoning, 1 tsp garlic powder, 1.25 tsp salt, and 1/2 tsp black pepper. Cook for 4 minutes until the outside of the chicken turns opaque.",
+          "Sprinkle 3 tbsp all-purpose flour evenly over the chicken and vegetables; stir constantly for 90 seconds to cook out the raw flour taste.",
+          "Slowly pour in 4 cups chicken broth while stirring to prevent lumps, then add the cubed gold potatoes. Bring to a boil, reduce heat to medium-low, and simmer covered for 15 minutes until potatoes are tender.",
+          "Remove from heat, mash a few potato cubes against the pot wall for body, and stir in 1 cup shredded cheddar cheese until velvety and melted."
+        ],
+        storeItems: [
+          { name: "Boneless Skinless Chicken Breast (1.25 lb)", aisle: "Meat & Seafood", basePrice: 6.99, key: "chicken" },
+          { name: "Baby Gold Potatoes (1.5 lb bag)", aisle: "Produce", basePrice: 3.49, key: "potatoes" },
+          { name: "Whole Carrots (2 lb bag)", aisle: "Produce", basePrice: 1.99, key: "carrots" },
+          { name: "Sharp Cheddar Cheese Shredded (8 oz)", aisle: "Dairy & Eggs", basePrice: 2.79, key: "cheddar cheese" }
+        ]
+      },
+      {
+        title: "Crispy Air-Fryer or Oven Parmesan-Crusted Chicken & Roasted Broccoli",
+        prepTime: "10 mins",
+        cookTime: "18 mins",
+        equipmentNeeded: "Oven & Sheet Pan",
+        equipmentId: "sheet_pan",
+        allergens: ["Gluten / Wheat"],
+        chefTip: "Tossing the broccoli florets with a tiny pinch of sugar along with garlic powder and salt helps the florets caramelize deeply in high heat.",
+        ingredients: [
+          "1.25 lbs chicken breast, butterflied into 4 thin cutlets",
+          "1 lb fresh broccoli crowns, cut into florets",
+          "2 tbsp olive oil, divided",
+          "2 tbsp butter, melted",
+          "1/3 cup all-purpose flour",
+          "1.5 tsp Italian seasoning",
+          "1 tsp smoked paprika",
+          "1 tsp garlic powder",
+          "1 tsp kosher salt & 1/2 tsp black pepper"
+        ],
+        steps: [
+          "Preheat oven to 425F (or Air Fryer to 400F). On a shallow plate, mix 1/3 cup flour, 1.5 tsp Italian seasoning, 1 tsp smoked paprika, 1 tsp garlic powder, 3/4 tsp kosher salt, and 1/4 tsp black pepper.",
+          "Brush the 4 thin chicken cutlets with 2 tbsp melted butter, then press both sides firmly into the seasoned flour mixture to form a light, savory crust.",
+          "Arrange the coated cutlets on one half of a greased sheet pan and drizzle the tops lightly with 1 tbsp olive oil.",
+          "Toss the broccoli florets with the remaining 1 tbsp olive oil, 1/4 tsp salt, and 1/4 tsp black pepper; spread on the other half of the sheet pan.",
+          "Bake at 425F for 16 to 18 minutes (flipping halfway) until the chicken crust is golden-crisp (165F internal) and broccoli edges are charred."
+        ],
+        storeItems: [
+          { name: "Boneless Skinless Chicken Breast (1.25 lb)", aisle: "Meat & Seafood", basePrice: 6.99, key: "chicken breast" },
+          { name: "Fresh Broccoli Crowns (1 lb)", aisle: "Produce", basePrice: 2.29, key: "broccoli" }
         ]
       }
     ];
@@ -921,7 +1106,7 @@
         try {
           plan = await window.generatePlanWithGemini(store, window.DEFAULT_WORKER_URL);
         } catch (e) {
-          console.warn("Gemini fallback to built-in solver:", e.message);
+          console.warn("Gemini fallback to built-in chef solver:", e.message);
         }
       }
 
@@ -949,10 +1134,11 @@
 
       var scored = eligible.map(function (r) {
         var matchScore = 0;
-        r.ingredients.forEach(function (ing) {
+        var sItems = r.storeItems ? r.storeItems : [];
+        sItems.forEach(function (ing) {
           if (fridgeLower.indexOf(ing.key.toLowerCase()) !== -1) matchScore += 2;
         });
-        return { recipe: r, score: matchScore + Math.random() };
+        return { recipe: r, score: matchScore + (Math.random() * 3) };
       }).sort(function (a, b) { return b.score - a.score; });
 
       var chosenRecipes = scored.slice(0, window.profileState.mealsCount).map(function (x) { return x.recipe; });
@@ -960,7 +1146,8 @@
       var usedFromKitchen = [];
 
       chosenRecipes.forEach(function (recipe) {
-        recipe.ingredients.forEach(function (ing) {
+        var sItems = recipe.storeItems ? recipe.storeItems : [];
+        sItems.forEach(function (ing) {
           if (fridgeLower.indexOf(ing.key.toLowerCase()) !== -1) {
             if (usedFromKitchen.indexOf(ing.name) === -1) usedFromKitchen.push(ing.name);
           } else if (!shoppingMap.has(ing.name)) {
@@ -992,15 +1179,57 @@
 
     window.generatePlanWithGemini = async function (store, workerUrl) {
       var allergyText = window.profileState.allergies.length > 0 ? window.profileState.allergies.join(", ") : "None";
-      var prompt = "Create a weekly grocery plan and " + window.profileState.mealsCount +
-        " dinner recipes (" + window.profileState.servingsCount + " servings each) for a shopper at " +
-        store.name + " (" + store.address + "). Maximum Weekly Budget: " + window.CURRENCY_SIGN + window.profileState.weeklyBudget +
-        ". Kitchen Equipment Available: " + window.profileState.equipment.join(", ") +
-        ". Allergies to Strictly Avoid: " + allergyText +
-        ". Preferences: " + window.profileState.preferences.join(", ") +
-        ". Ingredients Already in Kitchen (Use these first, zero extra cost): " + window.profileState.fridgeItems.join(", ") +
-        ". Basic Staples on Hand: " + window.profileState.staples.join(", ") +
-        '. Return ONLY valid JSON with keys: "shoppingList" (array of {name, aisle, price, checked, sourceBadge}), "usedFromKitchen" (array of strings), and "recipes" (array of {title, time, equipmentNeeded, steps}).';
+      var styleThemes = [
+        "Focus on restaurant-quality weeknight skillet, sheet-pan, and comfort classics with bold herb and spice layering.",
+        "Include a vibrant mix of Mediterranean, smoky Southwest, Asian-inspired stir-fry, and American bistro dinners.",
+        "Prioritize high-flavor, satisfying dinners with caramelized edges, pan sauces, and crisp-tender vegetables."
+      ];
+      var randomTheme = styleThemes[Math.floor(Math.random() * styleThemes.length)];
+
+      var prompt = "You are an executive chef and grocery budget planner. Create a weekly grocery plan and " +
+        window.profileState.mealsCount + " distinct, restaurant-quality dinner recipes (" +
+        window.profileState.servingsCount + " servings each) for a shopper at " + store.name + " (" + store.address + ").\n" +
+        "Culinary Direction: " + randomTheme + "\n\n" +
+        "CONSTRAINTS:\n" +
+        "- Maximum Weekly Grocery Budget: " + window.CURRENCY_SIGN + window.profileState.weeklyBudget + ".\n" +
+        "- Kitchen Equipment Available: " + window.profileState.equipment.join(", ") + ".\n" +
+        "- Allergies to Strictly Avoid: " + allergyText + ".\n" +
+        "- Dining Preferences: " + window.profileState.preferences.join(", ") + ".\n" +
+        "- In-Stock Fridge/Pantry (Prioritize using these at zero extra cost): " + window.profileState.fridgeItems.join(", ") + ".\n" +
+        "- Basic Kitchen Staples on Hand: " + window.profileState.staples.join(", ") + ".\n\n" +
+        "RECIPE REQUIREMENTS:\n" +
+        "1. EXACT MEASUREMENTS: Every recipe must list every ingredient with precise culinary measurements (e.g., '1.5 lbs boneless chicken thighs, cut into 1-inch pieces', '1 cup long-grain jasmine rice', '2 cups low-sodium chicken broth', '2 tbsp olive oil').\n" +
+        "2. SPICES & SEASONINGS: Never say 'spices to taste'. Specify exact amounts for each individual spice and herb (e.g., '1 tbsp smoked paprika', '1.5 tsp ground cumin', '1 tsp dried oregano', '1.25 tsp kosher salt', '1/2 tsp freshly cracked black pepper', '4 cloves garlic, finely minced').\n" +
+        "3. IN-DEPTH CULINARY STEPS: Write 5 to 6 thorough, step-by-step instructions covering prep, seasoning, sauce building, cooking temperatures, burner heat levels (medium-high, low simmer), exact timings, and visual/texture cues.\n" +
+        "4. METRICS & TIPS: Include active Prep Time, Cook Time, and a Chef's Tip.\n\n" +
+        "Return ONLY valid JSON matching this exact structure:\n" +
+        "{\n" +
+        '  "shoppingList": [\n' +
+        '    { "name": "Store Package Name & Size", "aisle": "Produce, Meat & Seafood, Dairy & Eggs, or Pantry", "price": 4.99, "checked": false, "sourceBadge": "Store Estimate" }\n' +
+        '  ],\n' +
+        '  "usedFromKitchen": ["Item 1", "Item 2"],\n' +
+        '  "recipes": [\n' +
+        '    {\n' +
+        '      "title": "Dish Name",\n' +
+        '      "prepTime": "15 mins",\n' +
+        '      "cookTime": "25 mins",\n' +
+        '      "equipmentNeeded": "Skillet / Frying Pan",\n' +
+        '      "chefTip": "Specific culinary tip for best flavor or texture.",\n' +
+        '      "ingredients": [\n' +
+        '        "1.5 lbs boneless chicken thighs, patted dry",\n' +
+        '        "1.5 tbsp olive oil",\n' +
+        '        "1 tbsp smoked paprika",\n' +
+        '        "1 tsp garlic powder",\n' +
+        '        "1 tsp kosher salt",\n' +
+        '        "1/2 tsp black pepper"\n' +
+        '      ],\n' +
+        '      "steps": [\n' +
+        '        "Detailed step 1...",\n' +
+        '        "Detailed step 2..."\n' +
+        '      ]\n' +
+        '    }\n' +
+        '  ]\n' +
+        "}";
 
       var u = new URL(workerUrl);
       u.searchParams.set("provider", "gemini");
@@ -1014,7 +1243,9 @@
         })
       });
       var data = await res.json();
-      var parsed = JSON.parse(data.candidates[0].content.parts[0].text);
+      var rawText = data.candidates[0].content.parts[0].text;
+      var cleanJson = rawText.replace(/^```json\s*/i, "").replace(/```\s*$/i, "").trim();
+      var parsed = JSON.parse(cleanJson);
       var totalCost = +parsed.shoppingList.reduce(function (s, i) { return s + Number(i.price ? i.price : 0); }, 0).toFixed(2);
       return {
         storeName: store.name,
@@ -1078,16 +1309,48 @@
 
       var recipesEl = document.getElementById("recipesContainer");
       recipesEl.innerHTML = plan.recipes.map(function (r, i) {
-        var stepsArr = r.steps ? r.steps : [];
-        var stepItems = stepsArr.map(function (s) {
-          return '<li style="margin-bottom:6px;">' + s + '</li>';
+        var rawIngs = r.ingredients ? r.ingredients : [];
+        var ingList = rawIngs.map(function (ing) {
+          var text = typeof ing === "string" ? ing : ing.name;
+          return '<li style="margin-bottom:6px; font-size:13px; color:#292524; display:flex; align-items:baseline; gap:8px;">' +
+            '<span style="color:#15803D; font-weight:800;">•</span>' +
+            '<span>' + text + '</span>' +
+          '</li>';
         }).join("");
-        return '<div class="card">' +
-          '<div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;">' +
-          '<span class="live-badge" style="margin-bottom:0;">Dinner #' + (i + 1) + ' • ' + r.time + '</span>' +
-          '<span style="font-size:12px; font-weight:700; color:#57534E; background:#F5F5F4; padding:4px 10px; border-radius:999px;">Uses: ' + r.equipmentNeeded + '</span>' +
-          '</div><h5 style="font-size:18px; font-weight:800; margin-bottom:12px;">' + r.title + '</h5>' +
-          '<ol style="padding-left:20px; font-size:14px; color:#44403C;">' + stepItems + '</ol></div>';
+
+        var stepsArr = r.steps ? r.steps : [];
+        var stepItems = stepsArr.map(function (s, sIdx) {
+          return '<li style="margin-bottom:12px; line-height:1.6;">' +
+            '<span style="font-weight:800; color:#1C1917;">Step ' + (sIdx + 1) + ': </span>' +
+            '<span>' + s + '</span>' +
+          '</li>';
+        }).join("");
+
+        var timeLabel = r.prepTime ? ("Prep: " + r.prepTime + (r.cookTime ? " • Cook: " + r.cookTime : "")) : (r.time ? r.time : "30 mins");
+
+        var tipHtml = r.chefTip ? (
+          '<div style="margin-top:16px; background:#FEF3C7; border-left:4px solid #D97706; padding:12px 14px; border-radius:0 12px 12px 0;">' +
+            '<div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#92400E; margin-bottom:2px;">👨‍🍳 Chef\'s Pro Tip</div>' +
+            '<div style="font-size:13px; color:#78350F; line-height:1.4;">' + r.chefTip + '</div>' +
+          '</div>'
+        ) : "";
+
+        return '<div class="card" style="margin-bottom:20px;">' +
+          '<div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px;">' +
+            '<span class="live-badge" style="margin-bottom:0;">Dinner #' + (i + 1) + ' • ' + timeLabel + '</span>' +
+            '<span style="font-size:12px; font-weight:700; color:#57534E; background:#F5F5F4; padding:4px 10px; border-radius:999px;">Uses: ' + r.equipmentNeeded + '</span>' +
+          '</div>' +
+          '<h5 style="font-size:20px; font-weight:800; color:#1C1917; margin-bottom:14px;">' + r.title + '</h5>' +
+          '<div style="background:#FAF8F5; border:1px solid #E7E5E4; border-radius:16px; padding:14px 16px; margin-bottom:16px;">' +
+            '<div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; color:#15803D; margin-bottom:8px;">Ingredients &amp; Exact Measurements</div>' +
+            '<ul style="list-style:none; padding:0; margin:0;">' + ingList + '</ul>' +
+          '</div>' +
+          '<div>' +
+            '<div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; color:#57534E; margin-bottom:8px;">Step-by-Step Instructions</div>' +
+            '<ol style="list-style:none; padding:0; font-size:14px; color:#44403C;">' + stepItems + '</ol>' +
+          '</div>' +
+          tipHtml +
+        '</div>';
       }).join("");
     };
 
@@ -1182,7 +1445,7 @@
       };
 
       const statusEl = document.getElementById("cloudStatusText");
-      if (statusEl) statusEl.textContent = "v2.4 Live • Cloud Connected";
+      if (statusEl) statusEl.textContent = "v2.5 Live • Cloud Connected";
 
       onAuthStateChanged(auth, async function (user) {
         if (user) {
