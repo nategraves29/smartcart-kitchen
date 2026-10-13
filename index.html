@@ -20,7 +20,7 @@
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
     }
-    button, input, select { font-family: inherit; }
+    button, input, select, textarea { font-family: inherit; }
     button { cursor: pointer; touch-action: manipulation; border: none; background: none; }
     .top-header { background: #FFFFFF; border-bottom: 1px solid #E7E5E4; position: sticky; top: 0; z-index: 30; }
     .header-inner { max-width: 1024px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
@@ -44,8 +44,8 @@
     .mode-btn.active { background: #FFFFFF; color: #1C1917; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
     .form-group { margin-bottom: 16px; }
     .form-label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #57534E; margin-bottom: 6px; }
-    .text-input, .select-input { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #D6D3D1; font-size: 15px; background: #FFFFFF; color: #1C1917; outline: none; }
-    .text-input:focus, .select-input:focus { border-color: #15803D; box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.12); }
+    .text-input, .select-input, .textarea-input { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #D6D3D1; font-size: 15px; background: #FFFFFF; color: #1C1917; outline: none; }
+    .text-input:focus, .select-input:focus, .textarea-input:focus { border-color: #15803D; box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.12); }
     .error-box { background: #FEF2F2; border: 1px solid #FECACA; color: #B91C1C; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
     .btn-primary { width: 100%; padding: 14px 22px; background: #15803D; color: #FFFFFF; font-size: 16px; font-weight: 800; border-radius: 16px; box-shadow: 0 4px 12px rgba(21, 128, 61, 0.22); transition: background 0.15s ease; }
     .btn-primary:hover { background: #166534; }
@@ -82,6 +82,7 @@
     .counter-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
     .counter-box { padding: 16px; border-radius: 16px; border: 1.5px solid #E7E5E4; display: flex; align-items: center; justify-content: space-between; }
     .counter-btn { width: 36px; height: 36px; border-radius: 10px; background: #F5F5F4; font-size: 18px; font-weight: 800; }
+    .craving-box { background: #F0FDF4; border: 1.5px solid #BBF7D0; border-radius: 18px; padding: 18px; margin-top: 18px; }
     .footer-bar { margin-top: auto; border-top: 1px solid #E7E5E4; background: #FFFFFF; padding: 16px; text-align: center; font-size: 12px; color: #78716C; }
     @media print { .no-print { display: none !important; } body { background: #FFFFFF; } }
   </style>
@@ -115,7 +116,7 @@
         <div class="auth-hero-icon">🥗</div>
         <div class="live-badge">
           <span class="status-dot"></span>
-          <span id="cloudStatusText">v2.6 Live • Ready</span>
+          <span id="cloudStatusText">v2.7 Live • Ready</span>
         </div>
         <h2 class="auth-title">Welcome to Your Kitchen</h2>
         <p class="auth-subtitle">Sign in to load your kitchen tools, fridge inventory, favorite store, and weekly budget.</p>
@@ -206,7 +207,7 @@
           <div id="quickFridgePills" class="pill-wrap"></div>
         </div>
         <div style="display:flex; gap:8px; margin-top:14px;">
-          <input id="customFridgeInput" type="text" aria-label="Add custom fridge item" placeholder="Type anything else you have (e.g., 2 chicken breasts, spinach)..."
+          <input id="customFridgeInput" type="text" aria-label="Add custom fridge item" placeholder="Type anything else you have (e.g., 2 chicken breasts, heirloom tomatoes, squash)..."
             onkeydown="if(event.key==='Enter'){event.preventDefault();window.addCustomFridgeItem();}" class="text-input" />
           <button type="button" onclick="window.addCustomFridgeItem()"
             style="padding:0 20px; background:#1C1917; color:#FFF; font-weight:800; border-radius:12px; font-size:14px; white-space:nowrap;">+ Add Item</button>
@@ -224,22 +225,48 @@
       </div>
 
       <div class="card">
-        <h3 style="font-size:19px; font-weight:800; margin-bottom:4px;">3. Any allergies or food preferences?</h3>
-        <p style="font-size:14px; color:#57534E; margin-bottom:16px;">Select any allergies to strictly avoid, plus the style of meals you enjoy.</p>
+        <h3 style="font-size:19px; font-weight:800; margin-bottom:4px;">3. Allergies, Preferences &amp; What You're Feeling</h3>
+        <p style="font-size:14px; color:#57534E; margin-bottom:16px;">Select any allergies to strictly avoid, tap meal styles you enjoy, and tell the chef what you're craving this week.</p>
         <div style="margin-bottom:18px;">
           <div class="form-label" style="color:#B91C1C;">🚫 Allergies &amp; Dislikes (Strictly Excluded)</div>
           <div id="allergyGrid" class="pill-wrap"></div>
         </div>
-        <div>
+        <div style="margin-bottom:18px;">
           <div class="form-label" style="color:#166534;">😋 Meal Styles You Like</div>
           <div id="preferenceGrid" class="pill-wrap"></div>
         </div>
+
+        <!-- NEW: WHAT ARE YOU FEELING / CRAVING BOX -->
+        <div class="craving-box">
+          <label for="cravingInputStep1" class="form-label" style="color:#14532D; font-size:12px;">💭 What are you feeling this week? (Cravings &amp; Dish Ideas)</label>
+          <p style="font-size:13px; color:#166534; margin-bottom:10px;">
+            Tell the chef what sounds good or how you want to use your on-hand ingredients—we'll build recipes around your idea and budget!
+          </p>
+          <textarea id="cravingInputStep1" rows="2"
+            oninput="window.updateCravingPrompt(this.value)"
+            placeholder="e.g., Crispy chicken thighs on the pellet smoker, a cozy spicy noodle stir-fry using my onions and eggs, or a hearty pasta dinner..."
+            class="textarea-input"></textarea>
+        </div>
       </div>
 
+      <!-- UPGRADED: CUSTOMIZABLE PANTRY STAPLES -->
       <div class="card">
-        <h3 style="font-size:18px; font-weight:800; margin-bottom:4px;">4. Basic Pantry Staples</h3>
-        <p style="font-size:14px; color:#57534E; margin-bottom:14px;">Uncheck anything you are completely out of so we add it to your grocery list.</p>
-        <div id="staplesGrid" class="pill-wrap"></div>
+        <h3 style="font-size:18px; font-weight:800; margin-bottom:4px;">4. Basic Pantry Staples &amp; Spice Rack</h3>
+        <p style="font-size:14px; color:#57534E; margin-bottom:14px;">
+          Tap any staple to uncheck it if you're out, or add your own go-to pantry staples, sauces, and rubs below.
+        </p>
+        <div id="staplesGrid" class="pill-wrap" style="margin-bottom:14px;"></div>
+
+        <div style="display:flex; gap:8px; padding-top:12px; border-top:1px solid #E7E5E4;">
+          <input id="customStapleInput" type="text" aria-label="Add custom pantry staple"
+            placeholder="Add your own staple (e.g., Sesame Oil, Fish Sauce, Smoked Paprika, Cornstarch, BBQ Rub)..."
+            onkeydown="if(event.key==='Enter'){event.preventDefault();window.addCustomStapleItem();}"
+            class="text-input" />
+          <button type="button" onclick="window.addCustomStapleItem()"
+            style="padding:0 20px; background:#292524; color:#FFF; font-weight:800; border-radius:12px; font-size:14px; white-space:nowrap;">
+            + Add Staple
+          </button>
+        </div>
       </div>
 
       <div style="display:flex; justify-content:flex-end;">
@@ -316,7 +343,7 @@
       <div id="planLoadingCard" class="card hidden" style="text-align:center; padding:44px 20px;">
         <div style="font-size:42px; margin-bottom:10px;">👨‍🍳</div>
         <h3 style="font-size:20px; font-weight:800; margin-bottom:6px;">Crafting Chef Recipes &amp; Checking Store Prices...</h3>
-        <p id="loadingSubtext" style="font-size:14px; color:#57534E;">Calculating exact spice ratios, prep measurements, and keeping your cart under budget.</p>
+        <p id="loadingSubtext" style="font-size:14px; color:#57534E;">Calculating exact fractional measurements, spice ratios, and keeping your cart under budget.</p>
       </div>
 
       <div id="planResultsContainer">
@@ -352,6 +379,20 @@
               <div id="budgetProgressBar" class="progress-fill" style="width: 60%"></div>
             </div>
           </div>
+
+          <!-- QUICK CRAVING BAR ON STEP 3 -->
+          <div class="no-print" style="margin-top:16px; background:#F0FDF4; border:1px solid #BBF7D0; border-radius:14px; padding:12px 14px; display:flex; flex-wrap:wrap; align-items:center; gap:10px;">
+            <label for="cravingInputStep3" style="font-size:12px; font-weight:800; color:#14532D; white-space:nowrap;">💭 What are you feeling?</label>
+            <input id="cravingInputStep3" type="text"
+              oninput="window.updateCravingPrompt(this.value)"
+              onkeydown="if(event.key==='Enter'){event.preventDefault();window.generateWeeklyMealPlan();}"
+              placeholder="Type a craving or dish idea (e.g., smoky grilled chicken, enchiladas, garlic noodles) &amp; hit Generate..."
+              class="text-input" style="flex:1; min-width:220px; padding:9px 12px; font-size:13px;" />
+            <button type="button" onclick="window.generateWeeklyMealPlan()"
+              style="padding:10px 16px; background:#15803D; color:#FFF; font-weight:800; font-size:13px; border-radius:10px; white-space:nowrap;">
+              ✨ Generate Matching Plan
+            </button>
+          </div>
         </div>
 
         <div class="plan-layout">
@@ -385,7 +426,7 @@
   </div>
 
   <footer class="footer-bar no-print">
-    SmartCart Kitchen v2.6 — Reston, VA (20191) &amp; Beaverton, OR
+    SmartCart Kitchen v2.7 — Reston, VA (20191) &amp; Beaverton, OR
   </footer>
 
   <script>
@@ -411,6 +452,27 @@
       var cleaned = String(pickVal(val, "")).replace(/[^0-9.]/g, "");
       var num = parseFloat(cleaned);
       return isNaN(num) ? pickVal(fallback, 3.99) : num;
+    }
+
+    // Converts decimal quantities (.25, 0.5, .75, 1.25, 1.5, 1.75, 2.5, etc.) into clean kitchen fractions
+    function formatCulinaryFractions(text) {
+      if (!text || typeof text !== "string") return "";
+      var decMap = {
+        "25": "1/4",
+        "33": "1/3",
+        "5": "1/2",
+        "50": "1/2",
+        "66": "2/3",
+        "67": "2/3",
+        "75": "3/4"
+      };
+      return text.replace(/(^|\s|\()(\d*)\.(25|33|50|5|66|67|75)\b/g, function (match, prefix, whole, dec) {
+        var frac = decMap[dec] ? decMap[dec] : ("." + dec);
+        if (whole && whole !== "0") {
+          return prefix + whole + " " + frac;
+        }
+        return prefix + frac;
+      });
     }
 
     var STORES = [
@@ -456,9 +518,10 @@
     ];
 
     var STAPLE_OPTIONS = [
-      "Olive / Cooking Oil", "Butter", "Salt & Black Pepper", "Garlic / Garlic Powder",
-      "Soy Sauce", "All-Purpose Flour", "Sugar / Honey", "Vinegar",
-      "Chili Powder / Paprika", "Italian Seasoning", "Chicken / Veggie Broth"
+      "Olive / Cooking Oil", "Butter", "Kosher Salt & Black Pepper", "Garlic / Garlic Powder",
+      "Onion Powder", "Soy Sauce", "All-Purpose Flour", "Sugar / Honey",
+      "Apple Cider / Rice Vinegar", "Chili Powder & Smoked Paprika", "Ground Cumin",
+      "Italian Seasoning", "Chicken / Veggie Broth", "Hot Sauce", "Cornstarch"
     ];
 
     var CURATED_RECIPES = [
@@ -471,14 +534,14 @@
         allergens: [],
         chefTip: "Patting the chicken thighs completely dry with paper towels before rubbing with oil and spices is the secret to blistered, crispy edges.",
         ingredients: [
-          "1.5 lbs boneless skinless chicken thighs, trimmed",
-          "1.5 lbs baby gold potatoes, halved lengthwise",
+          "1 1/2 lbs boneless skinless chicken thighs, trimmed",
+          "1 1/2 lbs baby gold potatoes, halved lengthwise",
           "1 lb fresh broccoli crowns, cut into bite-sized florets",
-          "2.5 tbsp extra-virgin olive oil, divided",
-          "1.5 tsp dried Italian herb seasoning",
+          "2 1/2 tbsp extra-virgin olive oil, divided",
+          "1 1/2 tsp dried Italian herb seasoning",
           "1 tsp smoked paprika",
           "1 tsp garlic powder (or 4 cloves fresh garlic, minced)",
-          "1.25 tsp kosher salt, divided",
+          "1 1/4 tsp kosher salt, divided",
           "1/2 tsp freshly cracked black pepper"
         ],
         steps: [
@@ -489,8 +552,8 @@
           "Return to the oven for 12 to 13 minutes until the chicken reaches 175F internally and the potatoes are fork-tender with crispy golden edges."
         ],
         storeItems: [
-          { name: "Boneless Skinless Chicken Thighs (1.5 lb)", aisle: "Meat & Seafood", basePrice: 6.49, key: "chicken" },
-          { name: "Baby Gold Potatoes (1.5 lb bag)", aisle: "Produce", basePrice: 3.49, key: "potatoes" },
+          { name: "Boneless Skinless Chicken Thighs (1 1/2 lb)", aisle: "Meat & Seafood", basePrice: 6.49, key: "chicken" },
+          { name: "Baby Gold Potatoes (1 1/2 lb bag)", aisle: "Produce", basePrice: 3.49, key: "potatoes" },
           { name: "Fresh Broccoli Crowns (1 lb)", aisle: "Produce", basePrice: 2.29, key: "broccoli" }
         ]
       },
@@ -509,9 +572,9 @@
           "1 cup long-grain white or jasmine rice, uncooked",
           "1 can (15 oz) black beans, rinsed and drained",
           "1 cup chunky restaurant-style salsa",
-          "1.75 cups low-sodium chicken or beef broth",
+          "1 3/4 cups low-sodium chicken or beef broth",
           "1 tbsp chili powder",
-          "1.5 tsp ground cumin",
+          "1 1/2 tsp ground cumin",
           "1 tsp smoked paprika",
           "1 tsp garlic powder",
           "1 tsp kosher salt & 1/2 tsp black pepper",
@@ -519,9 +582,9 @@
         ],
         steps: [
           "Heat a 12-inch deep skillet over medium-high heat. Add the ground beef and diced yellow onion, breaking the meat apart with a wooden spoon, and cook for 6 to 7 minutes until browned.",
-          "Add the diced bell peppers, 1 tbsp chili powder, 1.5 tsp cumin, 1 tsp smoked paprika, 1 tsp garlic powder, 1 tsp salt, and 1/2 tsp black pepper. Saute for 2 minutes until fragrant.",
+          "Add the diced bell peppers, 1 tbsp chili powder, 1 1/2 tsp cumin, 1 tsp smoked paprika, 1 tsp garlic powder, 1 tsp salt, and 1/2 tsp black pepper. Saute for 2 minutes until fragrant.",
           "Pour in the 1 cup uncooked rice and stir constantly for 1 minute to coat the grains in the seasoned oil.",
-          "Stir in the drained black beans, 1 cup salsa, and 1.75 cups broth. Bring to a boil, then immediately reduce burner heat to low and cover tightly with a lid.",
+          "Stir in the drained black beans, 1 cup salsa, and 1 3/4 cups broth. Bring to a boil, then immediately reduce burner heat to low and cover tightly with a lid.",
           "Simmer undisturbed for 15 minutes until the rice is tender. Turn off the heat, scatter the 1 cup shredded cheddar across the top, cover for 2 minutes until melted, and serve."
         ],
         storeItems: [
@@ -542,21 +605,21 @@
         chefTip: "Save 1/2 cup of starchy pasta boiling water before draining—splashing it into the tomato-garlic sauce makes it cling to the rigatoni.",
         ingredients: [
           "1 lb mild or hot Italian dinner sausage, casings removed",
-          "12 oz rigatoni or penne pasta (about 3.5 cups dry)",
+          "3/4 lb (12 oz) rigatoni or penne pasta (about 3 1/2 cups dry)",
           "1 tbsp olive oil",
           "1 small yellow onion, finely chopped",
-          "4 cloves garlic, minced (or 1.5 tsp garlic powder)",
+          "4 cloves garlic, minced (or 1 1/2 tsp garlic powder)",
           "1 can (28 oz) crushed San Marzano-style tomatoes",
-          "1.5 tsp dried Italian seasoning",
+          "1 1/2 tsp dried Italian seasoning",
           "1 tsp kosher salt & 1/2 tsp black pepper",
           "1 tsp granulated sugar (to balance tomato acidity)",
           "4 oz fresh baby spinach (about 4 packed cups)",
           "3 tbsp butter"
         ],
         steps: [
-          "Bring a large pot of salted water to a rolling boil. Add the 12 oz pasta and cook 1 minute shy of package directions. Reserve 1/2 cup pasta water, then drain.",
+          "Bring a large pot of salted water to a rolling boil. Add the 3/4 lb pasta and cook 1 minute shy of package directions. Reserve 1/2 cup pasta water, then drain.",
           "Warm 1 tbsp olive oil in a large skillet over medium-high heat. Add the Italian sausage and press flat; sear undisturbed for 3 minutes to develop a brown crust, then crumble and cook 4 minutes more.",
-          "Add the chopped onion and saute for 3 minutes until translucent. Add the minced garlic and 1.5 tsp Italian seasoning; stir for 45 seconds.",
+          "Add the chopped onion and saute for 3 minutes until translucent. Add the minced garlic and 1 1/2 tsp Italian seasoning; stir for 45 seconds.",
           "Pour in the 28 oz crushed tomatoes, 1 tsp sugar, 1 tsp salt, and 1/2 tsp black pepper. Reduce heat to medium-low and simmer gently for 8 minutes.",
           "Swirl in 3 tbsp butter and fold in the drained pasta and 4 cups fresh baby spinach, adding splashes of reserved pasta water as needed, tossing for 2 minutes until the spinach wilts."
         ],
@@ -576,10 +639,10 @@
         allergens: ["Fish", "Soy"],
         chefTip: "Roasting the carrots for 12 minutes before putting the salmon on the sheet pan ensures the carrots caramelize without overcooking the fish.",
         ingredients: [
-          "2 salmon fillets (6 oz each, 12 oz total), skin-on",
+          "3/4 lb salmon fillets (2 fillets, 6 oz each), skin-on",
           "1 lb whole carrots, peeled and sliced on a diagonal into 1/2-inch coins",
-          "1 cup dry jasmine rice (cooked with 1.75 cups water)",
-          "1.5 tbsp olive oil",
+          "1 cup dry jasmine rice (cooked with 1 3/4 cups water)",
+          "1 1/2 tbsp olive oil",
           "3 tbsp low-sodium soy sauce",
           "2 tbsp honey",
           "1 tsp rice vinegar or apple cider vinegar",
@@ -587,14 +650,14 @@
           "1/2 tsp kosher salt & 1/2 tsp black pepper"
         ],
         steps: [
-          "Preheat oven to 400F. Rinse 1 cup jasmine rice in cold water until clear, then simmer in a covered pot or rice cooker with 1.75 cups water and a pinch of salt for 15 minutes.",
-          "Toss the sliced carrots on a rimmed sheet pan with 1.5 tbsp olive oil, 1/2 tsp kosher salt, and 1/4 tsp black pepper. Roast for 12 minutes.",
+          "Preheat oven to 400F. Rinse 1 cup jasmine rice in cold water until clear, then simmer in a covered pot or rice cooker with 1 3/4 cups water and a pinch of salt for 15 minutes.",
+          "Toss the sliced carrots on a rimmed sheet pan with 1 1/2 tbsp olive oil, 1/2 tsp kosher salt, and 1/4 tsp black pepper. Roast for 12 minutes.",
           "Meanwhile, whisk together 3 tbsp soy sauce, 2 tbsp honey, 1 tsp vinegar, and 3 cloves minced garlic in a small bowl.",
           "Push the par-roasted carrots to the outer edges of the pan. Place the salmon fillets skin-side down in the center and spoon half of the honey-garlic glaze over the fish.",
           "Roast for 10 to 12 minutes until the salmon flakes easily with a fork (135F internal). Brush with the remaining glaze and serve over warm jasmine rice."
         ],
         storeItems: [
-          { name: "Atlantic or Coho Salmon Portions (12 oz)", aisle: "Meat & Seafood", basePrice: 8.99, key: "salmon" },
+          { name: "Atlantic or Coho Salmon Portions (3/4 lb)", aisle: "Meat & Seafood", basePrice: 8.99, key: "salmon" },
           { name: "Whole Carrots (2 lb bag)", aisle: "Produce", basePrice: 1.99, key: "carrots" },
           { name: "Jasmine Rice (2 lb bag)", aisle: "Pantry", basePrice: 3.29, key: "rice" }
         ]
@@ -610,20 +673,20 @@
         ingredients: [
           "3 cups cooked jasmine or long-grain rice, chilled",
           "4 large eggs, lightly beaten with a pinch of salt",
-          "1.5 cups frozen peas and diced carrots, thawed",
+          "1 1/2 cups frozen peas and diced carrots, thawed",
           "1 medium yellow onion, finely diced",
           "1 bunch green onions, thinly sliced (whites and greens separated)",
-          "2.5 tbsp cooking oil, divided",
+          "2 1/2 tbsp cooking oil, divided",
           "3 cloves garlic, finely minced",
-          "2.5 tbsp soy sauce",
+          "2 1/2 tbsp soy sauce",
           "1 tsp sugar & 1/2 tsp freshly ground black pepper"
         ],
         steps: [
           "Heat 1 tbsp oil in a large wide skillet over medium-high heat. Pour in the 4 beaten eggs and scramble gently for 60 to 90 seconds into soft curds; transfer to a plate.",
-          "Add the remaining 1.5 tbsp oil to the hot skillet. Add the diced yellow onion and white parts of the green onions; stir-fry for 3 minutes until edges are golden.",
+          "Add the remaining 1 1/2 tbsp oil to the hot skillet. Add the diced yellow onion and white parts of the green onions; stir-fry for 3 minutes until edges are golden.",
           "Toss in the minced garlic and thawed peas and carrots; stir-fry for 2 minutes until bright and hot.",
           "Add the 3 cups chilled rice to the skillet, pressing it flat against the hot pan for 30 seconds at a time between tosses so the grains toast.",
-          "Drizzle the 2.5 tbsp soy sauce, 1 tsp sugar, and 1/2 tsp black pepper around the perimeter of the hot pan, then fold in the scrambled eggs and green onion tops."
+          "Drizzle the 2 1/2 tbsp soy sauce, 1 tsp sugar, and 1/2 tsp black pepper around the perimeter of the hot pan, then fold in the scrambled eggs and green onion tops."
         ],
         storeItems: [
           { name: "Large Grade A Eggs (12 ct)", aisle: "Dairy & Eggs", basePrice: 3.29, key: "eggs" },
@@ -641,27 +704,27 @@
         allergens: ["Gluten / Wheat"],
         chefTip: "Slice your chicken breast against the grain into uniform 1/2-inch strips and sear in a hot pan without crowding so the strips char.",
         ingredients: [
-          "1.25 lbs boneless skinless chicken breast, sliced into 1/2-inch strips",
+          "1 1/4 lbs boneless skinless chicken breast, sliced into 1/2-inch strips",
           "2 bell peppers, sliced into thin strips",
           "1 large yellow onion, halved and thinly sliced into half-moons",
           "8 fajita-size flour or corn tortillas, warmed",
           "2 tbsp cooking oil, divided",
           "2 tsp chili powder",
-          "1.5 tsp ground cumin",
+          "1 1/2 tsp ground cumin",
           "1 tsp smoked paprika",
           "1 tsp garlic powder",
-          "1.25 tsp kosher salt & 1/2 tsp black pepper",
+          "1 1/4 tsp kosher salt & 1/2 tsp black pepper",
           "1 tbsp vinegar or fresh lime juice"
         ],
         steps: [
-          "In a small bowl, mix the spice rub: 2 tsp chili powder, 1.5 tsp ground cumin, 1 tsp smoked paprika, 1 tsp garlic powder, 1.25 tsp salt, and 1/2 tsp black pepper.",
+          "In a small bowl, mix the spice rub: 2 tsp chili powder, 1 1/2 tsp ground cumin, 1 tsp smoked paprika, 1 tsp garlic powder, 1 1/4 tsp salt, and 1/2 tsp black pepper.",
           "Toss the sliced chicken strips with 1 tbsp oil and two-thirds of the spice blend until evenly coated.",
           "Heat a heavy skillet over high heat. Add 1 tbsp oil, the sliced bell peppers, sliced onion, and the remaining spice blend; sear for 5 to 6 minutes until blistered on the edges. Transfer veggies to a plate.",
           "Add the seasoned chicken strips to the same hot skillet in a single layer. Sear undisturbed for 3 minutes, then toss and cook 2 to 3 minutes more until cooked through (165F).",
           "Return the charred peppers and onions to the skillet, splash with 1 tbsp vinegar or lime juice, toss together for 30 seconds, and serve in warm tortillas."
         ],
         storeItems: [
-          { name: "Boneless Skinless Chicken Breast (1.25 lb)", aisle: "Meat & Seafood", basePrice: 6.99, key: "chicken breast" },
+          { name: "Boneless Skinless Chicken Breast (1 1/4 lb)", aisle: "Meat & Seafood", basePrice: 6.99, key: "chicken breast" },
           { name: "Green & Red Bell Peppers (2 ct)", aisle: "Produce", basePrice: 2.50, key: "bell peppers" },
           { name: "Soft Taco Flour Tortillas (10 ct)", aisle: "Pantry", basePrice: 2.49, key: "tortillas" }
         ]
@@ -687,6 +750,8 @@
         allergies: [],
         preferences: ["Quick (Under 30 Mins)", "High Protein"],
         staples: STAPLE_OPTIONS.slice(),
+        allStaples: STAPLE_OPTIONS.slice(),
+        cravingPrompt: "",
         currentPlan: null,
         updatedAt: new Date().toISOString()
       };
@@ -815,6 +880,18 @@
       document.getElementById("authScreen").classList.remove("hidden");
     };
 
+    function ensureAllStaplesMerged() {
+      var master = window.profileState.allStaples ? window.profileState.allStaples.slice() : STAPLE_OPTIONS.slice();
+      STAPLE_OPTIONS.forEach(function (st) {
+        if (master.indexOf(st) === -1) master.push(st);
+      });
+      var currentActive = window.profileState.staples ? window.profileState.staples : [];
+      currentActive.forEach(function (st) {
+        if (master.indexOf(st) === -1) master.push(st);
+      });
+      window.profileState.allStaples = master;
+    }
+
     window.loadUserProfile = async function (defaultRegion, defaultName) {
       if (!window.currentUser) return;
       var r = pickVal(defaultRegion, "reston");
@@ -849,9 +926,9 @@
           console.warn("Using local profile cache:", e.message);
         }
       }
+      ensureAllStaplesMerged();
     };
 
-    // Non-blocking save: saves to localStorage immediately and syncs to Firestore in the background
     window.saveUserProfile = function () {
       if (!window.currentUser) return Promise.resolve();
       window.profileState.updatedAt = new Date().toISOString();
@@ -906,12 +983,27 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
+    window.updateCravingPrompt = function (val) {
+      window.profileState.cravingPrompt = val;
+      var box1 = document.getElementById("cravingInputStep1");
+      var box3 = document.getElementById("cravingInputStep3");
+      if (box1 && box1.value !== val) box1.value = val;
+      if (box3 && box3.value !== val) box3.value = val;
+      window.saveUserProfile();
+    };
+
     window.renderAllSteps = function () {
       document.getElementById("bannerBudgetDisplay").textContent = window.CURRENCY_SIGN + window.profileState.weeklyBudget;
       document.getElementById("budgetSliderLabel").textContent = window.CURRENCY_SIGN + window.profileState.weeklyBudget;
       document.getElementById("budgetRangeInput").value = window.profileState.weeklyBudget;
       document.getElementById("mealsCountDisplay").textContent = window.profileState.mealsCount;
       document.getElementById("servingsCountDisplay").textContent = window.profileState.servingsCount;
+
+      var cravingVal = pickVal(window.profileState.cravingPrompt, "");
+      var box1 = document.getElementById("cravingInputStep1");
+      var box3 = document.getElementById("cravingInputStep3");
+      if (box1) box1.value = cravingVal;
+      if (box3) box3.value = cravingVal;
 
       window.renderFridgeSection();
       window.renderEquipmentGrid();
@@ -974,10 +1066,29 @@
     };
 
     window.renderStaplesGrid = function () {
-      document.getElementById("staplesGrid").innerHTML = STAPLE_OPTIONS.map(function (st) {
+      ensureAllStaplesMerged();
+      var masterList = window.profileState.allStaples;
+      document.getElementById("staplesGrid").innerHTML = masterList.map(function (st) {
+        var safeSt = st.replace(/'/g, "");
         var active = window.profileState.staples.indexOf(st) !== -1;
-        return '<button type="button" onclick="window.toggleArrayItem(\'staples\', \'' + st + '\')" class="pill-btn ' + (active ? 'pill-staple-active' : 'pill-staple-off') + '">' + (active ? '✓ ' : '') + st + '</button>';
+        return '<button type="button" onclick="window.toggleArrayItem(\'staples\', \'' + safeSt + '\')" class="pill-btn ' + (active ? 'pill-staple-active' : 'pill-staple-off') + '">' + (active ? '✓ ' : '') + st + '</button>';
       }).join("");
+    };
+
+    window.addCustomStapleItem = function () {
+      var input = document.getElementById("customStapleInput");
+      var val = input.value.trim().replace(/'/g, "");
+      if (!val) return;
+      ensureAllStaplesMerged();
+      if (window.profileState.allStaples.indexOf(val) === -1) {
+        window.profileState.allStaples.push(val);
+      }
+      if (window.profileState.staples.indexOf(val) === -1) {
+        window.profileState.staples.push(val);
+      }
+      window.saveUserProfile();
+      window.renderStaplesGrid();
+      input.value = "";
     };
 
     window.toggleArrayItem = function (key, item) {
@@ -1075,8 +1186,8 @@
         window.renderPlanResults(plan);
         if (noticeEl) {
           noticeEl.textContent = usedAi
-            ? "✨ Custom-crafted by Gemini Chef AI with exact measurements for your kitchen & budget."
-            : "All recipes include exact measurements, fit your kitchen tools, and stay within budget.";
+            ? "✨ Custom-crafted by Gemini Chef AI around your cravings, kitchen inventory & budget."
+            : "All recipes include exact fractional measurements, fit your kitchen tools, and stay within budget.";
         }
       } finally {
         loadingCard.classList.add("hidden");
@@ -1088,6 +1199,7 @@
 
     window.buildSmartLocalPlan = function (store) {
       var fridgeLower = window.profileState.fridgeItems.join(" ").toLowerCase();
+      var cravingLower = pickVal(window.profileState.cravingPrompt, "").toLowerCase();
 
       var eligible = CURATED_RECIPES.filter(function (r) {
         var hasTool = window.profileState.equipment.indexOf(r.equipmentId) !== -1;
@@ -1101,7 +1213,11 @@
         var sItems = r.storeItems ? r.storeItems : [];
         sItems.forEach(function (ing) {
           if (fridgeLower.indexOf(ing.key.toLowerCase()) !== -1) matchScore += 2;
+          if (cravingLower && cravingLower.indexOf(ing.key.toLowerCase()) !== -1) matchScore += 4;
         });
+        if (cravingLower && r.title.toLowerCase().indexOf(cravingLower) !== -1) {
+          matchScore += 5;
+        }
         return { recipe: r, score: matchScore + (Math.random() * 3) };
       }).sort(function (a, b) { return b.score - a.score; });
 
@@ -1142,7 +1258,13 @@
     };
 
     window.generatePlanWithGemini = async function (store, workerUrl) {
+      ensureAllStaplesMerged();
       var allergyText = window.profileState.allergies.length > 0 ? window.profileState.allergies.join(", ") : "None";
+      var cravingText = pickVal(window.profileState.cravingPrompt, "").trim();
+      var outOfStockStaples = window.profileState.allStaples.filter(function (st) {
+        return window.profileState.staples.indexOf(st) === -1;
+      });
+
       var styleThemes = [
         "Focus on restaurant-quality weeknight skillet, sheet-pan, and comfort classics with bold herb and spice layering.",
         "Include a vibrant mix of Mediterranean, smoky Southwest, Asian-inspired stir-fry, and American bistro dinners.",
@@ -1150,26 +1272,31 @@
       ];
       var randomTheme = styleThemes[Math.floor(Math.random() * styleThemes.length)];
 
+      var cravingDirective = cravingText
+        ? ("USER CRAVINGS & REQUESTED DISH IDEAS FOR THIS WEEK (HIGHEST PRIORITY): \"" + cravingText + "\". You MUST design the recipes to fulfill what the user is feeling while combining their on-hand fridge/pantry items and staying within their grocery budget!\n\n")
+        : ("Culinary Direction: " + randomTheme + "\n\n");
+
       var prompt = "You are an executive chef and grocery budget planner. Create a weekly grocery plan and " +
         window.profileState.mealsCount + " distinct, restaurant-quality dinner recipes (" +
-        window.profileState.servingsCount + " servings each) for a shopper at " + store.name + " (" + store.address + ").\n" +
-        "Culinary Direction: " + randomTheme + "\n\n" +
+        window.profileState.servingsCount + " servings each) for a shopper at " + store.name + " (" + store.address + ").\n\n" +
+        cravingDirective +
         "CONSTRAINTS:\n" +
         "- Maximum Weekly Grocery Budget: " + window.CURRENCY_SIGN + window.profileState.weeklyBudget + ".\n" +
         "- Kitchen Equipment Available: " + window.profileState.equipment.join(", ") + ".\n" +
         "- Allergies to Strictly Avoid: " + allergyText + ".\n" +
         "- Dining Preferences: " + window.profileState.preferences.join(", ") + ".\n" +
         "- In-Stock Fridge/Pantry (Prioritize using these at zero extra cost): " + window.profileState.fridgeItems.join(", ") + ".\n" +
-        "- Basic Kitchen Staples on Hand: " + window.profileState.staples.join(", ") + ".\n\n" +
+        "- Basic Kitchen Staples on Hand (free to use): " + window.profileState.staples.join(", ") + ".\n" +
+        (outOfStockStaples.length > 0 ? ("- Staples User is OUT OF (add to shoppingList if needed): " + outOfStockStaples.join(", ") + ".\n\n") : "\n") +
         "RECIPE REQUIREMENTS:\n" +
-        "1. EXACT MEASUREMENTS: Every recipe must list every ingredient with precise culinary measurements (e.g., '1.5 lbs boneless chicken thighs, cut into 1-inch pieces', '1 cup long-grain jasmine rice', '2 cups low-sodium chicken broth', '2 tbsp olive oil').\n" +
-        "2. SPICES & SEASONINGS: Never say 'spices to taste'. Specify exact amounts for each individual spice and herb (e.g., '1 tbsp smoked paprika', '1.5 tsp ground cumin', '1 tsp dried oregano', '1.25 tsp kosher salt', '1/2 tsp freshly cracked black pepper', '4 cloves garlic, finely minced').\n" +
+        "1. FRACTIONAL CULINARY MEASUREMENTS ONLY: NEVER use decimals like 0.75 lb, 1.5 lbs, 0.5 tsp, 1.25 tsp, or 2.5 tbsp. ALWAYS write standard kitchen fractions (e.g., '3/4 lb', '1 1/2 lbs', '1/2 tsp', '1 1/4 tsp', '2 1/2 tbsp', '1 3/4 cups').\n" +
+        "2. SPICES & SEASONINGS: Never say 'spices to taste'. Specify exact fractional or whole amounts for each individual spice and herb (e.g., '1 tbsp smoked paprika', '1 1/2 tsp ground cumin', '1 tsp dried oregano', '1 1/4 tsp kosher salt', '1/2 tsp freshly cracked black pepper', '4 cloves garlic, finely minced').\n" +
         "3. IN-DEPTH CULINARY STEPS: Write 5 to 6 thorough, step-by-step instructions covering prep, seasoning, sauce building, cooking temperatures, burner heat levels (medium-high, low simmer), exact timings, and visual/texture cues.\n" +
         "4. METRICS & TIPS: Include active Prep Time, Cook Time, and a Chef's Tip.\n\n" +
         "Return ONLY valid JSON matching this exact structure:\n" +
         "{\n" +
         '  "shoppingList": [\n' +
-        '    { "name": "Store Package Name & Size", "aisle": "Produce, Meat & Seafood, Dairy & Eggs, or Pantry", "price": 4.99, "checked": false, "sourceBadge": "Store Estimate" }\n' +
+        '    { "name": "Store Package Name & Size (use fractions like 1 1/2 lb)", "aisle": "Produce, Meat & Seafood, Dairy & Eggs, or Pantry", "price": 4.99, "checked": false, "sourceBadge": "Store Estimate" }\n' +
         '  ],\n' +
         '  "usedFromKitchen": ["Item 1", "Item 2"],\n' +
         '  "recipes": [\n' +
@@ -1180,11 +1307,11 @@
         '      "equipmentNeeded": "Skillet / Frying Pan",\n' +
         '      "chefTip": "Specific culinary tip for best flavor or texture.",\n' +
         '      "ingredients": [\n' +
-        '        "1.5 lbs boneless chicken thighs, patted dry",\n' +
-        '        "1.5 tbsp olive oil",\n' +
+        '        "1 1/2 lbs boneless chicken thighs, patted dry",\n' +
+        '        "1 1/2 tbsp olive oil",\n' +
         '        "1 tbsp smoked paprika",\n' +
         '        "1 tsp garlic powder",\n' +
-        '        "1 tsp kosher salt",\n' +
+        '        "1 1/4 tsp kosher salt",\n' +
         '        "1/2 tsp black pepper"\n' +
         '      ],\n' +
         '      "steps": [\n' +
@@ -1238,7 +1365,7 @@
       var parsed = JSON.parse(rawText);
       var cleanShopping = (parsed.shoppingList ? parsed.shoppingList : []).map(function (item) {
         return {
-          name: pickVal(item.name, "Grocery Item"),
+          name: formatCulinaryFractions(pickVal(item.name, "Grocery Item")),
           aisle: pickVal(item.aisle, "Pantry"),
           price: parsePriceNum(item.price, 3.99),
           checked: Boolean(item.checked),
@@ -1297,7 +1424,7 @@
           return '<label onclick="window.toggleGroceryCheck(' + item.index + ')" class="grocery-item ' + (item.checked ? 'checked' : '') + '">' +
             '<div style="display:flex; align-items:center; gap:10px;">' +
             '<input type="checkbox" ' + (item.checked ? 'checked' : '') + ' style="width:18px; height:18px; accent-color:#15803D; pointer-events:none;" />' +
-            '<div><div style="font-size:14px; font-weight:700;">' + item.name + '</div>' +
+            '<div><div style="font-size:14px; font-weight:700;">' + formatCulinaryFractions(item.name) + '</div>' +
             '<div style="font-size:11px; font-weight:700; color:#15803D;">' + badgeText + '</div></div></div>' +
             '<div style="font-size:14px; font-weight:800;">' + window.CURRENCY_SIGN + itemPrice.toFixed(2) + '</div></label>';
         }).join("");
@@ -1318,7 +1445,7 @@
           var text = typeof ing === "string" ? ing : ing.name;
           return '<li style="margin-bottom:6px; font-size:13px; color:#292524; display:flex; align-items:baseline; gap:8px;">' +
             '<span style="color:#15803D; font-weight:800;">•</span>' +
-            '<span>' + text + '</span>' +
+            '<span>' + formatCulinaryFractions(text) + '</span>' +
           '</li>';
         }).join("");
 
@@ -1326,7 +1453,7 @@
         var stepItems = stepsArr.map(function (s, sIdx) {
           return '<li style="margin-bottom:12px; line-height:1.6;">' +
             '<span style="font-weight:800; color:#1C1917;">Step ' + (sIdx + 1) + ': </span>' +
-            '<span>' + s + '</span>' +
+            '<span>' + formatCulinaryFractions(s) + '</span>' +
           '</li>';
         }).join("");
 
@@ -1335,7 +1462,7 @@
         var tipHtml = r.chefTip ? (
           '<div style="margin-top:16px; background:#FEF3C7; border-left:4px solid #D97706; padding:12px 14px; border-radius:0 12px 12px 0;">' +
             '<div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#92400E; margin-bottom:2px;">👨‍🍳 Chef\'s Pro Tip</div>' +
-            '<div style="font-size:13px; color:#78350F; line-height:1.4;">' + r.chefTip + '</div>' +
+            '<div style="font-size:13px; color:#78350F; line-height:1.4;">' + formatCulinaryFractions(r.chefTip) + '</div>' +
           '</div>'
         ) : "";
 
@@ -1449,7 +1576,7 @@
       };
 
       const statusEl = document.getElementById("cloudStatusText");
-      if (statusEl) statusEl.textContent = "v2.6 Live • Cloud Connected";
+      if (statusEl) statusEl.textContent = "v2.7 Live • Cloud Connected";
 
       onAuthStateChanged(auth, async function (user) {
         if (user) {
